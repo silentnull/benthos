@@ -21,21 +21,95 @@
 package processor
 
 import (
-	"os"
+	"bytes"
+	"io/ioutil"
 	"testing"
 
 	"github.com/Jeffail/benthos/lib/log"
+	"github.com/Jeffail/benthos/lib/message"
 	"github.com/Jeffail/benthos/lib/metrics"
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/armor"
+	"golang.org/x/crypto/openpgp/packet"
 )
 
 func TestEncryptBadAlgo(t *testing.T) {
 	conf := NewConfig()
 	conf.Encrypt.Scheme = "does not exist"
 
-	testLog := log.New(os.Stdout, log.Config{LogLevel: "NONE"})
-
-	_, err := NewEncrypt(conf, nil, testLog, metrics.DudType{})
-	if err == nil {
+	if _, err := NewEncrypt(conf, nil, log.Noop(), metrics.Noop()); err == nil {
 		t.Error("Expected error from un-supported scheme")
+	}
+}
+
+func TestEncryptPgp(t *testing.T) {
+	conf := NewConfig()
+	conf.Encrypt.Scheme = "pgp"
+	conf.Encrypt.Key = "./testdata/pgp_public.key"
+
+	key, err := ioutil.ReadFile("./testdata/pgp_private.key")
+	if err != nil {
+		t.Fatal(err)
+	}
+	// decode armor
+	keyBlock, err := armor.Decode(bytes.NewReader(key))
+	if err != nil {
+		t.Fatal(err)
+	}
+	// check key type
+	if keyBlock.Type != openpgp.PrivateKeyType {
+		t.Fatal(err)
+	}
+	keyReader := packet.NewReader(keyBlock.Body)
+	keyEntity, err := openpgp.ReadEntity(keyReader)
+	if err != nil {
+		t.Fatal(err)
+	}
+	entityList := &openpgp.EntityList{keyEntity}
+
+	input := [][]byte{
+		[]byte("hello world first part"),
+		[]byte("hello world second part"),
+		[]byte("third part"),
+		[]byte("fourth"),
+		[]byte("5"),
+	}
+
+	proc, err := NewEncrypt(conf, nil, log.Noop(), metrics.Noop())
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	msgs, res := proc.ProcessMessage(message.New(input))
+	if len(msgs) != 1 {
+		t.Fatal("Encrypt failed")
+	} else if res != nil {
+		t.Errorf("Expected nil response: %v", res)
+	}
+
+	outputs := message.GetAllBytes(msgs[0])
+	for i, output := range outputs {
+		if act, notexp := string(output), string(input[i]); act == notexp {
+			t.Errorf("Unexpected output: %s == %s", act, notexp)
+		}
+
+		m := bytes.NewReader(output)
+		messageBlock, err := armor.Decode(m)
+		if err != nil {
+			t.Fatal(err)
+		}
+		message, err := openpgp.ReadMessage(messageBlock.Body, entityList, nil, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		actBytes, err := ioutil.ReadAll(message.UnverifiedBody)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if act, exp := string(actBytes), string(input[i]); act != exp {
+			t.Errorf("Unexpected output: %s != %s", act, exp)
+		}
 	}
 }

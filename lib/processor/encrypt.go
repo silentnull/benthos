@@ -23,15 +23,14 @@ package processor
 import (
 	"bytes"
 	"fmt"
-	"golang.org/x/crypto/openpgp"
-	"golang.org/x/crypto/openpgp/armor"
-	"golang.org/x/crypto/openpgp/packet"
 	"io/ioutil"
 
 	"github.com/Jeffail/benthos/lib/log"
 	"github.com/Jeffail/benthos/lib/metrics"
-	"github.com/Jeffail/benthos/lib/response"
 	"github.com/Jeffail/benthos/lib/types"
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/armor"
+	"golang.org/x/crypto/openpgp/packet"
 )
 
 //------------------------------------------------------------------------------
@@ -41,7 +40,17 @@ func init() {
 		constructor: NewEncrypt,
 		description: `
 Encrypts parts of a message according to the selected scheme. Supported schemes
-are: pgp.`,
+are: pgp.
+
+#### ` + "`pgp`" + `
+
+Currently only armored keys are supported. The output is also armored.
+
+WARNING: This processor is experimental and has NOT undergone any form of
+security audit. The config format is also very likely to change.
+
+If you would like to discuss the future of this processor please join the
+discussion here: https://github.com/Jeffail/benthos/issues/47`,
 	}
 }
 
@@ -65,9 +74,9 @@ func NewEncryptConfig() EncryptConfig {
 
 //------------------------------------------------------------------------------
 
-type encryptFunc func(key []byte, bytes []byte) ([]byte, error)
+type encryptFunc func(bytes []byte) ([]byte, error)
 
-func pgpEncrypt(key []byte, b []byte) ([]byte, error) {
+func pgpEncrypt(key []byte) (encryptFunc, error) {
 	// decode armor
 	keyBlock, err := armor.Decode(bytes.NewReader(key))
 	if err != nil {
@@ -78,24 +87,32 @@ func pgpEncrypt(key []byte, b []byte) ([]byte, error) {
 	keyReader := packet.NewReader(keyBlock.Body)
 	keyEntity, err := openpgp.ReadEntity(keyReader)
 
-	encyptedBuffer := bytes.NewBuffer(nil)
-	plainText, err := openpgp.Encrypt(encyptedBuffer, []*openpgp.Entity{keyEntity}, nil, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	_, err = plainText.Write(b)
-	if err != nil {
-		return nil, err
-	}
-	plainText.Close()
+	return func(b []byte) ([]byte, error) {
+		encryptedBuffer := bytes.NewBuffer(nil)
+		armoredWriter, err := armor.Encode(encryptedBuffer, "PGP MESSAGE", nil)
+		if err != nil {
+			return nil, err
+		}
 
-	return encyptedBuffer.Bytes(), nil
+		plainText, err := openpgp.Encrypt(armoredWriter, []*openpgp.Entity{keyEntity}, nil, nil, nil)
+		if err != nil {
+			return nil, err
+		}
+		_, err = plainText.Write(b)
+		if err != nil {
+			return nil, err
+		}
+		plainText.Close()
+		armoredWriter.Close()
+
+		return encryptedBuffer.Bytes(), nil
+	}, nil
 }
 
-func strToEncryptr(str string) (encryptFunc, error) {
+func strToEncryptr(str string, key []byte) (encryptFunc, error) {
 	switch str {
 	case "pgp":
-		return pgpEncrypt, nil
+		return pgpEncrypt(key)
 	}
 	return nil, fmt.Errorf("encrypt scheme not recognised: %v", str)
 }
@@ -128,15 +145,19 @@ func NewEncrypt(
 	if err != nil {
 		return nil, err
 	}
-	cor, err := strToEncryptr(conf.Encrypt.Scheme)
+	cor, err := strToEncryptr(conf.Encrypt.Scheme, key)
 	if err != nil {
 		return nil, err
 	}
+
+	logger := log.NewModule(".processor.encrypt")
+	logger.Warnln("WARNING: This processor is experimental and has NOT undergone any form of security audit. The config format is also very likely to change.")
+
 	return &Encrypt{
 		conf:  conf.Encrypt,
 		fn:    cor,
 		key:   key,
-		log:   log.NewModule(".processor.encrypt"),
+		log:   logger,
 		stats: stats,
 
 		mCount:     stats.GetCounter("processor.encrypt.count"),
@@ -157,17 +178,9 @@ func (c *Encrypt) ProcessMessage(msg types.Message) ([]types.Message, types.Resp
 
 	newMsg := msg.Copy()
 
-	targetParts := c.conf.Parts
-	if len(targetParts) == 0 {
-		targetParts = make([]int, newMsg.Len())
-		for i := range targetParts {
-			targetParts[i] = i
-		}
-	}
-
-	for _, index := range targetParts {
+	proc := func(index int) {
 		part := msg.Get(index).Get()
-		newPart, err := c.fn(c.key, part)
+		newPart, err := c.fn(part)
 		if err == nil {
 			c.mSucc.Incr(1)
 			newMsg.Get(index).Set(newPart)
@@ -177,9 +190,14 @@ func (c *Encrypt) ProcessMessage(msg types.Message) ([]types.Message, types.Resp
 		}
 	}
 
-	if newMsg.Len() == 0 {
-		c.mSkipped.Incr(1)
-		return nil, response.NewAck()
+	if len(c.conf.Parts) == 0 {
+		for i := 0; i < msg.Len(); i++ {
+			proc(i)
+		}
+	} else {
+		for _, index := range c.conf.Parts {
+			proc(index)
+		}
 	}
 
 	c.mSent.Incr(1)

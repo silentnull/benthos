@@ -21,9 +21,7 @@
 package processor
 
 import (
-	"bytes"
 	"io/ioutil"
-	"os"
 	"reflect"
 	"testing"
 
@@ -36,10 +34,7 @@ func TestDecryptBadScheme(t *testing.T) {
 	conf := NewConfig()
 	conf.Decrypt.Scheme = "does not exist"
 
-	testLog := log.New(os.Stdout, log.Config{LogLevel: "NONE"})
-
-	_, err := NewDecrypt(conf, nil, testLog, metrics.DudType{})
-	if err == nil {
+	if _, err := NewDecrypt(conf, nil, log.Noop(), metrics.Noop()); err == nil {
 		t.Error("Expected error from un-supported scheme")
 	}
 }
@@ -47,27 +42,23 @@ func TestDecryptBadScheme(t *testing.T) {
 func TestDecryptPgp(t *testing.T) {
 	conf := NewConfig()
 	conf.Decrypt.Scheme = "pgp"
-	conf.Decrypt.Key = "testdata/pgp_private.key"
+	conf.Decrypt.Key = "./testdata/pgp_private.key"
 
-	testLog := log.New(os.Stdout, log.Config{LogLevel: "NONE"})
+	encrypted, err := ioutil.ReadFile("./testdata/pgp_message.encrypted")
+	exp, err := ioutil.ReadFile("./testdata/pgp_message.decrypted")
 
-	encrypted, err := ioutil.ReadFile("testdata/pgp_message.encrypted")
-	exp, err := ioutil.ReadFile("testdata/pgp_message.decrypted")
-
-	input := bytes.Split(enc, []byte("\n"))
-
-	proc, err := NewDecrypt(conf, nil, testLog, metrics.DudType{})
+	proc, err := NewDecrypt(conf, nil, log.Noop(), metrics.Noop())
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	msgs, res := proc.ProcessMessage(message.New(input))
+	msgs, res := proc.ProcessMessage(message.New([][]byte{encrypted}))
 	if len(msgs) != 1 {
 		t.Error("Decrypt failed")
 	} else if res != nil {
 		t.Errorf("Expected nil response: %v", res)
 	}
-	if act := message.GetAllBytes(msgs[0]); !reflect.DeepEqual(exp, act) {
+	if act := message.GetAllBytes(msgs[0])[0]; !reflect.DeepEqual(exp, act) {
 		t.Errorf("Unexpected output: %s != %s", act, exp)
 	}
 }

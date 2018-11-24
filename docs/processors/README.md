@@ -245,8 +245,19 @@ decrypt:
   scheme: pgp
 ```
 
-Decrypts parts of a message according to the selected scheme. Supported available
-schemes are: pgp.
+Decrypts parts of a message according to the selected scheme. Supported
+available schemes are: pgp.
+
+#### `pgp`
+
+Currently only armored keys and encrypted messages are supported, and the
+private key must not require a password.
+
+WARNING: This processor is experimental and has NOT undergone any form of
+security audit. The config format is also very likely to change.
+
+If you would like to discuss the future of this processor please join the
+discussion here: https://github.com/Jeffail/benthos/issues/47
 
 ## `dedupe`
 
@@ -325,6 +336,16 @@ encrypt:
 
 Encrypts parts of a message according to the selected scheme. Supported schemes
 are: pgp.
+
+#### `pgp`
+
+Currently only armored keys are supported. The output is also armored.
+
+WARNING: This processor is experimental and has NOT undergone any form of
+security audit. The config format is also very likely to change.
+
+If you would like to discuss the future of this processor please join the
+discussion here: https://github.com/Jeffail/benthos/issues/47
 
 ## `filter`
 

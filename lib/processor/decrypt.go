@@ -23,15 +23,14 @@ package processor
 import (
 	"bytes"
 	"fmt"
-	"golang.org/x/crypto/openpgp"
-	"golang.org/x/crypto/openpgp/armor"
-	"golang.org/x/crypto/openpgp/packet"
 	"io/ioutil"
 
 	"github.com/Jeffail/benthos/lib/log"
 	"github.com/Jeffail/benthos/lib/metrics"
-	"github.com/Jeffail/benthos/lib/response"
 	"github.com/Jeffail/benthos/lib/types"
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/armor"
+	"golang.org/x/crypto/openpgp/packet"
 )
 
 //------------------------------------------------------------------------------
@@ -40,8 +39,19 @@ func init() {
 	Constructors[TypeDecrypt] = TypeSpec{
 		constructor: NewDecrypt,
 		description: `
-Decrypts parts of a message according to the selected scheme. Supported available
-schemes are: pgp.`,
+Decrypts parts of a message according to the selected scheme. Supported
+available schemes are: pgp.
+
+#### ` + "`pgp`" + `
+
+Currently only armored keys and encrypted messages are supported, and the
+private key must not require a password.
+
+WARNING: This processor is experimental and has NOT undergone any form of
+security audit. The config format is also very likely to change.
+
+If you would like to discuss the future of this processor please join the
+discussion here: https://github.com/Jeffail/benthos/issues/47`,
 	}
 }
 
@@ -49,31 +59,31 @@ schemes are: pgp.`,
 
 // DecryptConfig contains configuration fields for the Decrypt processor.
 type DecryptConfig struct {
-	Scheme     string `json:"scheme" yaml:"scheme"`
-	Key        string `json:"key" yaml:"key"`
-	Parts      []int  `json:"parts" yaml:"parts"`
+	Scheme string `json:"scheme" yaml:"scheme"`
+	Key    string `json:"key" yaml:"key"`
+	Parts  []int  `json:"parts" yaml:"parts"`
 }
 
 // NewDecryptConfig returns a DecryptConfig with default values.
 func NewDecryptConfig() DecryptConfig {
 	return DecryptConfig{
-		Scheme:     "pgp",
-		Key:        "",
-		Parts:      []int{},
+		Scheme: "pgp",
+		Key:    "",
+		Parts:  []int{},
 	}
 }
 
 //------------------------------------------------------------------------------
 
-type decryptFunc func(key []byte, bytes []byte) ([]byte, error)
+type decryptFunc func(bytes []byte) ([]byte, error)
 
-func pgpDecrypt(key []byte, b []byte) ([]byte, error) {
+func pgpDecrypt(key []byte) (decryptFunc, error) {
 	// decode armor
 	keyBlock, err := armor.Decode(bytes.NewReader(key))
 	if err != nil {
 		return nil, err
 	}
-  // check key type
+	// check key type
 	if keyBlock.Type != openpgp.PrivateKeyType {
 		return nil, fmt.Errorf("invalid key type: %v", keyBlock.Type)
 	}
@@ -81,25 +91,30 @@ func pgpDecrypt(key []byte, b []byte) ([]byte, error) {
 	// add key to key list
 	keyReader := packet.NewReader(keyBlock.Body)
 	keyEntity, err := openpgp.ReadEntity(keyReader)
+	if err != nil {
+		return nil, err
+	}
 	entityList := &openpgp.EntityList{keyEntity}
 
-	m := bytes.NewReader(b)
-	messageBlock, err := armor.Decode(m)
-	if err != nil {
-		return nil, err
-	}
-	message, err := openpgp.ReadMessage(messageBlock.Body, entityList, nil, nil)
-	if err != nil {
-		return nil, err
-	}
+	return func(b []byte) ([]byte, error) {
+		m := bytes.NewReader(b)
+		messageBlock, err := armor.Decode(m)
+		if err != nil {
+			return nil, err
+		}
+		message, err := openpgp.ReadMessage(messageBlock.Body, entityList, nil, nil)
+		if err != nil {
+			return nil, err
+		}
 
-	return ioutil.ReadAll(message.UnverifiedBody)
+		return ioutil.ReadAll(message.UnverifiedBody)
+	}, nil
 }
 
-func strToDecryptor(str string) (decryptFunc, error) {
+func strToDecryptor(str string, key []byte) (decryptFunc, error) {
 	switch str {
 	case "pgp":
-		return pgpDecrypt, nil
+		return pgpDecrypt(key)
 	}
 	return nil, fmt.Errorf("decrypt scheme not recognised: %v", str)
 }
@@ -132,15 +147,19 @@ func NewDecrypt(
 	if err != nil {
 		return nil, err
 	}
-	cor, err := strToDecryptor(conf.Decrypt.Scheme)
+	cor, err := strToDecryptor(conf.Decrypt.Scheme, key)
 	if err != nil {
 		return nil, err
 	}
+
+	logger := log.NewModule(".processor.decrypt")
+	logger.Warnln("WARNING: This processor is experimental and has NOT undergone any form of security audit. The config format is also very likely to change.")
+
 	return &Decrypt{
 		conf:  conf.Decrypt,
 		fn:    cor,
 		key:   key,
-		log:   log.NewModule(".processor.decrypt"),
+		log:   logger,
 		stats: stats,
 
 		mCount:     stats.GetCounter("processor.decrypt.count"),
@@ -161,17 +180,9 @@ func (c *Decrypt) ProcessMessage(msg types.Message) ([]types.Message, types.Resp
 
 	newMsg := msg.Copy()
 
-	targetParts := c.conf.Parts
-	if len(targetParts) == 0 {
-		targetParts = make([]int, newMsg.Len())
-		for i := range targetParts {
-			targetParts[i] = i
-		}
-	}
-
-	for _, index := range targetParts {
+	proc := func(index int) {
 		part := msg.Get(index).Get()
-		newPart, err := c.fn(c.key, part)
+		newPart, err := c.fn(part)
 		if err == nil {
 			c.mSucc.Incr(1)
 			newMsg.Get(index).Set(newPart)
@@ -181,9 +192,14 @@ func (c *Decrypt) ProcessMessage(msg types.Message) ([]types.Message, types.Resp
 		}
 	}
 
-	if newMsg.Len() == 0 {
-		c.mSkipped.Incr(1)
-		return nil, response.NewAck()
+	if len(c.conf.Parts) == 0 {
+		for i := 0; i < msg.Len(); i++ {
+			proc(i)
+		}
+	} else {
+		for _, index := range c.conf.Parts {
+			proc(index)
+		}
 	}
 
 	c.mSent.Incr(1)

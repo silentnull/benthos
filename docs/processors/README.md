@@ -46,34 +46,36 @@ used.
 6. [`conditional`](#conditional)
 7. [`decode`](#decode)
 8. [`decompress`](#decompress)
-9. [`dedupe`](#dedupe)
-10. [`encode`](#encode)
-11. [`filter`](#filter)
-12. [`filter_parts`](#filter_parts)
-13. [`grok`](#grok)
-14. [`group_by`](#group_by)
-15. [`hash`](#hash)
-16. [`hash_sample`](#hash_sample)
-17. [`http`](#http)
-18. [`insert_part`](#insert_part)
-19. [`jmespath`](#jmespath)
-20. [`json`](#json)
-21. [`lambda`](#lambda)
-22. [`log`](#log)
-23. [`merge_json`](#merge_json)
-24. [`metadata`](#metadata)
-25. [`metric`](#metric)
-26. [`noop`](#noop)
-27. [`process_batch`](#process_batch)
-28. [`process_dag`](#process_dag)
-29. [`process_field`](#process_field)
-30. [`process_map`](#process_map)
-31. [`sample`](#sample)
-32. [`select_parts`](#select_parts)
-33. [`split`](#split)
-34. [`text`](#text)
-35. [`throttle`](#throttle)
-36. [`unarchive`](#unarchive)
+9. [`decrypt`](#decrypt)
+10. [`dedupe`](#dedupe)
+11. [`encode`](#encode)
+12. [`encrypt`](#encrypt)
+13. [`filter`](#filter)
+14. [`filter_parts`](#filter_parts)
+15. [`grok`](#grok)
+16. [`group_by`](#group_by)
+17. [`hash`](#hash)
+18. [`hash_sample`](#hash_sample)
+19. [`http`](#http)
+20. [`insert_part`](#insert_part)
+21. [`jmespath`](#jmespath)
+22. [`json`](#json)
+23. [`lambda`](#lambda)
+24. [`log`](#log)
+25. [`merge_json`](#merge_json)
+26. [`metadata`](#metadata)
+27. [`metric`](#metric)
+28. [`noop`](#noop)
+29. [`process_batch`](#process_batch)
+30. [`process_dag`](#process_dag)
+31. [`process_field`](#process_field)
+32. [`process_map`](#process_map)
+33. [`sample`](#sample)
+34. [`select_parts`](#select_parts)
+35. [`split`](#split)
+36. [`text`](#text)
+37. [`throttle`](#throttle)
+38. [`unarchive`](#unarchive)
 
 ## `archive`
 
@@ -233,6 +235,19 @@ decompression types are: gzip, zlib, bzip2, flate.
 Parts that fail to decompress (invalid format) will be removed from the message.
 If the message results in zero parts it is skipped entirely.
 
+## `decrypt`
+
+``` yaml
+type: decrypt
+decrypt:
+  key: ""
+  parts: []
+  scheme: pgp
+```
+
+Decrypts parts of a message according to the selected scheme. Supported available
+schemes are: pgp.
+
 ## `dedupe`
 
 ``` yaml
@@ -297,6 +312,19 @@ encode:
 
 Encodes parts of a message according to the selected scheme. Supported schemes
 are: base64.
+
+## `encrypt`
+
+``` yaml
+type: encrypt
+encrypt:
+  key: ""
+  parts: []
+  scheme: pgp
+```
+
+Encrypts parts of a message according to the selected scheme. Supported schemes
+are: pgp.
 
 ## `filter`
 

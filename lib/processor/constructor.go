@@ -63,8 +63,10 @@ const (
 	TypeConditional  = "conditional"
 	TypeDecode       = "decode"
 	TypeDecompress   = "decompress"
+	TypeDecrypt      = "decrypt"
 	TypeDedupe       = "dedupe"
 	TypeEncode       = "encode"
+	TypeEncrypt      = "encrypt"
 	TypeFilter       = "filter"
 	TypeFilterParts  = "filter_parts"
 	TypeGrok         = "grok"
@@ -106,8 +108,10 @@ type Config struct {
 	Conditional  ConditionalConfig  `json:"conditional" yaml:"conditional"`
 	Decode       DecodeConfig       `json:"decode" yaml:"decode"`
 	Decompress   DecompressConfig   `json:"decompress" yaml:"decompress"`
+	Decrypt      DecryptConfig      `json:"decrypt" yaml:"decrypt"`
 	Dedupe       DedupeConfig       `json:"dedupe" yaml:"dedupe"`
 	Encode       EncodeConfig       `json:"encode" yaml:"encode"`
+	Encrypt      EncryptConfig      `json:"encrypt" yaml:"encrypt"`
 	Filter       FilterConfig       `json:"filter" yaml:"filter"`
 	FilterParts  FilterPartsConfig  `json:"filter_parts" yaml:"filter_parts"`
 	Grok         GrokConfig         `json:"grok" yaml:"grok"`
@@ -148,8 +152,10 @@ func NewConfig() Config {
 		Conditional:  NewConditionalConfig(),
 		Decode:       NewDecodeConfig(),
 		Decompress:   NewDecompressConfig(),
+		Decrypt:      NewDecryptConfig(),
 		Dedupe:       NewDedupeConfig(),
 		Encode:       NewEncodeConfig(),
+		Encrypt:      NewEncryptConfig(),
 		Filter:       NewFilterConfig(),
 		FilterParts:  NewFilterPartsConfig(),
 		Grok:         NewGrokConfig(),

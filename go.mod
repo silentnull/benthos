@@ -79,7 +79,7 @@ require (
 	github.com/trivago/grok v1.0.0
 	github.com/trivago/tgo v1.0.5 // indirect
 	go.opencensus.io v0.17.0 // indirect
-	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e // indirect
+	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e
 	golang.org/x/net v0.0.0-20181017193950-04a2e542c03f // indirect
 	golang.org/x/oauth2 v0.0.0-20181017192945-9dcd33a902f4 // indirect
 	golang.org/x/sys v0.0.0-20181021155630-eda9bb28ed51 // indirect

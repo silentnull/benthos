@@ -377,6 +377,10 @@ pipeline:
     decompress:
       algorithm: gzip
       parts: []
+    decrypt:
+      scheme: pgp
+      key: ""
+      parts: []
     dedupe:
       cache: ""
       hash: none
@@ -386,6 +390,10 @@ pipeline:
       drop_on_err: true
     encode:
       scheme: base64
+      parts: []
+    encrypt:
+      scheme: pgp
+      key: ""
       parts: []
     filter:
       type: text

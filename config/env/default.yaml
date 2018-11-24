@@ -288,8 +288,14 @@ pipeline:
       scheme: ${PROCESSOR_DECODE_SCHEME:base64}
     decompress:
       algorithm: ${PROCESSOR_DECOMPRESS_ALGORITHM:gzip}
+    decrypt:
+      key: ${PROCESSOR_DECRYPT_KEY}
+      scheme: ${PROCESSOR_DECRYPT_SCHEME:pgp}
     encode:
       scheme: ${PROCESSOR_ENCODE_SCHEME:base64}
+    encrypt:
+      key: ${PROCESSOR_ENCRYPT_KEY}
+      scheme: ${PROCESSOR_ENCRYPT_SCHEME:pgp}
     grok:
       named_captures_only: ${PROCESSOR_GROK_NAMED_CAPTURES_ONLY:true}
       output_format: ${PROCESSOR_GROK_OUTPUT_FORMAT:json}

@@ -274,7 +274,11 @@ PROCESSOR_COMPRESS_ALGORITHM                         = gzip
 PROCESSOR_COMPRESS_LEVEL                             = -1
 PROCESSOR_DECODE_SCHEME                              = base64
 PROCESSOR_DECOMPRESS_ALGORITHM                       = gzip
+PROCESSOR_DECRYPT_KEY
+PROCESSOR_DECRYPT_SCHEME                             = pgp
 PROCESSOR_ENCODE_SCHEME                              = base64
+PROCESSOR_ENCRYPT_KEY
+PROCESSOR_ENCRYPT_SCHEME                             = pgp
 PROCESSOR_GROK_NAMED_CAPTURES_ONLY                   = true
 PROCESSOR_GROK_OUTPUT_FORMAT                         = json
 PROCESSOR_GROK_REMOVE_EMPTY_VALUES                   = true

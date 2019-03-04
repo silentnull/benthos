@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Twitter firehose - Benthos Documentation</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">Benthos Documentation</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="/">Home</a>
+                            </li>
+                            <li >
+                                <a href="../../concepts/">Core Concepts</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../inputs">Inputs</a>
+</li>
+                                    
+<li >
+    <a href="../../buffers">Buffers</a>
+</li>
+                                    
+<li >
+    <a href="../../processors">Processors</a>
+</li>
+                                    
+<li >
+    <a href="../../conditions">Conditions</a>
+</li>
+                                    
+<li >
+    <a href="../../outputs">Outputs</a>
+</li>
+                                    
+<li >
+    <a href="../../caches">Caches</a>
+</li>
+                                    
+<li >
+    <a href="../../rate_limits">Rate Limits</a>
+</li>
+                                    
+<li >
+    <a href="../../metrics">Metrics</a>
+</li>
+                                    
+<li >
+    <a href="../../tracers">Tracers</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../pipeline/">Pipeline</a>
+</li>
+                                    
+<li >
+    <a href="../../batching/">Message Batching</a>
+</li>
+                                    
+<li >
+    <a href="../../error_handling/">Error Handling</a>
+</li>
+                                    
+<li >
+    <a href="../../workflows/">Workflows</a>
+</li>
+                                    
+<li >
+    <a href="../../configuration/">Config Cheats</a>
+</li>
+                                    
+<li >
+    <a href="../../config_interpolation/">Config Interpolation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#twitter-firehose">Twitter Firehose</a></li>
+            <li><a href="#input">Input</a></li>
+            <li><a href="#buffer">Buffer</a></li>
+            <li><a href="#pipeline">Pipeline</a></li>
+            <li><a href="#output">Output</a></li>
+            <li><a href="#resources">Resources</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="twitter-firehose">Twitter Firehose</h1>
+<p>This example demonstrates how Benthos can be used to stream the Twitter firehose
+into a Kafka topic. The output section could be changed to target any of the
+<a href="../../outputs/">supported output types</a>. This example includes deduplication, which
+means multiple instances can be run for redundancy without swamping the data
+sink with duplicates. Deduplication is performed via a shared Memcached cluster.</p>
+<p><a href="http://support.gnip.com/apis/consuming_streaming_data.html">As of the time of writing this example</a> there are three streaming
+APIs for Twitter: PowerTrack, Firehose and Replay. All three provide an HTTP
+stream connection, where tweets are delivered as line-delimited (<code>\r\n</code>) JSON
+blobs. Occasionally the stream will deliver blank lines in order to keep the
+connection alive. The stream is never ending, and therefore if the connection
+closes it should be reopened. The example provided could be used to consume any
+of the stream types.</p>
+<p>The full config for this <a href="../twitter-firehose.yaml">example can be found here</a>.</p>
+<h2 id="input">Input</h2>
+<p>The input of this example is fairly standard. We initiate an HTTP stream which
+is automatically recovered if a disconnection occurs. The only processor
+attached to the input is a <code>bounds_check</code> filter that removes any empty lines.</p>
+<pre><code class="yaml">input:
+  type: http_client
+  http_client:
+    url: https://gnip-stream.twitter.com/stream/firehose/accounts/foo/publishers/twitter/prod.json?partition=1
+    verb: GET
+    content_type: application/json
+    basic_auth:
+      enabled: true
+      password: &quot;&quot; # TODO
+      username: &quot;&quot; # TODO
+    stream:
+      enabled: true
+      max_buffer: 10_000_000 # 10MB - The max supported length of a single line
+  processors:
+  - type: bounds_check # Filter out keep alives (empty message)
+    bounds_check:
+      min_part_size: 2
+</code></pre>
+
+<p>It's worth noting that you can add the <code>backfillMinutes</code> URL parameter if you
+have the feature enabled. This means any connection recovery will always gain a
+small window of automatic backfill.</p>
+<h2 id="buffer">Buffer</h2>
+<pre><code class="yaml">buffer:
+  type: memory
+  memory:
+    limit: 500_000_000
+</code></pre>
+
+<p>We add a memory based buffer in this config which will help us keep up with the
+stream during sudden traffic spikes. It also allows us to parallelise the next
+layer of deduplication processors.</p>
+<h2 id="pipeline">Pipeline</h2>
+<pre><code class="yaml">pipeline:
+  threads: 16 # Determines the max number of concurrent calls to dedupe cache
+  processors:
+  - type: filter # Filter out non-json objects and error messages
+    filter:
+      type: jmespath
+      jmespath:
+        query: &quot;keys(@) | length(@) &gt; `0` &amp;&amp; !contains(@, 'error')&quot;
+  - type: dedupe
+    dedupe:
+      cache: dedupe
+      drop_on_err: false # Prefer occasional duplicates over lost messages
+      key: &quot;${!json_field:id_str}&quot; # Dedupe based on 'id_str' field of tweets
+      hash: none
+</code></pre>
+
+<p>The pipeline section contains two processors.</p>
+<p>The first processor is a <a href="http://jmespath.org/">JMESPath</a> query which checks whether the
+message object is an invalid JSON object or system error message from Twitter.
+We chose to remove these messages since client disconnects are handled
+automatically and it's possible to observe the reasons for a disconnection from
+the API dashboard.</p>
+<p>The second processor is a deduplication step which checks the <code>id_str</code> field of
+the tweet against a shared Memcached cluster (the cache details are configured
+later on in the resources section). This is likely to be the bottleneck of the
+system (mostly idle on network IO), therefore the <code>threads</code> field should be
+tweaked in order to tune the optimum number of concurrent Memcached requests.</p>
+<h2 id="output">Output</h2>
+<p>The output section is a standard Kafka connection.</p>
+<pre><code class="yaml">output:
+  type: kafka
+  kafka:
+    addresses:
+    - localhost:9092 # TODO
+    client_id: benthos_firehose_bridge
+    topic: twitter_firehose
+    max_msg_bytes: 10_000_000 # 10MB - The max supported message size
+</code></pre>
+
+<p>This can be changed to any other output type without impacting the rest of the
+pipeline.</p>
+<h2 id="resources">Resources</h2>
+<pre><code class="yaml">resources:
+  caches:
+    dedupe:
+      type: memcached
+      memcached:
+        addresses:
+        - localhost:11211 # TODO
+        ttl: 604_800 # Keep Twitter IDs cached for a week
+</code></pre>
+
+<p>The resources section contains the configuration of our deduplication cache. We
+are using Memcached which allows us share the dedupe cache across multiple
+redundant Benthos instances. If you aren't using redundant instances or wish to
+deduplicate elsewhere then you can simply remove this section as well as the
+<code>dedupe</code> processor in the pipeline section, this should also improve throughput.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

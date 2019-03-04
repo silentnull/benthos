@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Streaming aws s3 archives - Benthos Documentation</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">Benthos Documentation</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="/">Home</a>
+                            </li>
+                            <li >
+                                <a href="../../concepts/">Core Concepts</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../inputs">Inputs</a>
+</li>
+                                    
+<li >
+    <a href="../../buffers">Buffers</a>
+</li>
+                                    
+<li >
+    <a href="../../processors">Processors</a>
+</li>
+                                    
+<li >
+    <a href="../../conditions">Conditions</a>
+</li>
+                                    
+<li >
+    <a href="../../outputs">Outputs</a>
+</li>
+                                    
+<li >
+    <a href="../../caches">Caches</a>
+</li>
+                                    
+<li >
+    <a href="../../rate_limits">Rate Limits</a>
+</li>
+                                    
+<li >
+    <a href="../../metrics">Metrics</a>
+</li>
+                                    
+<li >
+    <a href="../../tracers">Tracers</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../pipeline/">Pipeline</a>
+</li>
+                                    
+<li >
+    <a href="../../batching/">Message Batching</a>
+</li>
+                                    
+<li >
+    <a href="../../error_handling/">Error Handling</a>
+</li>
+                                    
+<li >
+    <a href="../../workflows/">Workflows</a>
+</li>
+                                    
+<li >
+    <a href="../../configuration/">Config Cheats</a>
+</li>
+                                    
+<li >
+    <a href="../../config_interpolation/">Config Interpolation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#streaming-aws-s3-archives">Streaming AWS S3 Archives</a></li>
+            <li><a href="#input">Input</a></li>
+            <li><a href="#pipeline">Pipeline</a></li>
+            <li><a href="#output">Output</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="streaming-aws-s3-archives">Streaming AWS S3 Archives</h1>
+<p>This example demonstrates how Benthos can be used to stream an S3 bucket of
+<code>.tar.gz</code> archives containing JSON documents into any output target. This
+example is able to listen for newly added archives and then downloads,
+decompresses, unarchives and streams the JSON documents found within to a Kafka
+topic. The Kafka output in this example can be replaced with any Benthos
+<a href="../../outputs/">output target</a>.</p>
+<p>The method used to stream archives is via an <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ways-to-add-notification-config-to-bucket.html">SQS queue</a>, which is
+a common pattern. Benthos can work either with S3 events sent via SQS directly,
+or by S3 events broadcast via SNS to SQS, there is a small adjustment to the
+config which is explained in the input section.</p>
+<p>The full config for this <a href="../streaming-aws-s3-archives.yaml">example can be found here</a>.</p>
+<h2 id="input">Input</h2>
+<pre><code class="yaml">input:
+  type: s3
+  s3:
+    region: eu-west-1 # TODO
+    bucket: TODO
+    delete_objects: false
+    sqs_url: TODO
+    sqs_body_path: Records.s3.object.key
+    sqs_envelope_path: &quot;&quot;
+    sqs_max_messages: 10
+    credentials:
+      id: &quot;TODO&quot;
+      secret: &quot;TODO&quot;
+      token: &quot;TODO&quot;
+      role: &quot;TODO&quot;
+</code></pre>
+
+<p>This input section contains lots of fields to be completed which are self
+explanatory, such as <code>bucket</code>, <code>sqs_url</code> and the <code>credentials</code> section.</p>
+<p>The <code>sqs_body_path</code> field is the JSON path within an SQS message that contains
+the name of new S3 files, which should be left as <code>Records.s3.object.key</code> unless
+you have built a custom solution.</p>
+<p>If SNS is being used to broadcast S3 events instead of connecting SQS directly
+you will need to fill in the <code>sqs_envelope_path</code>, which is the JSON path inside
+an SNS message that contains the enveloped S3 event. The value of
+<code>sqs_envelope_path</code> should be <code>Message</code> when using the standard AWS set up.</p>
+<p>This example uses a single consumer, but if the throughput isn't high enough to
+keep up with the bucket it is possible to use a <code>broker</code> type to have multiple
+parallel consumers:</p>
+<pre><code class="yaml">input:
+  type: broker
+  broker:
+    copies: 8 # Increase this to gain more parallel consumers
+    inputs:
+    - type: s3
+      s3:
+      ... etc
+</code></pre>
+
+<p>You can have any number of consumers of a bucket and messages (archives) will
+automatically be distributed amongst them via the SQS queue.</p>
+<h2 id="pipeline">Pipeline</h2>
+<pre><code class="yaml">pipeline:
+  threads: 4 # Try to match the number of available logical CPU cores
+  processors:
+  - type: decompress
+    decompress:
+      algorithm: gzip
+  - type: unarchive
+    unarchive:
+      format: tar
+  - type: split
+  - type: batch
+    batch:
+      count: 10 # The size of message batches to send to Kafka
+</code></pre>
+
+<p>The processors in this example start off with a simple decompress and unarchive
+of the payload. This results in a single payload of multiple documents. The
+split processor turns this payload into individual messages.</p>
+<p>The final processor is optional. It is a batch stage that bundles the individual
+messages back into batches to be sent to the Kafka topic, increasing the
+throughput. If the batch processor is used it should be a factor of the number
+of messages inside the S3 archives. The size also needs to be low enough so that
+the overall size of the batch doesn't exceed the maximum bytes of a Kafka
+request.</p>
+<p>These processors are heavy on CPU, which is why they are configured inside the
+pipeline section. This allows you to explicitly set the number of parallel
+threads to exactly match the number of logical CPU cores available.</p>
+<h2 id="output">Output</h2>
+<p>The output config is a standard Kafka output.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

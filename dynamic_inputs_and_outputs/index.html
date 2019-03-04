@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Dynamic inputs and outputs - Benthos Documentation</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="..">Benthos Documentation</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="/">Home</a>
+                            </li>
+                            <li >
+                                <a href="../concepts/">Core Concepts</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../inputs">Inputs</a>
+</li>
+                                    
+<li >
+    <a href="../buffers">Buffers</a>
+</li>
+                                    
+<li >
+    <a href="../processors">Processors</a>
+</li>
+                                    
+<li >
+    <a href="../conditions">Conditions</a>
+</li>
+                                    
+<li >
+    <a href="../outputs">Outputs</a>
+</li>
+                                    
+<li >
+    <a href="../caches">Caches</a>
+</li>
+                                    
+<li >
+    <a href="../rate_limits">Rate Limits</a>
+</li>
+                                    
+<li >
+    <a href="../metrics">Metrics</a>
+</li>
+                                    
+<li >
+    <a href="../tracers">Tracers</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../pipeline/">Pipeline</a>
+</li>
+                                    
+<li >
+    <a href="../batching/">Message Batching</a>
+</li>
+                                    
+<li >
+    <a href="../error_handling/">Error Handling</a>
+</li>
+                                    
+<li >
+    <a href="../workflows/">Workflows</a>
+</li>
+                                    
+<li >
+    <a href="../configuration/">Config Cheats</a>
+</li>
+                                    
+<li >
+    <a href="../config_interpolation/">Config Interpolation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#dynamic-inputs-and-outputs">Dynamic Inputs and Outputs</a></li>
+            <li><a href="#api">API</a></li>
+            <li><a href="#applications">Applications</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="dynamic-inputs-and-outputs">Dynamic Inputs and Outputs</h1>
+<p>It is possible to have sets of inputs and outputs in Benthos that can be added,
+updated and removed during runtime with the <a href="../inputs/#dynamic">dynamic fan in</a> and
+<a href="../outputs/#dynamic">dynamic fan out</a> types.</p>
+<p>Dynamic inputs and outputs are each identified by unique string labels, which
+are specified when adding them either in configuration or via the HTTP API. The
+labels are useful when querying which types are active.</p>
+<h2 id="api">API</h2>
+<p>The API for dynamic types (both inputs and outputs) is a collection of HTTP REST
+endpoints:</p>
+<h3 id="inputs"><code>/inputs</code></h3>
+<p>Returns a JSON object that maps input labels to an object containing details
+about the input, including uptime and configuration. If the input has terminated
+naturally the uptime will be set to <code>stopped</code>.</p>
+<pre><code class="json">{
+  &quot;&lt;string, input_label&gt;&quot;: {
+    &quot;uptime&quot;: &quot;&lt;string&gt;&quot;,
+    &quot;config&quot;: &lt;object&gt;
+  },
+  ...
+}
+</code></pre>
+
+<h3 id="inputinput_label"><code>/input/{input_label}</code></h3>
+<p>GET returns the configuration of the input idenfified by <code>input_label</code>.</p>
+<p>POST sets the input <code>input_label</code> to the body of the request parsed as a JSON
+configuration. If the input label already exists the previous input is first
+stopped and removed.</p>
+<p>DELETE stops and removes the input identified by <code>input_label</code>.</p>
+<h3 id="outputs"><code>/outputs</code></h3>
+<p>Returns a JSON object that maps output labels to an object containing details
+about the output, including uptime and configuration. If the output has
+terminated naturally the uptime will be set to <code>stopped</code>.</p>
+<pre><code class="json">{
+  &quot;&lt;string, output_label&gt;&quot;: {
+    &quot;uptime&quot;: &quot;&lt;string&gt;&quot;,
+    &quot;config&quot;: &lt;object&gt;
+  },
+  ...
+}
+</code></pre>
+
+<h3 id="outputoutput_label"><code>/output/{output_label}</code></h3>
+<p>GET returns the configuration of the output idenfified by <code>output_label</code>.</p>
+<p>POST sets the output <code>output_label</code> to the body of the request parsed as a JSON
+configuration. If the output label already exists the previous output is first
+stopped and removed.</p>
+<p>DELETE stops and removes the output identified by <code>output_label</code>.</p>
+<p>A custom prefix can be set for these endpoints in configuration.</p>
+<h2 id="applications">Applications</h2>
+<p>Dynamic types are useful when a platforms data streams might need to change
+regularly and automatically. It is also useful for triggering batches of
+platform data, e.g. a cron job can be created to send hourly curl requests that
+adds a dynamic input to read a file of sample data:</p>
+<pre><code class="sh">curl http://localhost:4195/input/read_sample -d @- &lt;&lt; EOF
+{
+    &quot;type&quot;: &quot;file&quot;,
+    &quot;file&quot;: {
+        &quot;path&quot;: &quot;/tmp/line_delim_sample_data.txt&quot;
+    }
+}
+EOF
+</code></pre>
+
+<p>Some inputs have a finite lifetime, e.g. <code>s3</code> without an SQS queue configured
+will close once the whole bucket has been read. When a dynamic types lifetime
+ends the <code>uptime</code> field of an input listing will be set to <code>stopped</code>. You can
+use this to write tools that trigger new inputs (to move onto the next bucket,
+for example).</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

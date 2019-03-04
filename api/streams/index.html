@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Streams - Benthos Documentation</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">Benthos Documentation</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="/">Home</a>
+                            </li>
+                            <li >
+                                <a href="../../concepts/">Core Concepts</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../inputs">Inputs</a>
+</li>
+                                    
+<li >
+    <a href="../../buffers">Buffers</a>
+</li>
+                                    
+<li >
+    <a href="../../processors">Processors</a>
+</li>
+                                    
+<li >
+    <a href="../../conditions">Conditions</a>
+</li>
+                                    
+<li >
+    <a href="../../outputs">Outputs</a>
+</li>
+                                    
+<li >
+    <a href="../../caches">Caches</a>
+</li>
+                                    
+<li >
+    <a href="../../rate_limits">Rate Limits</a>
+</li>
+                                    
+<li >
+    <a href="../../metrics">Metrics</a>
+</li>
+                                    
+<li >
+    <a href="../../tracers">Tracers</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../pipeline/">Pipeline</a>
+</li>
+                                    
+<li >
+    <a href="../../batching/">Message Batching</a>
+</li>
+                                    
+<li >
+    <a href="../../error_handling/">Error Handling</a>
+</li>
+                                    
+<li >
+    <a href="../../workflows/">Workflows</a>
+</li>
+                                    
+<li >
+    <a href="../../configuration/">Config Cheats</a>
+</li>
+                                    
+<li >
+    <a href="../../config_interpolation/">Config Interpolation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#streams-api">Streams API</a></li>
+            <li><a href="#api">API</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="streams-api">Streams API</h1>
+<p>When Benthos is run in <code>--streams</code> mode it will open up an HTTP REST API for
+creating and managing independent streams of data instead of creating a single
+stream.</p>
+<p>Each stream has its own input, buffer, pipeline and output sections which
+contains an isolated stream of data with its own lifetime.</p>
+<p>A walkthrough on using this API <a href="../../streams/using_REST_API/">can be found here</a>.</p>
+<h2 id="api">API</h2>
+<h3 id="get-streams">GET <code>/streams</code></h3>
+<p>Returns a map of existing streams by their unique identifiers to an object
+showing their status and uptime.</p>
+<h4 id="response-200">Response 200</h4>
+<pre><code class="json">{
+    &quot;&lt;string, stream id&gt;&quot;: {
+        &quot;active&quot;: &quot;&lt;bool, whether the stream is running&gt;&quot;,
+        &quot;uptime&quot;: &quot;&lt;float, uptime in seconds&gt;&quot;,
+        &quot;uptime_str&quot;: &quot;&lt;string, human readable string of uptime&gt;&quot;
+    }
+}
+</code></pre>
+
+<h3 id="post-streams">POST <code>/streams</code></h3>
+<p>Sets the entire collection of streams to the body of the request. Streams that
+exist but aren't within the request body are <em>removed</em>, streams that exist
+already and are in the request body are updated, other streams within the
+request body are created.</p>
+<pre><code class="json">{
+    &quot;&lt;string, stream id&gt;&quot;: &quot;&lt;object, a standard Benthos stream configuration&gt;&quot;
+}
+</code></pre>
+
+<h4 id="response-200_1">Response 200</h4>
+<p>The streams were updated successfully.</p>
+<h3 id="post-streamsid">POST <code>/streams/{id}</code></h3>
+<p>Create a new stream identified by <code>id</code> by posting a body containing the stream
+configuration in either JSON or YAML format. The configuration should be a
+standard Benthos configuration containing the sections <code>input</code>, <code>buffer</code>,
+<code>pipeline</code> and <code>output</code>.</p>
+<h4 id="response-200_2">Response 200</h4>
+<p>The stream was created successfully.</p>
+<h3 id="get-streamsid">GET <code>/streams/{id}</code></h3>
+<p>Read the details of an existing stream identified by <code>id</code>.</p>
+<h4 id="response-200_3">Response 200</h4>
+<pre><code class="json">{
+    &quot;active&quot;: &quot;&lt;bool, whether the stream is running&gt;&quot;,
+    &quot;uptime&quot;: &quot;&lt;float, uptime in seconds&gt;&quot;,
+    &quot;uptime_str&quot;: &quot;&lt;string, human readable string of uptime&gt;&quot;,
+    &quot;config&quot;: &quot;&lt;object, the configuration of the stream&gt;&quot;
+}
+</code></pre>
+
+<h3 id="put-streamsid">PUT <code>/streams/{id}</code></h3>
+<p>Update an existing stream identified by <code>id</code> by posting a body containing the
+new stream configuration in either JSON or YAML format. The configuration should
+be a standard Benthos configuration containing the sections <code>input</code>, <code>buffer</code>,
+<code>pipeline</code> and <code>output</code>.</p>
+<p>The previous stream will be shut down before and a new stream will take its
+place.</p>
+<h4 id="response-200_4">Response 200</h4>
+<p>The stream was updated successfully.</p>
+<h3 id="patch-streamsid">PATCH <code>/streams/{id}</code></h3>
+<p>Update an existing stream identified by <code>id</code> by posting a body containing only
+changes to be made to the existing configuration. The existing configuration
+will be patched with the new fields and the stream restarted with the result.</p>
+<h4 id="response-200_5">Response 200</h4>
+<p>The stream was patched successfully.</p>
+<h3 id="delete-streamsid">DELETE <code>/streams/{id}</code></h3>
+<p>Attempt to shut down and remove a stream identified by <code>id</code>.</p>
+<h4 id="response-200_6">Response 200</h4>
+<p>The stream was found, shut down and removed successfully.</p>
+<h3 id="get-streamsidstats">GET <code>/streams/{id}/stats</code></h3>
+<p>Read the metrics of an existing stream as a hierarchical JSON object.</p>
+<h4 id="response-200_7">Response 200</h4>
+<p>The stream was found.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

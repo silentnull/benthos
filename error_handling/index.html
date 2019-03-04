@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Error Handling - Benthos Documentation</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="..">Benthos Documentation</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="/">Home</a>
+                            </li>
+                            <li >
+                                <a href="../concepts/">Core Concepts</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../inputs">Inputs</a>
+</li>
+                                    
+<li >
+    <a href="../buffers">Buffers</a>
+</li>
+                                    
+<li >
+    <a href="../processors">Processors</a>
+</li>
+                                    
+<li >
+    <a href="../conditions">Conditions</a>
+</li>
+                                    
+<li >
+    <a href="../outputs">Outputs</a>
+</li>
+                                    
+<li >
+    <a href="../caches">Caches</a>
+</li>
+                                    
+<li >
+    <a href="../rate_limits">Rate Limits</a>
+</li>
+                                    
+<li >
+    <a href="../metrics">Metrics</a>
+</li>
+                                    
+<li >
+    <a href="../tracers">Tracers</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../pipeline/">Pipeline</a>
+</li>
+                                    
+<li >
+    <a href="../batching/">Message Batching</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Error Handling</a>
+</li>
+                                    
+<li >
+    <a href="../workflows/">Workflows</a>
+</li>
+                                    
+<li >
+    <a href="../configuration/">Config Cheats</a>
+</li>
+                                    
+<li >
+    <a href="../config_interpolation/">Config Interpolation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../batching/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../workflows/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#error-handling">Error Handling</a></li>
+            <li><a href="#processor-errors">Processor Errors</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="error-handling">Error Handling</h1>
+<h2 id="processor-errors">Processor Errors</h2>
+<p>Sometimes things can go wrong. Benthos supports a range of
+<a href="../processors/">processors</a> such as <code>http</code> and <code>lambda</code> that have the potential to
+fail if their retry attempts are exhausted. When this happens the data is not
+dropped but instead continues through the pipeline mostly unchanged. The content
+remains the same but a metadata flag is added to the message that can be
+referred to later in the pipeline using the
+<a href="../conditions/#processor_failed"><code>processor_failed</code></a> condition.</p>
+<p>This behaviour allows you to define in your config whether you would like the
+failed messages to be dropped, recovered with more processing, or routed to a
+dead-letter queue, or any combination thereof.</p>
+<h3 id="abandon-on-failure">Abandon on Failure</h3>
+<p>It's possible to define a list of processors which should be skipped for
+messages that failed a previous stage using the <a href="../processors/#try"><code>try</code></a> processor:</p>
+<pre><code class="yaml">  - type: try
+    try:
+    - type: foo
+    - type: bar # Skipped if foo failed
+    - type: baz # Skipped if foo or bar failed
+</code></pre>
+
+<h3 id="recover-failed-messages">Recover Failed Messages</h3>
+<p>Failed messages can be fed into their own processor steps with a
+<a href="../processors/#catch"><code>catch</code></a> processor:</p>
+<pre><code class="yaml">  - type: catch
+    catch:
+    - type: foo # Recover here
+</code></pre>
+
+<p>Once messages finish the catch block they will have their failure flags removed
+and are treated like regular messages. If this behaviour is not desired then it
+is possible to simulate a catch block with a <a href="../processors/#conditional"><code>conditional</code></a>
+processor:</p>
+<pre><code class="yaml">  - type: process_batch
+    process_batch:
+    - type: conditional
+      conditional:
+        condition:
+          type: processor_failed
+        processors:
+        - type: foo # Recover here
+</code></pre>
+
+<h3 id="drop-failed-messages">Drop Failed Messages</h3>
+<p>In order to filter out any failed messages from your pipeline you can simply use
+a <a href="../processors/#filter_parts"><code>filter_parts</code></a> processor:</p>
+<pre><code class="yaml">  - type: filter_parts
+    filter_parts:
+      type: processor_failed
+</code></pre>
+
+<p>This will remove any failed messages from a batch.</p>
+<h3 id="route-to-a-dead-letter-queue">Route to a Dead-Letter Queue</h3>
+<p>It is possible to send failed messages to different destinations using either a
+<a href="../processors/#group_by"><code>group_by</code></a> processor with a <a href="../outputs/#switch"><code>switch</code></a> output, or a
+<a href="../outputs/#broker"><code>broker</code></a> output with <a href="../processors/#filter_parts"><code>filter_parts</code></a> processors.</p>
+<pre><code class="yaml">pipeline:
+  processors:
+  - type: group_by
+    group_by:
+    - condition:
+        type: processor_failed
+output:
+  type: switch
+  switch:
+    outputs:
+    - output:
+        type: foo # Dead letter queue
+      condition:
+        type: processor_failed
+    - output:
+        type: bar # Everything else
+</code></pre>
+
+<p>Note that the <a href="../processors/#group_by"><code>group_by</code></a> processor is only necessary when messages
+are batched.</p>
+<p>Alternatively, using a <code>broker</code> output looks like this:</p>
+<pre><code class="yaml">output:
+  type: broker
+  broker:
+    pattern: fan_out
+    outputs:
+    - type: foo # Dead letter queue
+      processors:
+      - type: filter_parts
+        filter_parts:
+          type: processor_failed
+    - type: bar # Everything else
+      processors:
+      - type: filter_parts
+        filter_parts:
+          type: not
+          not:
+            type: processor_failed
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

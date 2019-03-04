@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Benthos Documentation</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body class="homepage">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="..">Benthos Documentation</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="/">Home</a>
+                            </li>
+                            <li >
+                                <a href="../concepts/">Core Concepts</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href=".">Inputs</a>
+</li>
+                                    
+<li >
+    <a href="../buffers">Buffers</a>
+</li>
+                                    
+<li >
+    <a href="../processors">Processors</a>
+</li>
+                                    
+<li >
+    <a href="../conditions">Conditions</a>
+</li>
+                                    
+<li >
+    <a href="../outputs">Outputs</a>
+</li>
+                                    
+<li >
+    <a href="../caches">Caches</a>
+</li>
+                                    
+<li >
+    <a href="../rate_limits">Rate Limits</a>
+</li>
+                                    
+<li >
+    <a href="../metrics">Metrics</a>
+</li>
+                                    
+<li >
+    <a href="../tracers">Tracers</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../pipeline/">Pipeline</a>
+</li>
+                                    
+<li >
+    <a href="../batching/">Message Batching</a>
+</li>
+                                    
+<li >
+    <a href="../error_handling/">Error Handling</a>
+</li>
+                                    
+<li >
+    <a href="../workflows/">Workflows</a>
+</li>
+                                    
+<li >
+    <a href="../configuration/">Config Cheats</a>
+</li>
+                                    
+<li >
+    <a href="../config_interpolation/">Config Interpolation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#inputs">Inputs</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#amqp">amqp</a></li>
+            <li><a href="#broker">broker</a></li>
+            <li><a href="#dynamic">dynamic</a></li>
+            <li><a href="#file">file</a></li>
+            <li><a href="#files">files</a></li>
+            <li><a href="#gcp_pubsub">gcp_pubsub</a></li>
+            <li><a href="#hdfs">hdfs</a></li>
+            <li><a href="#http_client">http_client</a></li>
+            <li><a href="#http_server">http_server</a></li>
+            <li><a href="#inproc">inproc</a></li>
+            <li><a href="#kafka">kafka</a></li>
+            <li><a href="#kafka_balanced">kafka_balanced</a></li>
+            <li><a href="#kinesis">kinesis</a></li>
+            <li><a href="#mqtt">mqtt</a></li>
+            <li><a href="#nanomsg">nanomsg</a></li>
+            <li><a href="#nats">nats</a></li>
+            <li><a href="#nats_stream">nats_stream</a></li>
+            <li><a href="#nsq">nsq</a></li>
+            <li><a href="#read_until">read_until</a></li>
+            <li><a href="#redis_list">redis_list</a></li>
+            <li><a href="#redis_pubsub">redis_pubsub</a></li>
+            <li><a href="#redis_streams">redis_streams</a></li>
+            <li><a href="#s3">s3</a></li>
+            <li><a href="#sqs">sqs</a></li>
+            <li><a href="#stdin">stdin</a></li>
+            <li><a href="#websocket">websocket</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="inputs">Inputs</h1>
+<p>This document was generated with <code>benthos --list-inputs</code></p>
+<p>An input is a source of data piped through an array of
+<a href="../processors">processors</a>. Only one input is configured at the root of a
+Benthos config. However, the input can be a <a href="#broker">broker</a> which combines
+multiple inputs. For example, if we wanted three inputs, a 'foo' a 'bar' and a
+'baz' we could use the 'broker' input type at our root:</p>
+<pre><code class="yaml">input:
+  type: broker
+  broker:
+    inputs:
+    - type: foo
+      foo:
+        foo_field_1: value1
+    - type: bar
+      bar:
+        bar_field_1: value2
+        bar_field_2: value3
+    - type: baz
+      baz:
+        baz_field_1: value4
+      processors:
+      - type: baz_processor
+  processors:
+  - type: some_processor
+</code></pre>
+
+<p>Note that in this example we have specified a processor at the broker level
+which will be applied to <em>all</em> inputs, and we also have a processor at the baz
+level which is only applied to messages from the baz input.</p>
+<h3 id="contents">Contents</h3>
+<ol>
+<li><a href="#amqp"><code>amqp</code></a></li>
+<li><a href="#broker"><code>broker</code></a></li>
+<li><a href="#dynamic"><code>dynamic</code></a></li>
+<li><a href="#file"><code>file</code></a></li>
+<li><a href="#files"><code>files</code></a></li>
+<li><a href="#gcp_pubsub"><code>gcp_pubsub</code></a></li>
+<li><a href="#hdfs"><code>hdfs</code></a></li>
+<li><a href="#http_client"><code>http_client</code></a></li>
+<li><a href="#http_server"><code>http_server</code></a></li>
+<li><a href="#inproc"><code>inproc</code></a></li>
+<li><a href="#kafka"><code>kafka</code></a></li>
+<li><a href="#kafka_balanced"><code>kafka_balanced</code></a></li>
+<li><a href="#kinesis"><code>kinesis</code></a></li>
+<li><a href="#mqtt"><code>mqtt</code></a></li>
+<li><a href="#nanomsg"><code>nanomsg</code></a></li>
+<li><a href="#nats"><code>nats</code></a></li>
+<li><a href="#nats_stream"><code>nats_stream</code></a></li>
+<li><a href="#nsq"><code>nsq</code></a></li>
+<li><a href="#read_until"><code>read_until</code></a></li>
+<li><a href="#redis_list"><code>redis_list</code></a></li>
+<li><a href="#redis_pubsub"><code>redis_pubsub</code></a></li>
+<li><a href="#redis_streams"><code>redis_streams</code></a></li>
+<li><a href="#s3"><code>s3</code></a></li>
+<li><a href="#sqs"><code>sqs</code></a></li>
+<li><a href="#stdin"><code>stdin</code></a></li>
+<li><a href="#websocket"><code>websocket</code></a></li>
+</ol>
+<h2 id="amqp"><code>amqp</code></h2>
+<pre><code class="yaml">type: amqp
+amqp:
+  bindings_declare: []
+  consumer_tag: benthos-consumer
+  max_batch_count: 1
+  prefetch_count: 10
+  prefetch_size: 0
+  queue: benthos-queue
+  queue_declare:
+    durable: true
+    enabled: false
+  tls:
+    client_certs: []
+    enabled: false
+    root_cas_file: &quot;&quot;
+    skip_cert_verify: false
+  url: amqp://guest:guest@localhost:5672/
+</code></pre>
+
+<p>Connects to an AMQP (0.91) queue. AMQP is a messaging protocol used by various
+message brokers, including RabbitMQ.</p>
+<p>The field <code>max_batch_count</code> specifies the maximum number of prefetched
+messages to be batched together. When more than one message is batched they can
+be split into individual messages with the <code>split</code> processor.</p>
+<p>It's possible for this input type to declare the target queue by setting
+<code>queue_declare.enabled</code> to <code>true</code>, if the queue already exists then
+the declaration passively verifies that they match the target fields.</p>
+<p>Similarly, it is possible to declare queue bindings by adding objects to the
+<code>bindings_declare</code> array. Binding declare objects take the form of:</p>
+<pre><code class="yaml">{
+  &quot;exchange&quot;: &quot;benthos-exchange&quot;,
+  &quot;key&quot;: &quot;benthos-key&quot;
+}
+</code></pre>
+
+<p>TLS is automatic when connecting to an <code>amqps</code> URL, but custom
+settings can be enabled in the <code>tls</code> section.</p>
+<h3 id="metadata">Metadata</h3>
+<p>This input adds the following metadata fields to each message:</p>
+<pre><code>- amqp_content_type
+- amqp_content_encoding
+- amqp_delivery_mode
+- amqp_priority
+- amqp_correlation_id
+- amqp_reply_to
+- amqp_expiration
+- amqp_message_id
+- amqp_timestamp
+- amqp_type
+- amqp_user_id
+- amqp_app_id
+- amqp_consumer_tag
+- amqp_delivery_tag
+- amqp_redelivered
+- amqp_exchange
+- amqp_routing_key
+- All existing message headers, including nested headers prefixed with the key
+  of their respective parent.
+</code></pre>
+
+<p>You can access these metadata fields using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="broker"><code>broker</code></h2>
+<pre><code class="yaml">type: broker
+broker:
+  copies: 1
+  inputs: []
+</code></pre>
+
+<p>The broker type allows you to combine multiple inputs, where each input will be
+read in parallel. A broker type is configured with its own list of input
+configurations and a field to specify how many copies of the list of inputs
+should be created.</p>
+<p>Adding more input types allows you to merge streams from multiple sources into
+one. For example, reading from both RabbitMQ and Kafka:</p>
+<pre><code class="yaml">type: broker
+broker:
+  copies: 1
+  inputs:
+  - type: amqp
+    amqp:
+      url: amqp://guest:guest@localhost:5672/
+      consumer_tag: benthos-consumer
+      exchange: benthos-exchange
+      exchange_type: direct
+      key: benthos-key
+      queue: benthos-queue
+  - type: kafka
+    kafka:
+      addresses:
+      - localhost:9092
+      client_id: benthos_kafka_input
+      consumer_group: benthos_consumer_group
+      partition: 0
+      topic: benthos_stream
+
+</code></pre>
+
+<p>If the number of copies is greater than zero the list will be copied that number
+of times. For example, if your inputs were of type foo and bar, with 'copies'
+set to '2', you would end up with two 'foo' inputs and two 'bar' inputs.</p>
+<h3 id="processors">Processors</h3>
+<p>It is possible to configure <a href="../processors/">processors</a> at the broker
+level, where they will be applied to <em>all</em> child inputs, as well as on the
+individual child inputs. If you have processors at both the broker level <em>and</em>
+on child inputs then the broker processors will be applied <em>after</em> the child
+nodes processors.</p>
+<h2 id="dynamic"><code>dynamic</code></h2>
+<pre><code class="yaml">type: dynamic
+dynamic:
+  inputs: {}
+  prefix: &quot;&quot;
+  timeout: 5s
+</code></pre>
+
+<p>The dynamic type is a special broker type where the inputs are identified by
+unique labels and can be created, changed and removed during runtime via a REST
+HTTP interface.</p>
+<p>To GET a JSON map of input identifiers with their current uptimes use the
+<code>/inputs</code> endpoint.</p>
+<p>To perform CRUD actions on the inputs themselves use POST, DELETE, and GET
+methods on the <code>/inputs/{input_id}</code> endpoint. When using POST the body
+of the request should be a JSON configuration for the input, if the input
+already exists it will be changed.</p>
+<h2 id="file"><code>file</code></h2>
+<pre><code class="yaml">type: file
+file:
+  delimiter: &quot;&quot;
+  max_buffer: 1e+06
+  multipart: false
+  path: &quot;&quot;
+</code></pre>
+
+<p>The file type reads input from a file. If multipart is set to false each line
+is read as a separate message. If multipart is set to true each line is read as
+a message part, and an empty line indicates the end of a message.</p>
+<p>If the delimiter field is left empty then line feed (\n) is used.</p>
+<h2 id="files"><code>files</code></h2>
+<pre><code class="yaml">type: files
+files:
+  path: &quot;&quot;
+</code></pre>
+
+<p>Reads files from a path, where each discrete file will be consumed as a single
+message payload. The path can either point to a single file (resulting in only a
+single message) or a directory, in which case the directory will be walked and
+each file found will become a message.</p>
+<h3 id="metadata_1">Metadata</h3>
+<p>This input adds the following metadata fields to each message:</p>
+<pre><code>- path
+</code></pre>
+
+<p>You can access these metadata fields using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="gcp_pubsub"><code>gcp_pubsub</code></h2>
+<pre><code class="yaml">type: gcp_pubsub
+gcp_pubsub:
+  max_outstanding_bytes: 1e+09
+  max_outstanding_messages: 1000
+  project: &quot;&quot;
+  subscription: &quot;&quot;
+</code></pre>
+
+<p>Consumes messages from a GCP Cloud Pub/Sub subscription. Attributes from each
+message are added as metadata, which can be accessed using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="hdfs"><code>hdfs</code></h2>
+<pre><code class="yaml">type: hdfs
+hdfs:
+  directory: &quot;&quot;
+  hosts:
+  - localhost:9000
+  user: benthos_hdfs
+</code></pre>
+
+<p>Reads files from a HDFS directory, where each discrete file will be consumed as a single
+message payload.</p>
+<h3 id="metadata_2">Metadata</h3>
+<p>This input adds the following metadata fields to each message:</p>
+<pre><code>- hdfs_name
+- hdfs_path
+</code></pre>
+
+<p>You can access these metadata fields using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="http_client"><code>http_client</code></h2>
+<pre><code class="yaml">type: http_client
+http_client:
+  backoff_on:
+  - 429
+  basic_auth:
+    enabled: false
+    password: &quot;&quot;
+    username: &quot;&quot;
+  drop_on: []
+  headers:
+    Content-Type: application/octet-stream
+  max_retry_backoff: 300s
+  oauth:
+    access_token: &quot;&quot;
+    access_token_secret: &quot;&quot;
+    consumer_key: &quot;&quot;
+    consumer_secret: &quot;&quot;
+    enabled: false
+    request_url: &quot;&quot;
+  payload: &quot;&quot;
+  rate_limit: &quot;&quot;
+  retries: 3
+  retry_period: 1s
+  stream:
+    delimiter: &quot;&quot;
+    enabled: false
+    max_buffer: 1e+06
+    multipart: false
+    reconnect: true
+  timeout: 5s
+  tls:
+    client_certs: []
+    enabled: false
+    root_cas_file: &quot;&quot;
+    skip_cert_verify: false
+  url: http://localhost:4195/get
+  verb: GET
+</code></pre>
+
+<p>The HTTP client input type connects to a server and continuously performs
+requests for a single message.</p>
+<p>You should set a sensible retry period and max backoff so as to not flood your
+target server.</p>
+<p>The URL and header values of this type can be dynamically set using function
+interpolations described <a href="../config_interpolation/#functions">here</a>.</p>
+<h3 id="streaming">Streaming</h3>
+<p>If you enable streaming then Benthos will consume the body of the response as a
+line delimited list of message parts. Each part is read as an individual message
+unless multipart is set to true, in which case an empty line indicates the end
+of a message.</p>
+<h2 id="http_server"><code>http_server</code></h2>
+<pre><code class="yaml">type: http_server
+http_server:
+  address: &quot;&quot;
+  cert_file: &quot;&quot;
+  key_file: &quot;&quot;
+  path: /post
+  timeout: 5s
+  ws_path: /post/ws
+</code></pre>
+
+<p>Receive messages POSTed over HTTP(S). HTTP 2.0 is supported when using TLS,
+which is enabled when key and cert files are specified.</p>
+<p>You can leave the 'address' config field blank in order to use the instance wide
+HTTP server.</p>
+<h3 id="metadata_3">Metadata</h3>
+<p>This input adds the following metadata fields to each message:</p>
+<pre><code>- http_server_user_agent
+- All headers (only first values are taken)
+- All cookies
+</code></pre>
+
+<p>You can access these metadata fields using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="inproc"><code>inproc</code></h2>
+<pre><code class="yaml">type: inproc
+inproc: &quot;&quot;
+</code></pre>
+
+<p>Directly connect to an output within a Benthos process by referencing it by a
+chosen ID. This allows you to hook up isolated streams whilst running Benthos in
+<a href="../streams/"><code>--streams</code> mode</a> mode, it is NOT recommended
+that you connect the inputs of a stream with an output of the same stream, as
+feedback loops can lead to deadlocks in your message flow.</p>
+<p>It is possible to connect multiple inputs to the same inproc ID, but only one
+output can connect to an inproc ID, and will replace existing outputs if a
+collision occurs.</p>
+<h2 id="kafka"><code>kafka</code></h2>
+<pre><code class="yaml">type: kafka
+kafka:
+  addresses:
+  - localhost:9092
+  client_id: benthos_kafka_input
+  commit_period: 1s
+  consumer_group: benthos_consumer_group
+  max_batch_count: 1
+  partition: 0
+  start_from_oldest: true
+  target_version: 1.0.0
+  tls:
+    client_certs: []
+    enabled: false
+    root_cas_file: &quot;&quot;
+    skip_cert_verify: false
+  topic: benthos_stream
+</code></pre>
+
+<p>Connects to a kafka (0.8+) server. Offsets are managed within kafka as per the
+consumer group (set via config). Only one partition per input is supported, if
+you wish to balance partitions across a consumer group look at the
+<code>kafka_balanced</code> input type instead.</p>
+<p>The field <code>max_batch_count</code> specifies the maximum number of prefetched
+messages to be batched together. When more than one message is batched they can
+be split into individual messages with the <code>split</code> processor.</p>
+<p>The target version by default will be the oldest supported, as it is expected
+that the server will be backwards compatible. In order to support newer client
+features you should increase this version up to the known version of the target
+server.</p>
+<h3 id="tls">TLS</h3>
+<p>Custom TLS settings can be used to override system defaults. This includes
+providing a collection of root certificate authorities, providing a list of
+client certificates to use for client verification and skipping certificate
+verification.</p>
+<p>Client certificates can either be added by file or by raw contents:</p>
+<pre><code class="yaml">enabled: true
+client_certs:
+  - cert_file: ./example.pem
+    key_file: ./example.key
+  - cert: foo
+    key: bar
+</code></pre>
+
+<h3 id="metadata_4">Metadata</h3>
+<p>This input adds the following metadata fields to each message:</p>
+<pre><code>- kafka_key
+- kafka_topic
+- kafka_partition
+- kafka_offset
+- kafka_timestamp_unix
+- All existing message headers (version 0.11+)
+</code></pre>
+
+<p>You can access these metadata fields using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="kafka_balanced"><code>kafka_balanced</code></h2>
+<pre><code class="yaml">type: kafka_balanced
+kafka_balanced:
+  addresses:
+  - localhost:9092
+  client_id: benthos_kafka_input
+  commit_period: 1s
+  consumer_group: benthos_consumer_group
+  max_batch_count: 1
+  start_from_oldest: true
+  target_version: 1.0.0
+  tls:
+    client_certs: []
+    enabled: false
+    root_cas_file: &quot;&quot;
+    skip_cert_verify: false
+  topics:
+  - benthos_stream
+</code></pre>
+
+<p>Connects to a kafka (0.9+) server. Offsets are managed within kafka as per the
+consumer group (set via config), and partitions are automatically balanced
+across any members of the consumer group.</p>
+<p>The field <code>max_batch_count</code> specifies the maximum number of prefetched
+messages to be batched together. When more than one message is batched they can
+be split into individual messages with the <code>split</code> processor.</p>
+<h3 id="tls_1">TLS</h3>
+<p>Custom TLS settings can be used to override system defaults. This includes
+providing a collection of root certificate authorities, providing a list of
+client certificates to use for client verification and skipping certificate
+verification.</p>
+<p>Client certificates can either be added by file or by raw contents:</p>
+<pre><code class="yaml">enabled: true
+client_certs:
+  - cert_file: ./example.pem
+    key_file: ./example.key
+  - cert: foo
+    key: bar
+</code></pre>
+
+<h3 id="metadata_5">Metadata</h3>
+<p>This input adds the following metadata fields to each message:</p>
+<pre><code>- kafka_key
+- kafka_topic
+- kafka_partition
+- kafka_offset
+- kafka_timestamp_unix
+- All existing message headers (version 0.11+)
+</code></pre>
+
+<p>You can access these metadata fields using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="kinesis"><code>kinesis</code></h2>
+<pre><code class="yaml">type: kinesis
+kinesis:
+  client_id: benthos_consumer
+  commit_period: 1s
+  credentials:
+    id: &quot;&quot;
+    role: &quot;&quot;
+    role_external_id: &quot;&quot;
+    secret: &quot;&quot;
+    token: &quot;&quot;
+  dynamodb_table: &quot;&quot;
+  endpoint: &quot;&quot;
+  limit: 100
+  region: eu-west-1
+  shard: &quot;0&quot;
+  start_from_oldest: true
+  stream: &quot;&quot;
+  timeout: 5s
+</code></pre>
+
+<p>Receive messages from a Kinesis stream.</p>
+<p>It's possible to use DynamoDB for persisting shard iterators by setting the
+table name. Offsets will then be tracked per <code>client_id</code> per
+<code>shard_id</code>. When using this mode you should create a table with
+<code>namespace</code> as the primary key and <code>shard_id</code> as a sort key.</p>
+<h2 id="mqtt"><code>mqtt</code></h2>
+<pre><code class="yaml">type: mqtt
+mqtt:
+  client_id: benthos_input
+  qos: 1
+  topics:
+  - benthos_topic
+  urls:
+  - tcp://localhost:1883
+</code></pre>
+
+<p>Subscribe to topics on MQTT brokers.</p>
+<h3 id="metadata_6">Metadata</h3>
+<p>This input adds the following metadata fields to each message:</p>
+<pre><code>- mqtt_duplicate
+- mqtt_qos
+- mqtt_retained
+- mqtt_topic
+- mqtt_message_id
+</code></pre>
+
+<p>You can access these metadata fields using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="nanomsg"><code>nanomsg</code></h2>
+<pre><code class="yaml">type: nanomsg
+nanomsg:
+  bind: true
+  poll_timeout: 5s
+  reply_timeout: 5s
+  socket_type: PULL
+  sub_filters: []
+  urls:
+  - tcp://*:5555
+</code></pre>
+
+<p>The scalability protocols are common communication patterns. This input should
+be compatible with any implementation, but specifically targets Nanomsg.</p>
+<p>Currently only PULL and SUB sockets are supported.</p>
+<h2 id="nats"><code>nats</code></h2>
+<pre><code class="yaml">type: nats
+nats:
+  prefetch_count: 32
+  queue: benthos_queue
+  subject: benthos_messages
+  urls:
+  - nats://localhost:4222
+</code></pre>
+
+<p>Subscribe to a NATS subject. NATS is at-most-once, if you need at-least-once
+behaviour then look at NATS Stream.</p>
+<p>The urls can contain username/password semantics. e.g.
+nats://derek:pass@localhost:4222</p>
+<h3 id="metadata_7">Metadata</h3>
+<p>This input adds the following metadata fields to each message:</p>
+<pre><code>- nats_subject
+</code></pre>
+
+<p>You can access these metadata fields using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="nats_stream"><code>nats_stream</code></h2>
+<pre><code class="yaml">type: nats_stream
+nats_stream:
+  client_id: benthos_client
+  cluster_id: test-cluster
+  durable_name: benthos_offset
+  max_inflight: 1024
+  queue: benthos_queue
+  start_from_oldest: true
+  subject: benthos_messages
+  unsubscribe_on_close: true
+  urls:
+  - nats://localhost:4222
+</code></pre>
+
+<p>Subscribe to a NATS Stream subject, which is at-least-once. Joining a queue is
+optional and allows multiple clients of a subject to consume using queue
+semantics.</p>
+<p>Tracking and persisting offsets through a durable name is also optional and
+works with or without a queue. If a durable name is not provided then subjects
+are consumed from the most recently published message.</p>
+<p>When a consumer closes its connection it unsubscribes, when all consumers of a
+durable queue do this the offsets are deleted. In order to avoid this you can
+stop the consumers from unsubscribing by setting the field
+<code>unsubscribe_on_close</code> to <code>false</code>.</p>
+<h3 id="metadata_8">Metadata</h3>
+<p>This input adds the following metadata fields to each message:</p>
+<pre><code>- nats_stream_subject
+- nats_stream_sequence
+</code></pre>
+
+<p>You can access these metadata fields using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="nsq"><code>nsq</code></h2>
+<pre><code class="yaml">type: nsq
+nsq:
+  channel: benthos_stream
+  lookupd_http_addresses:
+  - localhost:4161
+  max_in_flight: 100
+  nsqd_tcp_addresses:
+  - localhost:4150
+  topic: benthos_messages
+  user_agent: benthos_consumer
+</code></pre>
+
+<p>Subscribe to an NSQ instance topic and channel.</p>
+<h2 id="read_until"><code>read_until</code></h2>
+<pre><code class="yaml">type: read_until
+read_until:
+  condition:
+    type: text
+    text:
+      arg: &quot;&quot;
+      operator: equals_cs
+      part: 0
+  input: {}
+  restart_input: false
+</code></pre>
+
+<p>Reads from an input and tests a condition on each message. Messages are read
+continuously while the condition returns false, when the condition returns true
+the message that triggered the condition is sent out and the input is closed.
+Use this type to define inputs where the stream should end once a certain
+message appears.</p>
+<p>Sometimes inputs close themselves. For example, when the <code>file</code> input
+type reaches the end of a file it will shut down. By default this type will also
+shut down. If you wish for the input type to be restarted every time it shuts
+down until the condition is met then set <code>restart_input</code> to <code>true</code>.</p>
+<h3 id="metadata_9">Metadata</h3>
+<p>A metadata key <code>benthos_read_until</code> containing the value <code>final</code> is
+added to the first part of the message that triggers to input to stop.</p>
+<h2 id="redis_list"><code>redis_list</code></h2>
+<pre><code class="yaml">type: redis_list
+redis_list:
+  key: benthos_list
+  timeout: 5s
+  url: tcp://localhost:6379
+</code></pre>
+
+<p>Pops messages from the beginning of a Redis list using the BLPop command.</p>
+<h2 id="redis_pubsub"><code>redis_pubsub</code></h2>
+<pre><code class="yaml">type: redis_pubsub
+redis_pubsub:
+  channels:
+  - benthos_chan
+  url: tcp://localhost:6379
+</code></pre>
+
+<p>Redis supports a publish/subscribe model, it's possible to subscribe to multiple
+channels using this input.</p>
+<h2 id="redis_streams"><code>redis_streams</code></h2>
+<pre><code class="yaml">type: redis_streams
+redis_streams:
+  body_key: body
+  client_id: benthos_consumer
+  commit_period: 1s
+  consumer_group: benthos_group
+  limit: 10
+  start_from_oldest: true
+  streams:
+  - benthos_stream
+  timeout: 5s
+  url: tcp://localhost:6379
+</code></pre>
+
+<p>Pulls messages from Redis (v5.0+) streams with the XREADGROUP command. The
+<code>client_id</code> should be unique for each consumer of a group.</p>
+<p>The field <code>limit</code> specifies the maximum number of records to be
+received per request. When more than one record is returned they are batched and
+can be split into individual messages with the <code>split</code> processor.</p>
+<p>Redis stream entries are key/value pairs, as such it is necessary to specify the
+key that contains the body of the message. All other keys/value pairs are saved
+as metadata fields.</p>
+<h2 id="s3"><code>s3</code></h2>
+<pre><code class="yaml">type: s3
+s3:
+  bucket: &quot;&quot;
+  credentials:
+    id: &quot;&quot;
+    role: &quot;&quot;
+    role_external_id: &quot;&quot;
+    secret: &quot;&quot;
+    token: &quot;&quot;
+  delete_objects: false
+  download_manager:
+    enabled: true
+  endpoint: &quot;&quot;
+  max_batch_count: 1
+  prefix: &quot;&quot;
+  region: eu-west-1
+  retries: 3
+  sqs_body_path: Records.s3.object.key
+  sqs_envelope_path: &quot;&quot;
+  sqs_max_messages: 10
+  sqs_url: &quot;&quot;
+  timeout: 5s
+</code></pre>
+
+<p>Downloads objects in an Amazon S3 bucket, optionally filtered by a prefix. If an
+SQS queue has been configured then only object keys read from the queue will be
+downloaded. Otherwise, the entire list of objects found when this input is
+created will be downloaded. Note that the prefix configuration is only used when
+downloading objects without SQS configured.</p>
+<p>If the download manager is enabled this can help speed up file downloads but
+results in file metadata not being copied.</p>
+<p>If your bucket is configured to send events directly to an SQS queue then you
+need to set the <code>sqs_body_path</code> field to where the object key is found
+in the payload. However, it is also common practice to send bucket events to an
+SNS topic which sends enveloped events to SQS, in which case you must also set
+the <code>sqs_envelope_path</code> field to where the payload can be found.</p>
+<p>Here is a guide for setting up an SQS queue that receives events for new S3
+bucket objects:</p>
+<p>https://docs.aws.amazon.com/AmazonS3/latest/dev/ways-to-add-notification-config-to-bucket.html</p>
+<p>WARNING: When using SQS please make sure you have sensible values for
+<code>sqs_max_messages</code> and also the visibility timeout of the queue
+itself.</p>
+<p>When Benthos consumes an S3 item as a result of receiving an SQS message the
+message is not deleted until the S3 item has been sent onwards. This ensures
+at-least-once crash resiliency, but also means that if the S3 item takes longer
+to process than the visibility timeout of your queue then the same items might
+be processed multiple times.</p>
+<h3 id="metadata_10">Metadata</h3>
+<p>This input adds the following metadata fields to each message:</p>
+<pre><code>- s3_key
+- s3_bucket
+- s3_last_modified_unix*
+- s3_last_modified (RFC3339)*
+- s3_content_type*
+- All user defined metadata*
+
+* Only added when NOT using download manager
+</code></pre>
+
+<p>You can access these metadata fields using
+<a href="../config_interpolation/#metadata">function interpolation</a>.</p>
+<h2 id="sqs"><code>sqs</code></h2>
+<pre><code class="yaml">type: sqs
+sqs:
+  credentials:
+    id: &quot;&quot;
+    role: &quot;&quot;
+    role_external_id: &quot;&quot;
+    secret: &quot;&quot;
+    token: &quot;&quot;
+  endpoint: &quot;&quot;
+  max_number_of_messages: 1
+  region: eu-west-1
+  timeout: 5s
+  url: &quot;&quot;
+</code></pre>
+
+<p>Receive messages from an Amazon SQS URL, only the body is extracted into
+messages.</p>
+<h2 id="stdin"><code>stdin</code></h2>
+<pre><code class="yaml">type: stdin
+stdin:
+  delimiter: &quot;&quot;
+  max_buffer: 1e+06
+  multipart: false
+</code></pre>
+
+<p>The stdin input simply reads any data piped to stdin as messages. By default the
+messages are assumed single part and are line delimited. If the multipart option
+is set to true then lines are interpretted as message parts, and an empty line
+indicates the end of the message.</p>
+<p>If the delimiter field is left empty then line feed (\n) is used.</p>
+<h2 id="websocket"><code>websocket</code></h2>
+<pre><code class="yaml">type: websocket
+websocket:
+  basic_auth:
+    enabled: false
+    password: &quot;&quot;
+    username: &quot;&quot;
+  oauth:
+    access_token: &quot;&quot;
+    access_token_secret: &quot;&quot;
+    consumer_key: &quot;&quot;
+    consumer_secret: &quot;&quot;
+    enabled: false
+    request_url: &quot;&quot;
+  open_message: &quot;&quot;
+  url: ws://localhost:4195/get/ws
+</code></pre>
+
+<p>Connects to a websocket server and continuously receives messages.</p>
+<p>It is possible to configure an <code>open_message</code>, which when set to a
+non-empty string will be sent to the websocket server each time a connection is
+first established.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.0.4
+Build Date UTC : 2019-03-04 15:27:11
+-->

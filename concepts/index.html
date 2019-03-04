@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Core Concepts - Benthos Documentation</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="..">Benthos Documentation</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="active">
+                                <a href="./">Core Concepts</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../inputs">Inputs</a>
+</li>
+                                    
+<li >
+    <a href="../buffers">Buffers</a>
+</li>
+                                    
+<li >
+    <a href="../processors">Processors</a>
+</li>
+                                    
+<li >
+    <a href="../conditions">Conditions</a>
+</li>
+                                    
+<li >
+    <a href="../outputs">Outputs</a>
+</li>
+                                    
+<li >
+    <a href="../caches">Caches</a>
+</li>
+                                    
+<li >
+    <a href="../rate_limits">Rate Limits</a>
+</li>
+                                    
+<li >
+    <a href="../metrics">Metrics</a>
+</li>
+                                    
+<li >
+    <a href="../tracers">Tracers</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../pipeline/">Pipeline</a>
+</li>
+                                    
+<li >
+    <a href="../batching/">Message Batching</a>
+</li>
+                                    
+<li >
+    <a href="../error_handling/">Error Handling</a>
+</li>
+                                    
+<li >
+    <a href="../workflows/">Workflows</a>
+</li>
+                                    
+<li >
+    <a href="../configuration/">Config Cheats</a>
+</li>
+                                    
+<li >
+    <a href="../config_interpolation/">Config Interpolation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="disabled">
+                                <a rel="next" >
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../pipeline/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#benthos-concepts">Benthos Concepts</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#configuration">Configuration</a></li>
+            <li><a href="#mutating-and-filtering-content">Mutating And Filtering Content</a></li>
+            <li><a href="#content-based-multiplexing">Content Based Multiplexing</a></li>
+            <li><a href="#sharing-resources-across-processors">Sharing Resources Across Processors</a></li>
+            <li><a href="#maximising-io-throughput">Maximising IO Throughput</a></li>
+            <li><a href="#maximising-cpu-utilisation">Maximising CPU Utilisation</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="benthos-concepts">Benthos Concepts</h1>
+<h2 id="contents">Contents</h2>
+<ol>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#mutating-and-filtering-content">Mutating And Filtering Content</a></li>
+<li><a href="#content-based-multiplexing">Content Based Multiplexing</a></li>
+<li><a href="#sharing-resources-across-processors">Sharing Resources Across Processors</a></li>
+<li><a href="#maximising-io-throughput">Maximising IO Throughput</a></li>
+<li><a href="#maximising-cpu-utilisation">Maximising CPU Utilisation</a></li>
+</ol>
+<h2 id="configuration">Configuration</h2>
+<p>A Benthos configuration consists of a number of root sections, the key parts
+being:</p>
+<ul>
+<li><a href="./inputs"><code>input</code></a></li>
+<li><a href="./buffers"><code>buffer</code></a></li>
+<li><a href="../pipeline/"><code>pipeline</code></a></li>
+<li><a href="./outputs"><code>output</code></a></li>
+</ul>
+<p>There are also sections for <code>metrics</code>, <code>logging</code> and <code>http</code> server options.
+Config examples for every input, output and processor type can be found
+<a href="../config">here</a>.</p>
+<p>Benthos provides lots of tooling to try and make writing configuration easier,
+you can read about them <a href="../configuration/">here</a>.</p>
+<h2 id="mutating-and-filtering-content">Mutating And Filtering Content</h2>
+<p>Benthos bridges different transport and storage mediums of data, but these often
+require the data to be represented in different ways. For example, we might be
+reading <code>.tgz</code> archives of messages from Amazon S3, but we need to decompress
+and unarchive the messages before sending them to Kafka. For this purpose we
+can use processors, which you <a href="../processors/">can read about in more detail here</a>.</p>
+<p>Processors can be attributed to both inputs and outputs, meaning you can be
+specific about which processors apply to data from specific sources or to
+specific sinks.</p>
+<h2 id="content-based-multiplexing">Content Based Multiplexing</h2>
+<p>It is possible to perform content based multiplexing of messages to specific
+outputs using <a href="../outputs/#switch">a switch output</a> with two or more conditional
+outputs. <a href="../conditions/">Conditions</a> are content aware logical operators that can
+be combined using boolean logic.</p>
+<p>For example, say we have an output <code>foo</code> that we only want to receive messages
+that contain the word <code>foo</code>, and an output <code>bar</code> that we wish to send everything
+that <code>foo</code> doesn't receive, we can achieve that with this config:</p>
+<pre><code class="yaml">output:
+  type: switch
+  switch:
+    outputs:
+    - output:
+        type: foo
+        foo:
+          foo_field_1: value1
+      condition:
+        type: text
+        text:
+          operator: contains
+          arg: foo
+    - output:
+        type: bar
+        bar:
+          bar_field_1: value2
+</code></pre>
+
+<p>Another method of content based multiplexing is with
+<a href="../outputs/#broker">an output broker with the <code>fan_out</code> pattern</a> and a
+<a href="../processors/#filter">filter processor</a> on each output, which is a processor
+that drops messages if the <a href="../conditions/">condition</a> does not pass.</p>
+<p>For example, the equivalent config for the previous example would be:</p>
+<pre><code class="yaml">output:
+  type: broker
+  broker:
+    pattern: fan_out
+    outputs:
+    - type: foo
+      foo:
+        foo_field_1: value1
+      processors:
+      - type: filter
+        filter:
+          type: text
+          text:
+            operator: contains
+            arg: foo
+    - type: bar
+      bar:
+        bar_field_1: value2
+      processors:
+      - type: filter
+        filter:
+          type: not
+          not:
+            type: text
+            text:
+              operator: contains
+              arg: foo
+</code></pre>
+
+<p>For more information regarding conditions, including the full list of
+conditions available, please <a href="../conditions/">read the docs here</a>.</p>
+<h2 id="sharing-resources-across-processors">Sharing Resources Across Processors</h2>
+<p>Sometimes it is advantageous to share configurations for resources such as
+caches or complex conditions between processors when they would otherwise be
+duplicated. For this purpose there is a <code>resource</code> section in a Benthos config
+where <a href="../caches/">caches</a>, <a href="../conditions/">conditions</a> and <a href="../rate_limits/">rate limits</a>
+can be configured to a label that is referred to by any components that wish to
+use them.</p>
+<p>For example, let's imagine we have three inputs, two of which we wish to
+deduplicate using a shared cache. We also have two outputs, one of which only
+receives messages that satisfy a condition and the other receives the logical
+NOT of that same condition. In this example we can save ourselves the trouble of
+configuring the same cache and condition twice by referring to them as resources
+like this:</p>
+<pre><code class="yaml">input:
+  type: broker
+  broker:
+    inputs:
+    - type: foo
+      processors:
+      - type: dedupe
+        dedupe:
+          cache: foobarcache
+          hash: none
+          parts: [0]
+    - type: bar
+      processors:
+      - type: dedupe
+        dedupe:
+          cache: foobarcache
+          hash: none
+          parts: [0]
+    - type: baz
+output:
+  type: broker
+  broker:
+    pattern: fan_out
+    outputs:
+    - type: quz
+      quz:
+        processors:
+        - type: filter
+          filter:
+            type: resource
+            resource: foobarcondition
+    - type: qux
+      qux:
+        processors:
+        - type: filter
+          filter:
+            type: not
+            not:
+              type: resource
+              resource: foobarcondition
+resources:
+  caches:
+    foobarcache:
+      type: memcached
+      memcached:
+        addresses:
+        - localhost:11211
+        ttl: 60
+  conditions:
+    foobarcondition:
+      type: text
+      text:
+        operator: equals_cs
+        part: 1
+        arg: filter me please
+</code></pre>
+
+<p>It is also worth noting that when conditions are used as resources in this way
+they will only be executed once per message, regardless of how many times they
+are referenced (unless the content is modified). Therefore, resource conditions
+can act as a runtime optimisation as well as a config optimisation.</p>
+<h2 id="maximising-io-throughput">Maximising IO Throughput</h2>
+<p>This section assumes your Benthos instance is doing minimal or zero processing,
+and therefore has minimal reliance on your CPU resource. Even if this is not the
+case the following still applies to an extent, but you should also refer to
+<a href="#maximising-cpu-utilisation">the next section regarding CPU utilisation</a></p>
+<p>Building a high throughput platform is an endless topic, instead this section
+outlines a few common throughput issues and ways in which they can be solved
+within Benthos.</p>
+<p>Before venturing into Benthos configurations you should first take an in-depth
+look at your sources and sinks. Benthos is generally much simpler
+architecturally than the inputs and outputs it supports. Spend some time
+understanding how to squeeze the most out of these services and it will make it
+easier (or unnecessary) to tune your bridge within Benthos.</p>
+<h3 id="benthos-reads-too-slowly">Benthos Reads Too Slowly</h3>
+<p>If Benthos isn't reading fast enough from your source it might not necessarily
+be due to a slow consumer. If the sink is slow this can cause back pressure that
+throttles the amount Benthos can read. Try replacing the output with <code>stdout</code>
+and pipe it to <code>/dev/null</code> (or use <code>file</code> with the path set to <code>/dev/null</code>). If
+you notice that the input suddenly speeds up then the issue is likely with the
+output, in which case <a href="#benthos-writes-too-slowly">try the next section</a>.</p>
+<p>If the <code>/dev/null</code> output pipe didn't help then take a quick look at the basic
+configuration fields for the input source type. Sometimes there are fields for
+setting a number of background prefetches or similar concepts that can increase
+your throughput. For example, increasing the value of <code>prefetch_count</code> for an
+AMQP consumer can greatly increase the rate at which it is consumed.</p>
+<p>Next, if your source supports multiple parallel consumers then you can try doing
+that within Benthos by using a <a href="../inputs/#broker">broker</a>. For example, if you
+started with:</p>
+<pre><code class="yaml">input:
+  type: foo
+  foo:
+    field1: etc
+</code></pre>
+
+<p>You could change to:</p>
+<pre><code class="yaml">input:
+  type: broker
+  broker:
+    copies: 4
+    inputs:
+    - type: foo
+      foo:
+        field1: etc
+</code></pre>
+
+<p>Which would create the exact same consumer as before with four copies in total.
+Try increasing the number of copies to see how that affects the throughput. If
+your multiple consumers would require different configurations then set copies
+to <code>1</code> and write each consumer as a separate object in the <code>inputs</code> array.</p>
+<p>Read the <a href="../inputs/#broker">broker documentation</a> for more tips on simplifying
+broker configs.</p>
+<p>If your source doesn't support multiple parallel consumers then unfortunately
+your options are limited. A logical next step might be to look at your
+network/disk configuration to see if that's a potential cause of contention.</p>
+<h3 id="benthos-writes-too-slowly">Benthos Writes Too Slowly</h3>
+<p>If you have an output sink that regularly places back pressure on your source
+there are a few solutions depending on the details of the issue.</p>
+<p>Firstly, you should check the config parameters of your output sink. There are
+often fields specifically for controlling the level of acknowledgement to expect
+before moving onto the next message, if these levels of guarantee are overkill
+you can disable them for greater throughput. For example, setting the
+<code>ack_replicas</code> field to <code>false</code> in the Kafka sink can have a high impact on
+throughput.</p>
+<p>If the config parameters for an output sink aren't enough then you can try the
+following:</p>
+<h4 id="send-messages-in-batches">Send messages in batches</h4>
+<p>Some output sinks do not support multipart messages and when receiving one will
+send each part as an individual message as a batch (the Kafka output will do
+this). You can use this to your advantage by using the <code>batch</code> processor to
+create batches of messages to send.</p>
+<p>For example, given the following input and output combination:</p>
+<pre><code class="yaml">input:
+  type: foo
+output:
+  type: kafka
+</code></pre>
+
+<p>This bridge will send messages one at a time, wait for acknowledgement from the
+output and propagate that acknowledgement to the input. Instead, using this
+config:</p>
+<pre><code class="yaml">input:
+  type: foo
+  processors:
+  - type: batch
+    batch:
+      count: 8
+output:
+  type: kafka
+</code></pre>
+
+<p>The bridge will read 8 messages from the input, send those 8 messages to the
+output as a batch, receive the acknowledgement from the output for all messages
+together, then propagate the acknowledgement for all those messages to the input
+together.</p>
+<p>Therefore, provided the input is able to send messages and acknowledge them
+outside of lock-step (or doesn't support acknowledgement at all), you can
+improve throughput without losing delivery guarantees.</p>
+<h4 id="level-out-input-spikes-with-a-buffer">Level out input spikes with a buffer</h4>
+<p>There are many reasons why an input source might have spikes or inconsistent
+throughput rates. It is possible that your output is capable of keeping up with
+the long term average flow of data, but fails to keep up when an intermittent
+spike occurs.</p>
+<p>In situations like these it is sometimes a better use of your hardware and
+resources to level out the flow of data rather than try and match the peak
+throughput. This would depend on the frequency and duration of the spikes as
+well as your latency requirements, and is therefore a matter of judgement.</p>
+<p>Leveling out the flow of data can be done within Benthos using a
+<a href="../buffers/">buffer</a>. Buffers allow an input source to store a bounded amount of
+data temporarily, which a consumer can work through at its own pace. Buffers
+always have a fixed capacity, which when full will proceed to block the input
+just like a busy output would.</p>
+<p>Therefore, it's still important to have an output that can keep up with the flow
+of data, the difference that a buffer makes is that the output only needs to
+keep up with the <em>average</em> flow of data versus the instantaneous flow of data.</p>
+<p>If your input usually produces 10 msgs/s, but occasionally spikes to 100 msgs/s,
+and your output can handle up to 50 msgs/s, it might be possible to configure a
+buffer large enough to store spikes in their entirety. As long as the average
+flow of messages from the input remains below 50 msgs/s then your bridge should
+be able to continue indefinitely without ever blocking the input source.</p>
+<p>Benthos offers <a href="../buffers/">a range of buffer strategies</a> and it is worth studying
+them all in order to find the correct combination of resilience, throughput and
+capacity that you need.</p>
+<h4 id="increase-the-number-of-parallel-output-sinks">Increase the number of parallel output sinks</h4>
+<p>If your output sink supports multiple parallel writers then it can greatly
+increase your throughput to have multiple outputs configured. However, one thing
+to keep in mind is that due to the lock-step of reading/sending/acknowledging of
+a Benthos bridge, if the number of output writers exceeds the number of input
+consumers you will need a <a href="../buffers/">buffer</a> between them in order to keep all
+outputs busy, the buffer doesn't need to be large.</p>
+<p>Increasing the number of parallel output sinks is similar to doing the same for
+input sources and is done using a <a href="../outputs/#broker">broker</a>. The output broker
+type supports a few different routing patterns depending on your intention. In
+this case we want to maximize throughput so our best choice is a <code>greedy</code>
+pattern. For example, if you started with:</p>
+<pre><code class="yaml">output:
+  type: foo
+  foo:
+    field1: etc
+</code></pre>
+
+<p>You could change to:</p>
+<pre><code class="yaml">output:
+  type: broker
+  broker:
+    pattern: greedy
+    copies: 4
+    outputs:
+    - type: foo
+      foo:
+        field1: etc
+</code></pre>
+
+<p>Which would create the exact same output writer as before with four copies in
+total. Try increasing the number of copies to see how that affects the
+throughput. If your multiple output writers would require different
+configurations (client ids, for example) then set copies to <code>1</code> and write each
+consumer as a separate object in the <code>outputs</code> array.</p>
+<p>Read the <a href="../outputs/#broker">broker documentation</a> for more tips on simplifying
+broker configs.</p>
+<h2 id="maximising-cpu-utilisation">Maximising CPU Utilisation</h2>
+<p>Some <a href="../processors/">processors</a> within Benthos are relatively heavy on your CPU,
+and can potentially become the bottleneck of a bridge. In these circumstances
+it is worth configuring your bridge so that your processors are running on each
+available core of your machine without contention.</p>
+<p>An array of processors in any section of a Benthos config becomes a single
+logical pipeline of steps running on a single logical thread.</p>
+<p>When the target of the processors (an input or output) is a broker type the
+pipeline will be duplicated once for each discrete input/output. This is one way
+to create parallel processing threads but they will be tightly coupled to the
+input or output they are bound to. Using processing pipelines in this way
+results in uneven and varying loads which is unideal for distributing processing
+work across logical CPUs.</p>
+<p>The other way to create parallel processor threads is to configure them inside
+the <a href="../pipeline/">pipeline</a> configuration block, where we can explicitly set any
+number of parallel processor threads independent of how many inputs or outputs
+we want to use. If the number of inputs is less than or close to the number of
+processing threads then it is also important to use a <a href="../buffers/">buffer</a> in order
+to decouple those inputs.</p>
+<p>Please refer <a href="../pipeline/">to the documentation regarding pipelines</a> for some
+examples.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

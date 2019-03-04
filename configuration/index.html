@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Config Cheats - Benthos Documentation</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="..">Benthos Documentation</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="/">Home</a>
+                            </li>
+                            <li >
+                                <a href="../concepts/">Core Concepts</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../inputs">Inputs</a>
+</li>
+                                    
+<li >
+    <a href="../buffers">Buffers</a>
+</li>
+                                    
+<li >
+    <a href="../processors">Processors</a>
+</li>
+                                    
+<li >
+    <a href="../conditions">Conditions</a>
+</li>
+                                    
+<li >
+    <a href="../outputs">Outputs</a>
+</li>
+                                    
+<li >
+    <a href="../caches">Caches</a>
+</li>
+                                    
+<li >
+    <a href="../rate_limits">Rate Limits</a>
+</li>
+                                    
+<li >
+    <a href="../metrics">Metrics</a>
+</li>
+                                    
+<li >
+    <a href="../tracers">Tracers</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../pipeline/">Pipeline</a>
+</li>
+                                    
+<li >
+    <a href="../batching/">Message Batching</a>
+</li>
+                                    
+<li >
+    <a href="../error_handling/">Error Handling</a>
+</li>
+                                    
+<li >
+    <a href="../workflows/">Workflows</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Config Cheats</a>
+</li>
+                                    
+<li >
+    <a href="../config_interpolation/">Config Interpolation</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../workflows/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../config_interpolation/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#configuration">Configuration</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#enabling-discovery">Enabling Discovery</a></li>
+            <li><a href="#help-with-debugging">Help With Debugging</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="configuration">Configuration</h1>
+<p>A Benthos stream is configured either in a YAML or JSON file using a
+hierarchical format. For a basic stream pipeline that means the section for,
+say, an input is very simple:</p>
+<pre><code class="yaml">input:
+  type: kafka
+  kafka:
+    topic: foo
+    partition: 0
+    addresses:
+      - localhost:9092
+</code></pre>
+
+<p>However, as configurations become more complex this format can sometimes be
+difficult to read and manage:</p>
+<pre><code class="yaml">input:
+  type: kafka
+  kafka:
+    ...
+  processors:
+    - type: conditional
+      conditional:
+        condition:
+          type: jmespath
+          jmespath:
+            query: contains(foo.bar, &quot;compress me&quot;)
+        processors:
+          - type: compress
+            compress:
+              algorithm: gzip
+</code></pre>
+
+<p>The above example reads messages from Kafka and, if the JSON path <code>foo.bar</code>
+contains the phrase "compress me" the entire message will be compressed with
+<code>gzip</code>, otherwise it passes unchanged.</p>
+<p>Allowing arbitrary hierarchies of <a href="../processors/">processors</a> and
+<a href="../conditions/">conditions</a> like this is powerful, but increases the likelihood of
+issues being introduced by typos.</p>
+<p>This document outlines tooling provided by Benthos to help with writing and
+managing these more complex configuration files.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#enabling-discovery">Enabling Discovery</a></li>
+<li><a href="#help-with-debugging">Help With Debugging</a></li>
+</ul>
+<h2 id="enabling-discovery">Enabling Discovery</h2>
+<p>The discoverability of configuration fields is a common headache with any
+configuration driven application. The classic solution is to provide curated
+documentation that is often hosted on a dedicated site. Benthos does this by
+generating a markdown document
+<a href="..#core-components">per configuration section</a>.</p>
+<p>However, a user often only needs to get their hands on a short, runnable example
+config file for their use case. They just need to see the format and field names
+as the fields themselves are usually self explanatory. Forcing such a user to
+navigate a website, scrolling through paragraphs of text, seems inefficient when
+all they actually needed to see was something like:</p>
+<pre><code class="yaml">input:
+  type: amqp
+  amqp:
+    url: amqp://guest:guest@localhost:5672/
+    consumer_tag: benthos-consumer
+    exchange: benthos-exchange
+    exchange_type: direct
+    key: benthos-key
+    prefetch_count: 10
+    prefetch_size: 0
+    queue: benthos-queue
+output:
+  type: stdout
+</code></pre>
+
+<p>In order to make this process easier Benthos is able to generate usable
+configuration examples for any types, and you can do this from the binary using
+the <code>--example</code> flag in combination with <code>--print-yaml</code> or <code>--print-json</code>. If,
+for example, we wanted to generate a config with a websocket input, a Kafka
+output and a JMESPath processor in the middle, we could do it with the following
+command:</p>
+<pre><code class="yaml">benthos --print-yaml --example websocket,kafka,jmespath
+</code></pre>
+
+<p>There are also examples within the <a href="../config">config directory</a>, where there is
+a config file for each input and output type, and inside the
+<a href="../config/processors">processors</a> subdirectory there is a file showing each
+processor type, and so on.</p>
+<p>All of these generated configuration examples also include other useful config
+sections such as <code>metrics</code>, <code>logging</code>, etc with sensible defaults.</p>
+<h3 id="printing-every-field">Printing Every Field</h3>
+<p>The format of a Benthos config file naturally exposes all of the options for a
+section when it's printed with all default values. For example, in a fictional
+section <code>foo</code>, which has type options <code>bar</code>, <code>baz</code> and <code>qux</code>, if you were to
+print the entire default <code>foo</code> section of a config it would look something like
+this:</p>
+<pre><code class="yaml">foo:
+  type: bar
+  bar:
+    field1: default_value
+    field2: 2
+  baz:
+    field3: another_default_value
+  qux:
+    field4: false
+</code></pre>
+
+<p>Which tells you that section <code>foo</code> supports the three object types <code>bar</code>, <code>baz</code>
+and <code>qux</code>, and defaults to type <code>bar</code>. It also shows you the fields that each
+section has, and their default values.</p>
+<p>The Benthos binary is able to print a JSON or YAML config file containing every
+section in this format with the commands <code>benthos --print-yaml --all</code> and
+<code>benthos --print-json --all</code>. This can be extremely useful for quick and dirty
+config discovery when the full repo isn't at hand.</p>
+<p>As a user you could create a new config file with:</p>
+<pre><code class="sh">benthos --print-yaml --all &gt; conf.yaml
+</code></pre>
+
+<p>And simply delete all lines for sections you aren't interested in, then you are
+left with the full set of fields you want.</p>
+<p>Alternatively, using tools such as <code>jq</code> you can extract specific type fields:</p>
+<pre><code class="sh"># Get a list of all input types:
+benthos --print-json --all | jq '.input | keys'
+
+# Get all Kafka input fields:
+benthos --print-json --all | jq '.input.kafka'
+
+# Get all AMQP output fields:
+benthos --print-json --all | jq '.output.amqp'
+
+# Get a list of all processor types:
+benthos --print-json --all | jq '.pipeline.processors[0] | keys'
+
+# Get all JSON processor fields:
+benthos --print-json --all | jq '.pipeline.processors[0].json'
+</code></pre>
+
+<h2 id="help-with-debugging">Help With Debugging</h2>
+<p>Once you have a config written you now move onto the next headache of proving
+that it works, and understanding why it doesn't. Benthos, like most good config
+driven services, performs validation on configs and tries to provide sensible
+error messages.</p>
+<p>However, with validation it can be hard to capture all problems, and the user
+usually understands their intentions better than the service. In order to help
+expose and diagnose config errors Benthos provides two mechanisms, linting and echoing.</p>
+<h3 id="linting">Linting</h3>
+<p>Benthos has a lint command (<code>--lint</code>) that, after parsing a config file, will
+print any errors it detects.</p>
+<p>The main goal of the linter is to expose instances where fields within a
+provided config are valid JSON or YAML but don't actually affect the behaviour
+of Benthos. These are useful for pointing out typos in object keys or the use of
+deprecated fields.</p>
+<p>For example, imagine we have a config <code>foo.yaml</code>, where we intend to read from
+AMQP, but there is a typo in our config struct:</p>
+<pre><code class="yaml">input:
+  type: amqp
+  amqq:
+    url: amqp://guest:guest@rabbitmqserver:5672/
+</code></pre>
+
+<p>This config is parse successfully, and Benthos will simply ignore the <code>amqq</code> key
+and run using default values for the <code>amqp</code> input. This is therefore an easy
+error to miss, but if we use the linter it will immediately report the problem:</p>
+<pre><code class="sh">$ benthos -c ./foo.yaml --lint
+input: Key 'amqq' found but is ignored
+</code></pre>
+
+<p>Which points us to exactly where the problem is.</p>
+<h3 id="echoing">Echoing</h3>
+<p>Echoing is where Benthos can print back your configuration <em>after</em> it has been
+parsed. It is done with the <code>--print-yaml</code> and <code>--print-json</code> commands, which
+print the Benthos configuration in YAML and JSON format respectively. Since this
+is done <em>after</em> parsing and applying your config it is able to show you exactly
+how your config was interpretted:</p>
+<pre><code class="sh">benthos -c ./your-config.yaml --print-yaml
+</code></pre>
+
+<p>You can check the output of the above command to see if certain sections are
+missing or fields are incorrect, which allows you to pinpoint typos in the
+config.</p>
+<p>If your configuration is complex, and the behaviour that you notice implies a
+certain section is at fault, then you can drill down into that section by using
+tools such as <code>jq</code>:</p>
+<pre><code class="sh"># Check the second processor config
+benthos -c ./your-config.yaml --print-json | jq '.pipeline.processors[1]'
+
+# Check the condition of a filter processor
+benthos -c ./your-config.yaml --print-json | jq '.pipeline.processors[0].filter'
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -7,11 +7,11 @@
         
         
         
-        <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Webhook with fallback - Benthos Documentation</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Getting Started - Benthos Documentation</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="../..">Benthos Documentation</a>
+                    <a class="navbar-brand" href="..">Benthos Documentation</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -50,79 +50,79 @@
                                 <a href="/">Home</a>
                             </li>
                             <li >
-                                <a href="../../concepts/">Concepts</a>
+                                <a href="../concepts/">Concepts</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../../inputs">Inputs</a>
+    <a href="../inputs">Inputs</a>
 </li>
                                     
 <li >
-    <a href="../../buffers">Buffers</a>
+    <a href="../buffers">Buffers</a>
 </li>
                                     
 <li >
-    <a href="../../processors">Processors</a>
+    <a href="../processors">Processors</a>
 </li>
                                     
 <li >
-    <a href="../../conditions">Conditions</a>
+    <a href="../conditions">Conditions</a>
 </li>
                                     
 <li >
-    <a href="../../outputs">Outputs</a>
+    <a href="../outputs">Outputs</a>
 </li>
                                     
 <li >
-    <a href="../../caches">Caches</a>
+    <a href="../caches">Caches</a>
 </li>
                                     
 <li >
-    <a href="../../rate_limits">Rate Limits</a>
+    <a href="../rate_limits">Rate Limits</a>
 </li>
                                     
 <li >
-    <a href="../../metrics">Metrics</a>
+    <a href="../metrics">Metrics</a>
 </li>
                                     
 <li >
-    <a href="../../tracers">Tracers</a>
+    <a href="../tracers">Tracers</a>
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../../getting_started/">Getting Started</a>
+<li class="active">
+    <a href="./">Getting Started</a>
 </li>
                                     
 <li >
-    <a href="../../pipeline/">Pipeline</a>
+    <a href="../pipeline/">Pipeline</a>
 </li>
                                     
 <li >
-    <a href="../../batching/">Message Batching</a>
+    <a href="../batching/">Message Batching</a>
 </li>
                                     
 <li >
-    <a href="../../error_handling/">Error Handling</a>
+    <a href="../error_handling/">Error Handling</a>
 </li>
                                     
 <li >
-    <a href="../../workflows/">Workflows</a>
+    <a href="../workflows/">Workflows</a>
 </li>
                                     
 <li >
-    <a href="../../configuration/">Config Cheats</a>
+    <a href="../configuration/">Config Cheats</a>
 </li>
                                     
 <li >
-    <a href="../../config_interpolation/">Config Interpolation</a>
+    <a href="../config_interpolation/">Config Interpolation</a>
 </li>
                                 </ul>
                             </li>
@@ -134,6 +134,16 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+                            <li >
+                                <a rel="next" href="../concepts/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../pipeline/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
                     </ul>
                 </div>
             </div>
@@ -142,71 +152,62 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#webhook-with-fallback">Webhook With Fallback</a></li>
+        <li class="main active"><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#install">Install</a></li>
+            <li><a href="#run">Run</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="webhook-with-fallback">Webhook With Fallback</h1>
-<p>It's possible to create fallback options for output types by using a
-<a href="../../outputs/#try"><code>try</code> broker</a>. In this guide we'll explore this pattern by creating
-stream bridges that accept messages via an HTTP server endpoint and forwards the
-messages to another HTTP endpoint, and if it fails to do so will print the
-message to <code>stdout</code> as a warning.</p>
-<p>In practice our input might be something like a RabbitMQ exchange, and our
-fallback output might be a queue used for scheduling action by a third party.</p>
-<p>We will also be using Benthos in <code>--streams</code> mode in this example so that we can
-create these bridges dynamically via <a href="../../api/streams/">REST endpoints</a>.</p>
-<p>The first thing to do is to run Benthos:</p>
-<pre><code class="sh">benthos --streams
+<h1 id="getting-started">Getting Started</h1>
+<h2 id="install">Install</h2>
+<h3 id="build-with-go">Build With Go</h3>
+<p>If you have Go version 1.11 or above you can build and install Benthos with:</p>
+<pre><code class="sh">go install github.com/Jeffail/benthos/cmd/benthos
+benthos -c ./yourconfig.yaml
 </code></pre>
 
-<p>And we can set up and start our stream under the id <code>foo</code> by sending it to the
-<code>/streams/foo</code> endpoint. For this example we will use curl, but this would
-normally be done via another service.</p>
-<pre><code class="sh">curl http://localhost:4195/streams/foo --data-binary @- &lt;&lt;EOF
-input:
-  type: http_server
+<h3 id="pull-with-docker">Pull With Docker</h3>
+<p>If you have docker installed you can pull the latest official Benthos image
+with:</p>
+<pre><code class="sh">docker pull jeffail/benthos
+docker run --rm -v /path/to/your/config.yaml:/benthos.yaml jeffail/benthos
+</code></pre>
+
+<h3 id="download-an-archive">Download an Archive</h3>
+<p>Otherwise you can pull an archive containing Benthos from the
+<a href="https://github.com/Jeffail/benthos/releases">Releases page</a>.</p>
+<pre><code class="sh">curl -L https://github.com/Jeffail/benthos/releases/download/${VERSION}/benthos_${VERSION}_linux_amd64.tar.gz | tar xz
+./benthos -c ./yourconfig.yaml
+</code></pre>
+
+<h2 id="run">Run</h2>
+<p>A Benthos stream pipeline is configured with a single config file made up of
+four main sections; input, buffer, pipeline, output. If we were to pipe stdin
+directly to Kafka it would look like this:</p>
+<pre><code class="yaml">input:
+  type: stdin
+buffer:
+  type: none
+pipeline:
+  threads: 1
+  processors: []
 output:
-  type: broker
-  broker:
-    pattern: try
-    outputs:
-      - type: http_client
-        http_client:
-          url: http://localhost/post
-          verb: POST
-          backoff_on: [ 429 ]
-          drop_on: [ 409 ]
-          retries: 3
-      - type: stdout
-        processors:
-        - type: insert_part
-          insert_part:
-            content: &quot;MESSAGE FAILED:&quot;
-            index: 0
-EOF
+  type: kafka
+  kafka:
+    addresses:
+    - localhost:9092
+    topic: benthos_stream
 </code></pre>
 
-<p>It's worth noting that we have added a processor on the fallback output which
-adds prefix content to the logged message. We could apply any processors here to
-make arbitrary changes to the payload.</p>
-<p>We can check whether the stream is ready and active with:</p>
-<pre><code class="sh">curl http://localhost:4195/streams/foo | jq '.active'
+<p>And then point Benthos to your config:</p>
+<pre><code class="sh">benthos -c ./yourconfig.yaml
 </code></pre>
 
-<p>And send some content with:</p>
-<pre><code class="sh">curl http://localhost:4195/foo/post -d &quot;hello world&quot;
-</code></pre>
-
-<p>Benthos will now attempt to send the payload to the configured <code>http_client</code>
-endpoint. If the endpoint isn't reachable then after a few seconds you should
-see something like this on <code>stdout</code>:</p>
-<pre><code class="sh">MESSAGE FAILED:
-hello world
-</code></pre>
-
-<p>Try playing around with inputs, fallback outputs and fallback processors.</p></div>
+<p>You can write messages in the terminal and they will be sent to your chosen
+Kafka topic, how exciting!</p>
+<p>Now that you are a Benthos expert the world is your oyster,
+<a href="..">check out all the other cool stuff you can do</a>.</p></div>
         </div>
 
         <footer class="col-md-12">
@@ -214,11 +215,11 @@ hello world
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "../..",
+            var base_url = "..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">

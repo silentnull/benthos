@@ -50,7 +50,7 @@
                                 <a href="/">Home</a>
                             </li>
                             <li >
-                                <a href="../concepts/">Core Concepts</a>
+                                <a href="../concepts/">Concepts</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
@@ -96,6 +96,10 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../getting_started/">Getting Started</a>
+</li>
                                     
 <li >
     <a href="../pipeline/">Pipeline</a>
@@ -737,6 +741,8 @@ redis_pubsub:
 
 <p>Publishes messages through the Redis PubSub model. It is not possible to
 guarantee that messages have been received.</p>
+<p>This output will interpolate functions within the channel field, you
+can find a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
 <h2 id="redis_streams"><code>redis_streams</code></h2>
 <pre><code class="yaml">type: redis_streams
 redis_streams:
@@ -993,5 +999,5 @@ websocket:
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-03-04 15:27:11
+Build Date UTC : 2019-03-06 20:51:46
 -->

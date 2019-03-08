@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Benthos Documentation</title>
+        <title>Benthos</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="..">Benthos Documentation</a>
+                    <a class="navbar-brand" href="..">Benthos</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -915,6 +915,7 @@ can read about these patterns <a href="../error_handling/">here</a>.</p>
 <h2 id="log"><code>log</code></h2>
 <pre><code class="yaml">type: log
 log:
+  fields: {}
   level: INFO
   message: &quot;&quot;
 </code></pre>
@@ -935,6 +936,20 @@ log:
 
 <p>The <code>level</code> field determines the log level of the printed events and
 can be any of the following values: TRACE, DEBUG, INFO, WARN, ERROR.</p>
+<h3 id="structured-fields">Structured Fields</h3>
+<p>It's also possible to output a map of structured fields, this only works when
+the service log is set to output as JSON. The field values are function
+interpolated, meaning it's possible to output structured fields containing
+message contents and metadata, e.g.:</p>
+<pre><code class="yaml">type: log
+log:
+  level: DEBUG
+  message: &quot;foo&quot;
+  fields:
+    id: &quot;${!json_field:id}&quot;
+    kafka_topic: &quot;${!metadata:kafka_topic}&quot;
+</code></pre>
+
 <h2 id="merge_json"><code>merge_json</code></h2>
 <pre><code class="yaml">type: merge_json
 merge_json:
@@ -1458,5 +1473,5 @@ extracted filename.</p></div>
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-03-06 20:51:46
+Build Date UTC : 2019-03-08 14:21:23
 -->

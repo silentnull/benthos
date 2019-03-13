@@ -22,6 +22,7 @@
         <script src="../js/jquery-1.10.2.min.js" defer></script>
         <script src="../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
@@ -123,6 +124,10 @@
                                     
 <li >
     <a href="../config_interpolation/">Config Interpolation</a>
+</li>
+                                    
+<li >
+    <a href="../examples">Interesting Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -273,7 +278,7 @@ the declaration passively verifies that they match the target fields.</p>
 settings can be enabled in the <code>tls</code> section.</p>
 <h3 id="metadata">Metadata</h3>
 <p>This input adds the following metadata fields to each message:</p>
-<pre><code>- amqp_content_type
+<pre><code class="text">- amqp_content_type
 - amqp_content_encoding
 - amqp_delivery_mode
 - amqp_priority
@@ -383,7 +388,7 @@ single message) or a directory, in which case the directory will be walked and
 each file found will become a message.</p>
 <h3 id="metadata_1">Metadata</h3>
 <p>This input adds the following metadata fields to each message:</p>
-<pre><code>- path
+<pre><code class="text">- path
 </code></pre>
 
 <p>You can access these metadata fields using
@@ -413,7 +418,7 @@ hdfs:
 message payload.</p>
 <h3 id="metadata_2">Metadata</h3>
 <p>This input adds the following metadata fields to each message:</p>
-<pre><code>- hdfs_name
+<pre><code class="text">- hdfs_name
 - hdfs_path
 </code></pre>
 
@@ -487,7 +492,7 @@ which is enabled when key and cert files are specified.</p>
 HTTP server.</p>
 <h3 id="metadata_3">Metadata</h3>
 <p>This input adds the following metadata fields to each message:</p>
-<pre><code>- http_server_user_agent
+<pre><code class="text">- http_server_user_agent
 - All headers (only first values are taken)
 - All cookies
 </code></pre>
@@ -554,7 +559,7 @@ client_certs:
 
 <h3 id="metadata_4">Metadata</h3>
 <p>This input adds the following metadata fields to each message:</p>
-<pre><code>- kafka_key
+<pre><code class="text">- kafka_key
 - kafka_topic
 - kafka_partition
 - kafka_offset
@@ -606,7 +611,7 @@ client_certs:
 
 <h3 id="metadata_5">Metadata</h3>
 <p>This input adds the following metadata fields to each message:</p>
-<pre><code>- kafka_key
+<pre><code class="text">- kafka_key
 - kafka_topic
 - kafka_partition
 - kafka_offset
@@ -656,7 +661,7 @@ mqtt:
 <p>Subscribe to topics on MQTT brokers.</p>
 <h3 id="metadata_6">Metadata</h3>
 <p>This input adds the following metadata fields to each message:</p>
-<pre><code>- mqtt_duplicate
+<pre><code class="text">- mqtt_duplicate
 - mqtt_qos
 - mqtt_retained
 - mqtt_topic
@@ -696,7 +701,7 @@ behaviour then look at NATS Stream.</p>
 nats://derek:pass@localhost:4222</p>
 <h3 id="metadata_7">Metadata</h3>
 <p>This input adds the following metadata fields to each message:</p>
-<pre><code>- nats_subject
+<pre><code class="text">- nats_subject
 </code></pre>
 
 <p>You can access these metadata fields using
@@ -728,7 +733,7 @@ stop the consumers from unsubscribing by setting the field
 <code>unsubscribe_on_close</code> to <code>false</code>.</p>
 <h3 id="metadata_8">Metadata</h3>
 <p>This input adds the following metadata fields to each message:</p>
-<pre><code>- nats_stream_subject
+<pre><code class="text">- nats_stream_subject
 - nats_stream_sequence
 </code></pre>
 
@@ -1012,5 +1017,5 @@ first established.</p></div>
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-03-08 22:28:04
+Build Date UTC : 2019-03-13 16:25:54
 -->

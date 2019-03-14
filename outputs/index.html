@@ -705,6 +705,8 @@ nats:
 
 <p>Publish to an NATS subject. NATS is at-most-once, so delivery is not guaranteed.
 For at-least-once behaviour with NATS look at NATS Stream.</p>
+<p>This output will interpolate functions within the subject field, you
+can find a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
 <h2 id="nats_stream"><code>nats_stream</code></h2>
 <pre><code class="yaml">type: nats_stream
 nats_stream:
@@ -1004,5 +1006,5 @@ websocket:
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-03-13 16:25:54
+Build Date UTC : 2019-03-14 11:14:49
 -->

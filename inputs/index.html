@@ -181,34 +181,19 @@
 
 <h1 id="inputs">Inputs</h1>
 <p>This document was generated with <code>benthos --list-inputs</code></p>
-<p>An input is a source of data piped through an array of
+<p>An input is a source of data piped through an array of optional
 <a href="../processors">processors</a>. Only one input is configured at the root of a
-Benthos config. However, the input can be a <a href="#broker">broker</a> which combines
-multiple inputs. For example, if we wanted three inputs, a 'foo' a 'bar' and a
-'baz' we could use the 'broker' input type at our root:</p>
+Benthos config. However, the root input can be a <a href="#broker">broker</a> which
+combines multiple inputs.</p>
+<p>An input config section looks like this:</p>
 <pre><code class="yaml">input:
-  type: broker
-  broker:
-    inputs:
-    - type: foo
-      foo:
-        foo_field_1: value1
-    - type: bar
-      bar:
-        bar_field_1: value2
-        bar_field_2: value3
-    - type: baz
-      baz:
-        baz_field_1: value4
-      processors:
-      - type: baz_processor
+  type: foo
+  foo:
+    bar: baz
   processors:
-  - type: some_processor
+  - type: qux
 </code></pre>
 
-<p>Note that in this example we have specified a processor at the broker level
-which will be applied to <em>all</em> inputs, and we also have a processor at the baz
-level which is only applied to messages from the baz input.</p>
 <h3 id="contents">Contents</h3>
 <ol>
 <li><a href="#amqp"><code>amqp</code></a></li>
@@ -1017,5 +1002,5 @@ first established.</p></div>
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-03-14 11:14:49
+Build Date UTC : 2019-03-14 17:11:22
 -->

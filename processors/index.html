@@ -199,13 +199,25 @@
 
 <h1 id="processors">Processors</h1>
 <p>This document was generated with <code>benthos --list-processors</code>.</p>
-<p>Benthos processors are functions that will be applied to each message passing
-through a pipeline. The function signature allows a processor to mutate or drop
-messages depending on the content of the message.</p>
+<p>Benthos processors are functions applied to messages passing through a pipeline.
+The function signature allows a processor to mutate or drop messages depending
+on the content of the message.</p>
 <p>Processors are set via config, and depending on where in the config they are
 placed they will be run either immediately after a specific input (set in the
 input section), on all messages (set in the pipeline section) or before a
-specific output (set in the output section).</p>
+specific output (set in the output section). Most processors apply to all
+messages and can be placed in the pipeline section:</p>
+<pre><code class="yaml">pipeline:
+  threads: 1
+  processors:
+  - type: foo
+    foo:
+      bar: baz
+</code></pre>
+
+<p>The <code>threads</code> field in the pipeline section determines how many
+parallel processing threads are created. You can read more about parallel
+processing in the <a href="../pipeline/">pipeline guide</a>.</p>
 <p>By organising processors you can configure complex behaviours in your pipeline.
 You can <a href="../examples/">find some examples here</a>.</p>
 <h3 id="error-handling">Error Handling</h3>
@@ -1478,5 +1490,5 @@ extracted filename.</p></div>
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-03-14 11:14:49
+Build Date UTC : 2019-03-14 17:11:22
 -->

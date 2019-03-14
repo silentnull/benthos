@@ -166,6 +166,13 @@ pathways of individual messages as they progress through a Benthos instance.</p>
 extracting a root span from the source of the message (HTTP headers). This is
 a work in progress and should eventually expand so that all inputs have a way of
 doing so.</p>
+<p>A tracer config section looks like this:</p>
+<pre><code class="yaml">tracer:
+  type: foo
+  foo:
+    bar: baz
+</code></pre>
+
 <p>WARNING: Although the configuration spec of this component is stable the format
 of spans, tags and logs created by Benthos is subject to change as it is tuned
 for improvement.</p>
@@ -271,5 +278,5 @@ none: {}
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-03-14 11:14:49
+Build Date UTC : 2019-03-14 17:11:22
 -->

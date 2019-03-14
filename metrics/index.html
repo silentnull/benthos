@@ -163,6 +163,14 @@
 <p>A metrics type represents a destination for Benthos metrics to be aggregated
 such as Statsd, Prometheus, or for debugging purposes an HTTP endpoint that
 exposes a JSON object of metrics.</p>
+<p>A metrics config section looks like this:</p>
+<pre><code class="yaml">metrics:
+  type: foo
+  prefix: benthos
+  foo:
+    bar: baz
+</code></pre>
+
 <p>Benthos exposes lots of metrics and their paths will depend on your pipeline
 configuration. However, there are some critical metrics that will always be
 present that are outlined in <a href="paths/">this document</a>.</p>
@@ -383,5 +391,5 @@ to allow all latency based metrics with the pattern <code>.*\.latency</code>.</p
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-03-14 11:14:49
+Build Date UTC : 2019-03-14 17:11:22
 -->

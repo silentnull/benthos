@@ -58,39 +58,39 @@
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../inputs">Inputs</a>
+    <a href="../inputs/">Inputs</a>
 </li>
                                     
 <li >
-    <a href="../buffers">Buffers</a>
+    <a href="../buffers/">Buffers</a>
 </li>
                                     
 <li >
-    <a href="../processors">Processors</a>
+    <a href="../processors/">Processors</a>
 </li>
                                     
 <li >
-    <a href="../conditions">Conditions</a>
+    <a href="../conditions/">Conditions</a>
 </li>
                                     
 <li >
-    <a href="../outputs">Outputs</a>
+    <a href="../outputs/">Outputs</a>
 </li>
                                     
 <li >
-    <a href="../caches">Caches</a>
+    <a href="../caches/">Caches</a>
 </li>
                                     
 <li >
-    <a href="../rate_limits">Rate Limits</a>
+    <a href="../rate_limits/">Rate Limits</a>
 </li>
                                     
 <li >
-    <a href="../metrics">Metrics</a>
+    <a href="../metrics/">Metrics</a>
 </li>
                                     
 <li >
-    <a href="../tracers">Tracers</a>
+    <a href="../tracers/">Tracers</a>
 </li>
                                 </ul>
                             </li>
@@ -127,7 +127,7 @@
 </li>
                                     
 <li >
-    <a href="../examples">Interesting Examples</a>
+    <a href="../examples/">Interesting Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -172,7 +172,7 @@ an exit node.</p>
 <p>For example, if we had processing stages A, B, C and D, where stage A could
 result in either stage B or C being next, always followed by D, it might look
 something like this:</p>
-<pre><code>     /--&gt; B --\
+<pre><code class="text">     /--&gt; B --\
 A --|          |--&gt; D
      \--&gt; C --/
 </code></pre>
@@ -182,7 +182,7 @@ use a <a href="../processors/#conditional"><code>conditional</code></a> processo
 on a condition on the result of A. However, this method of flow control quickly
 becomes unfeasible as the DAG gets more complicated, imagine expressing this
 flow using conditional or switch processors:</p>
-<pre><code>      /--&gt; B -------------|--&gt; D
+<pre><code class="text">      /--&gt; B -------------|--&gt; D
      /                   /
 A --|          /--&gt; E --|
      \--&gt; C --|          \
@@ -215,46 +215,42 @@ order to obtain the final result we are looking for.</p>
 in which case we want to send the full contents to a recovery service that will
 attempt to recover a fallback version of the goal enrichment.</p>
 <p>The enrichment stages can be described as:</p>
-<ul>
-<li>A) Perform an HTTP request to <code>fooserve</code> with the full message payload as the
-  contents. The response can be one of the following:</li>
+<hr />
+<p>A) Perform an HTTP request to <code>fooserve</code> with the full message payload as the
+contents. The response can be one of the following:</p>
+<ol>
 <li>200: <code>{"type":"bar","bar":{"some":"fields"}}</code></li>
 <li>200: <code>{"type":"baz","baz":{"some":"fields"}}</code></li>
-<li>
-<p>400: Bad request</p>
-</li>
-<li>
+<li>400: Bad request</li>
+</ol>
+<hr />
 <p>B) Perform an HTTP request to <code>barserve</code> with the object <code>bar</code> taken from the
-  output of stage A response 1. The response can be one of the following:</p>
-</li>
+output of stage A response 1. The response can be one of the following:</p>
+<ol>
 <li>200: <code>{"type":"baz","baz":{"some":"fields"}}</code></li>
-<li>
-<p>400: Bad request</p>
-</li>
-<li>
-<p>C) Perform an HTTP request to <code>bazserve</code> with the object <code>baz</code> taken either
-  from the output of stage A response 2 or stage B response 1. The response can
-  be one of the following:</p>
-</li>
+<li>400: Bad request</li>
+</ol>
+<hr />
+<p>C) Perform an HTTP request to <code>bazserve</code> with the object <code>baz</code> taken either from
+the output of stage A response 2 or stage B response 1. The response can be one
+of the following:</p>
+<ol>
 <li>200: <code>{"type":"qux","qux":{"some":"fields"}}</code></li>
-<li>
-<p>400: Bad request</p>
-</li>
-<li>
+<li>400: Bad request</li>
+</ol>
+<hr />
 <p>D) If any previous stage returns a 400 then we perform an HTTP request to
-  <code>recoverserve</code> with the full message payload as the contents. The response
-  will always be the following:</p>
-</li>
-<li>
-<p>200: <code>{"type":"qux","qux":{"default":"fields"}}</code></p>
-</li>
-<li>
+<code>recoverserve</code> with the full message payload as the contents. The response will
+always be the following:</p>
+<ol>
+<li>200: <code>{"type":"qux","qux":{"default":"fields"}}</code></li>
+</ol>
+<hr />
 <p>E) Place the final contents (the object at <code>qux</code>) in the document at
-  <code>tmp.enrichments.qux</code>.</p>
-</li>
-</ul>
+<code>tmp.enrichments.qux</code>.</p>
+<hr />
 <p>A diagram for this flow might look like this:</p>
-<pre><code>      /--------|--&gt; C --|----------------|-&gt; E
+<pre><code class="text">      /--------|--&gt; C --|----------------|-&gt; E
      /        /          \              /
 A --|--&gt; B --|            \            /
      \        \            \          /

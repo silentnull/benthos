@@ -4,11 +4,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
+        
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Benthos</title>
+        <title>Processors - Benthos</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -26,7 +26,7 @@
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
@@ -53,44 +53,44 @@
                             <li >
                                 <a href="../concepts/">Concepts</a>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../inputs">Inputs</a>
+    <a href="../inputs/">Inputs</a>
 </li>
                                     
 <li >
-    <a href="../buffers">Buffers</a>
+    <a href="../buffers/">Buffers</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Processors</a>
 </li>
                                     
 <li >
-    <a href=".">Processors</a>
+    <a href="../conditions/">Conditions</a>
 </li>
                                     
 <li >
-    <a href="../conditions">Conditions</a>
+    <a href="../outputs/">Outputs</a>
 </li>
                                     
 <li >
-    <a href="../outputs">Outputs</a>
+    <a href="../caches/">Caches</a>
 </li>
                                     
 <li >
-    <a href="../caches">Caches</a>
+    <a href="../rate_limits/">Rate Limits</a>
 </li>
                                     
 <li >
-    <a href="../rate_limits">Rate Limits</a>
+    <a href="../metrics/">Metrics</a>
 </li>
                                     
 <li >
-    <a href="../metrics">Metrics</a>
-</li>
-                                    
-<li >
-    <a href="../tracers">Tracers</a>
+    <a href="../tracers/">Tracers</a>
 </li>
                                 </ul>
                             </li>
@@ -127,7 +127,7 @@
 </li>
                                     
 <li >
-    <a href="../examples">Interesting Examples</a>
+    <a href="../examples/">Interesting Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -139,6 +139,16 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+                            <li >
+                                <a rel="next" href="../buffers/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../conditions/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
                     </ul>
                 </div>
             </div>
@@ -155,6 +165,7 @@
             <li><a href="#awk">awk</a></li>
             <li><a href="#batch">batch</a></li>
             <li><a href="#bounds_check">bounds_check</a></li>
+            <li><a href="#cache">cache</a></li>
             <li><a href="#catch">catch</a></li>
             <li><a href="#compress">compress</a></li>
             <li><a href="#conditional">conditional</a></li>
@@ -246,6 +257,7 @@ used.</p>
 <li><a href="#awk"><code>awk</code></a></li>
 <li><a href="#batch"><code>batch</code></a></li>
 <li><a href="#bounds_check"><code>bounds_check</code></a></li>
+<li><a href="#cache"><code>cache</code></a></li>
 <li><a href="#catch"><code>catch</code></a></li>
 <li><a href="#compress"><code>compress</code></a></li>
 <li><a href="#conditional"><code>conditional</code></a></li>
@@ -404,6 +416,70 @@ bounds_check:
 
 <p>Checks whether each message batch fits within certain boundaries, and drops
 batches that do not.</p>
+<h2 id="cache"><code>cache</code></h2>
+<pre><code class="yaml">type: cache
+cache:
+  cache: &quot;&quot;
+  key: &quot;&quot;
+  operator: set
+  parts: []
+  value: &quot;&quot;
+</code></pre>
+
+<p>Performs operations against a <a href="../caches">cache resource</a> for each message of a
+batch, allowing you to store or retrieve data within message payloads.</p>
+<p>This processor will interpolate functions within the <code>key</code> and <code>value</code>
+fields individually for each message of the batch. This allows you to specify
+dynamic keys and values based on the contents of the message payloads and
+metadata. You can find a list of functions
+<a href="../config_interpolation/#functions">here</a>.</p>
+<h3 id="operators">Operators</h3>
+<h4 id="set"><code>set</code></h4>
+<p>Set a key in the cache to a value. If the key already exists the contents are
+overridden.</p>
+<h4 id="add"><code>add</code></h4>
+<p>Set a key in the cache to a value. If the key already exists the action fails
+with a 'key already exists' error, which can be detected with
+<a href="../error_handling/">processor error handling</a>.</p>
+<h4 id="get"><code>get</code></h4>
+<p>Retrieve the contents of a cached key and replace the original message payload
+with the result. If the key does not exist the action fails with an error, which
+can be detected with <a href="../error_handling/">processor error handling</a>.</p>
+<h3 id="examples">Examples</h3>
+<p>The <code>cache</code> processor can be used in combination with other processors
+in order to solve a variety of data stream problems.</p>
+<h4 id="deduplication">Deduplication</h4>
+<p>Deduplication can be done using the add operator with a key extracted from the
+message payload, since it fails when a key already exists we can remove the
+duplicates using a
+<a href="../conditions/#processor_failed"><code>processor_failed</code></a>
+condition:</p>
+<pre><code class="yaml">- type: cache
+  cache:
+    cache: TODO
+    operator: add
+    key: &quot;${!json_field:message.id}&quot;
+    value: &quot;storeme&quot;
+- type: filter_parts
+  filter_parts:
+    type: processor_failed
+</code></pre>
+
+<h4 id="hydration">Hydration</h4>
+<p>It's possible to enrich payloads with content previously stored in a cache by
+using the <a href="#process_dag"><code>process_dag</code></a> processor:</p>
+<pre><code class="yaml">- type: process_map
+  process_map:
+    processors:
+    - type: cache
+      cache:
+        cache: TODO
+        operator: get
+        key: &quot;${!json_field:message.document_id}&quot;
+    postmap:
+      message.document: .
+</code></pre>
+
 <h2 id="catch"><code>catch</code></h2>
 <pre><code class="yaml">type: catch
 catch: []
@@ -844,7 +920,7 @@ overwrites the previous contents with the new value.</p>
 <p>If the path is empty or "." the root of the data will be targeted.</p>
 <p>This processor will interpolate functions within the 'value' field, you can find
 a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
-<h3 id="operations">Operations</h3>
+<h3 id="operators_1">Operators</h3>
 <h4 id="append"><code>append</code></h4>
 <p>Appends a value to an array at a target dot path. If the path does not exist all
 objects in the path are created (unless there is a collision).</p>
@@ -878,7 +954,7 @@ collision).</p>
 <h4 id="select"><code>select</code></h4>
 <p>Reads the value found at a dot path and replaced the original contents entirely
 by the new value.</p>
-<h4 id="set"><code>set</code></h4>
+<h4 id="set_1"><code>set</code></h4>
 <p>Sets the value of a field at a dot path. If the path does not exist all objects
 in the path are created (unless there is a collision).</p>
 <p>The value can be any type, including objects and arrays. When using YAML
@@ -997,8 +1073,8 @@ which allow you to set fields in certain outputs using these dynamic values.</p>
 you can find a list of functions <a href="../config_interpolation/#functions">here</a>.
 This allows you to set the contents of a metadata field using values taken from
 the message payload.</p>
-<h3 id="operations_1">Operations</h3>
-<h4 id="set_1"><code>set</code></h4>
+<h3 id="operators_2">Operators</h3>
+<h4 id="set_2"><code>set</code></h4>
 <p>Sets the value of a metadata key.</p>
 <h4 id="delete_all"><code>delete_all</code></h4>
 <p>Removes all metadata values from the message.</p>
@@ -1323,7 +1399,7 @@ text:
 <p>Performs text based mutations on payloads.</p>
 <p>This processor will interpolate functions within the <code>value</code> field,
 you can find a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
-<h3 id="operations_2">Operations</h3>
+<h3 id="operators_3">Operators</h3>
 <h4 id="append_1"><code>append</code></h4>
 <p>Appends text to the end of the payload.</p>
 <h4 id="escape_url_query"><code>escape_url_query</code></h4>
@@ -1340,7 +1416,7 @@ you can find a list of functions <a href="../config_interpolation/#functions">he
 <p>Replaces all occurrences of the argument regular expression in a message with a
 value. Inside the value $ signs are interpreted as submatch expansions, e.g. $1
 represents the text of the first submatch.</p>
-<h4 id="set_2"><code>set</code></h4>
+<h4 id="set_3"><code>set</code></h4>
 <p>Replace the contents of a message entirely with a value.</p>
 <h4 id="strip_html"><code>strip_html</code></h4>
 <p>Removes all HTML tags from a message.</p>
@@ -1487,8 +1563,3 @@ extracted filename.</p></div>
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-03-14 21:38:30
--->

@@ -58,39 +58,39 @@
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../inputs">Inputs</a>
+    <a href="../inputs/">Inputs</a>
 </li>
                                     
 <li >
-    <a href="../buffers">Buffers</a>
+    <a href="../buffers/">Buffers</a>
 </li>
                                     
 <li >
-    <a href="../processors">Processors</a>
+    <a href="../processors/">Processors</a>
 </li>
                                     
 <li >
-    <a href="../conditions">Conditions</a>
+    <a href="../conditions/">Conditions</a>
 </li>
                                     
 <li >
-    <a href="../outputs">Outputs</a>
+    <a href="../outputs/">Outputs</a>
 </li>
                                     
 <li >
-    <a href="../caches">Caches</a>
+    <a href="../caches/">Caches</a>
 </li>
                                     
 <li >
-    <a href="../rate_limits">Rate Limits</a>
+    <a href="../rate_limits/">Rate Limits</a>
 </li>
                                     
 <li >
-    <a href="../metrics">Metrics</a>
+    <a href="../metrics/">Metrics</a>
 </li>
                                     
 <li >
-    <a href="../tracers">Tracers</a>
+    <a href="../tracers/">Tracers</a>
 </li>
                                 </ul>
                             </li>
@@ -127,7 +127,7 @@
 </li>
                                     
 <li >
-    <a href="../examples">Interesting Examples</a>
+    <a href="../examples/">Interesting Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -145,7 +145,7 @@
                                 </a>
                             </li>
                             <li >
-                                <a rel="prev" href="../getting_started/">
+                                <a rel="prev" href="../inputs/">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -160,6 +160,7 @@
         <li class="main active"><a href="#benthos-concepts">Benthos Concepts</a></li>
             <li><a href="#contents">Contents</a></li>
             <li><a href="#configuration">Configuration</a></li>
+            <li><a href="#monitoring">Monitoring</a></li>
             <li><a href="#mutating-and-filtering-content">Mutating And Filtering Content</a></li>
             <li><a href="#content-based-multiplexing">Content Based Multiplexing</a></li>
             <li><a href="#sharing-resources-across-processors">Sharing Resources Across Processors</a></li>
@@ -173,6 +174,7 @@
 <h2 id="contents">Contents</h2>
 <ol>
 <li><a href="#configuration">Configuration</a></li>
+<li><a href="#monitoring">Monitoring</a></li>
 <li><a href="#mutating-and-filtering-content">Mutating And Filtering Content</a></li>
 <li><a href="#content-based-multiplexing">Content Based Multiplexing</a></li>
 <li><a href="#sharing-resources-across-processors">Sharing Resources Across Processors</a></li>
@@ -193,6 +195,24 @@ Config examples for every input, output and processor type can be found
 <a href="https://github.com/Jeffail/benthos/tree/master/config">here</a>.</p>
 <p>Benthos provides lots of tooling to try and make writing configuration easier,
 you can read about them <a href="../configuration/">here</a>.</p>
+<h2 id="monitoring">Monitoring</h2>
+<h3 id="health-checks">Health Checks</h3>
+<p>Benthos serves two HTTP endpoints for health checks:</p>
+<ul>
+<li><code>/ping</code> can be used as a liveness probe as it always returns a 200.</li>
+<li><code>/ready</code> can be used as a readiness probe as it serves a 200 only when both
+  the input and output are connected, otherwise a 503 is returned.</li>
+</ul>
+<h3 id="metrics">Metrics</h3>
+<p>Benthos <a href="../metrics/paths/">exposes lots of metrics</a> either to Statsd,
+Prometheus or for debugging purposes an HTTP endpoint that returns a JSON
+formatted object.</p>
+<p>The target destination of Benthos metrics is configurable from the
+<a href="../metrics/">metrics section</a>, where it's also possible to rename,
+whitelist or blacklist certain metric paths.</p>
+<h3 id="tracing">Tracing</h3>
+<p>Benthos also <a href="../tracers/">emits opentracing events</a> to a tracer of your
+choice, which can be used to visualise the processors within a pipeline.</p>
 <h2 id="mutating-and-filtering-content">Mutating And Filtering Content</h2>
 <p>Benthos bridges different transport and storage mediums of data, but these often
 require the data to be represented in different ways. For example, we might be

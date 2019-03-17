@@ -4,11 +4,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
+        
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Benthos</title>
+        <title>Conditions - Benthos</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -26,7 +26,7 @@
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
@@ -53,44 +53,44 @@
                             <li >
                                 <a href="../concepts/">Concepts</a>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../inputs">Inputs</a>
+    <a href="../inputs/">Inputs</a>
 </li>
                                     
 <li >
-    <a href="../buffers">Buffers</a>
+    <a href="../buffers/">Buffers</a>
 </li>
                                     
 <li >
-    <a href="../processors">Processors</a>
+    <a href="../processors/">Processors</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Conditions</a>
 </li>
                                     
 <li >
-    <a href=".">Conditions</a>
+    <a href="../outputs/">Outputs</a>
 </li>
                                     
 <li >
-    <a href="../outputs">Outputs</a>
+    <a href="../caches/">Caches</a>
 </li>
                                     
 <li >
-    <a href="../caches">Caches</a>
+    <a href="../rate_limits/">Rate Limits</a>
 </li>
                                     
 <li >
-    <a href="../rate_limits">Rate Limits</a>
+    <a href="../metrics/">Metrics</a>
 </li>
                                     
 <li >
-    <a href="../metrics">Metrics</a>
-</li>
-                                    
-<li >
-    <a href="../tracers">Tracers</a>
+    <a href="../tracers/">Tracers</a>
 </li>
                                 </ul>
                             </li>
@@ -127,7 +127,7 @@
 </li>
                                     
 <li >
-    <a href="../examples">Interesting Examples</a>
+    <a href="../examples/">Interesting Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -139,6 +139,16 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+                            <li >
+                                <a rel="next" href="../processors/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../outputs/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
                     </ul>
                 </div>
             </div>
@@ -151,7 +161,9 @@
             <li><a href="#batching-and-multipart-messages">Batching and Multipart Messages</a></li>
             <li><a href="#reusing-conditions">Reusing Conditions</a></li>
             <li><a href="#contents">Contents</a></li>
+            <li><a href="#all">all</a></li>
             <li><a href="#and">and</a></li>
+            <li><a href="#any">any</a></li>
             <li><a href="#bounds_check">bounds_check</a></li>
             <li><a href="#check_field">check_field</a></li>
             <li><a href="#count">count</a></li>
@@ -233,7 +245,9 @@ times as branches of a larger condition. It is possible to avoid writing
 duplicate condition configs by using the <a href="#resource">resource condition</a>.</p>
 <h3 id="contents">Contents</h3>
 <ol>
+<li><a href="#all"><code>all</code></a></li>
 <li><a href="#and"><code>and</code></a></li>
+<li><a href="#any"><code>any</code></a></li>
 <li><a href="#bounds_check"><code>bounds_check</code></a></li>
 <li><a href="#check_field"><code>check_field</code></a></li>
 <li><a href="#count"><code>count</code></a></li>
@@ -247,12 +261,48 @@ duplicate condition configs by using the <a href="#resource">resource condition<
 <li><a href="#text"><code>text</code></a></li>
 <li><a href="#xor"><code>xor</code></a></li>
 </ol>
+<h2 id="all"><code>all</code></h2>
+<pre><code class="yaml">type: all
+all: {}
+</code></pre>
+
+<p>All is a condition that tests a child condition against each message of a batch
+individually. If all messages pass the child condition then this condition also
+passes.</p>
+<p>For example, if we wanted to check that all messages of a batch contain the word
+'foo' we could use this config:</p>
+<pre><code class="yaml">type: all
+all:
+  type: text
+  text:
+    operator: contains
+    arg: foo
+</code></pre>
+
 <h2 id="and"><code>and</code></h2>
 <pre><code class="yaml">type: and
 and: []
 </code></pre>
 
 <p>And is a condition that returns the logical AND of its children conditions.</p>
+<h2 id="any"><code>any</code></h2>
+<pre><code class="yaml">type: any
+any: {}
+</code></pre>
+
+<p>Any is a condition that tests a child condition against each message of a batch
+individually. If any message passes the child condition then this condition also
+passes.</p>
+<p>For example, if we wanted to check that at least one message of a batch contains
+the word 'foo' we could use this config:</p>
+<pre><code class="yaml">type: any
+any:
+  type: text
+  text:
+    operator: contains
+    arg: foo
+</code></pre>
+
 <h2 id="bounds_check"><code>bounds_check</code></h2>
 <pre><code class="yaml">type: bounds_check
 bounds_check:
@@ -652,8 +702,3 @@ resolves to true.</p></div>
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-03-14 21:38:30
--->

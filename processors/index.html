@@ -204,6 +204,7 @@
             <li><a href="#throttle">throttle</a></li>
             <li><a href="#try">try</a></li>
             <li><a href="#unarchive">unarchive</a></li>
+            <li><a href="#while">while</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -296,6 +297,7 @@ used.</p>
 <li><a href="#throttle"><code>throttle</code></a></li>
 <li><a href="#try"><code>try</code></a></li>
 <li><a href="#unarchive"><code>unarchive</code></a></li>
+<li><a href="#while"><code>while</code></a></li>
 </ol>
 <h2 id="archive"><code>archive</code></h2>
 <pre><code class="yaml">type: archive
@@ -1483,7 +1485,28 @@ message.</p>
 and for each element of the array expands its contents into a new message.</p>
 <p>For the unarchive formats that contain file information (tar, zip), a metadata
 field is added to each message called <code>archive_filename</code> with the
-extracted filename.</p></div>
+extracted filename.</p>
+<h2 id="while"><code>while</code></h2>
+<pre><code class="yaml">type: while
+while:
+  at_least_once: false
+  condition:
+    type: text
+    text:
+      arg: &quot;&quot;
+      operator: equals_cs
+      part: 0
+  processors: []
+</code></pre>
+
+<p>While is a processor that has a condition and a list of child processors. The
+child processors are executed continously on a message batch for as long as the
+child condition resolves to true. The field <code>at_least_once</code>, if true,
+ensures that the child processors are always executed at least one time (like a
+do .. while loop.)</p>
+<p>If following a loop execution the number of messages in a batch is reduced to
+zero the loop is exited regardless of the condition result.</p>
+<p>You can find a <a href="../conditions">full list of conditions here</a>.</p></div>
         </div>
 
         <footer class="col-md-12">

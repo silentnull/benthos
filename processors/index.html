@@ -1496,14 +1496,17 @@ while:
       arg: &quot;&quot;
       operator: equals_cs
       part: 0
+  max_loops: 0
   processors: []
 </code></pre>
 
 <p>While is a processor that has a condition and a list of child processors. The
 child processors are executed continously on a message batch for as long as the
-child condition resolves to true. The field <code>at_least_once</code>, if true,
-ensures that the child processors are always executed at least one time (like a
-do .. while loop.)</p>
+child condition resolves to true.</p>
+<p>The field <code>at_least_once</code>, if true, ensures that the child processors
+are always executed at least one time (like a do .. while loop.)</p>
+<p>The field <code>max_loops</code>, if greater than zero, caps the number of loops
+for a message batch to this value.</p>
 <p>If following a loop execution the number of messages in a batch is reduced to
 zero the loop is exited regardless of the condition result.</p>
 <p>You can find a <a href="../conditions">full list of conditions here</a>.</p></div>

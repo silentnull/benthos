@@ -207,6 +207,24 @@ processor:</p>
         - type: foo # Recover here
 </code></pre>
 
+<h3 id="attempt-until-success">Attempt Until Success</h3>
+<p>It's possible to reattempt a processor for a particular message until it is
+successful with a <a href="../processors/#while"><code>while</code></a> processor:</p>
+<pre><code class="yaml">  - type: process_batch
+    process_batch:
+    - type: while
+      while:
+        at_least_once: true
+        condition:
+          type: processor_failed
+        processors:
+        - type: foo # Attempt this processor until success
+</code></pre>
+
+<p>This loop will block the pipeline and prevent the blocking message from being
+acknowledged. It is therefore usually a good idea in practice to build your
+condition with an exit strategy after N failed attempts so that the pipeline can
+unblock itself without intervention.</p>
 <h3 id="drop-failed-messages">Drop Failed Messages</h3>
 <p>In order to filter out any failed messages from your pipeline you can simply use
 a <a href="../processors/#filter_parts"><code>filter_parts</code></a> processor:</p>

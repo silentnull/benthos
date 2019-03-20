@@ -181,8 +181,8 @@ messages from a single input across multiple parallel processing threads.</p>
 processing pipelines.</p>
 <h3 id="example-1-single-consumer-multiple-processing-threads">Example 1: Single consumer multiple processing threads</h3>
 <p>Sometimes a source of data can only have a single consuming client. In these
-cirumstances it is still possible to have the single stream of data processed on
-parallel processing threads by using a <a href="./buffers">buffer</a>.</p>
+circumstances it is still possible to have the single stream of data processed
+on parallel processing threads by using a <a href="./buffers">buffer</a>.</p>
 <p>For example, say we have an input stream <code>foo</code> with only a single connected
 client. Our goal is to read the stream as fast as possible, perform mutations on
 the JSON payload using the <a href="../processors/#jmespath">jmespath processor</a>, and write
@@ -214,7 +214,7 @@ output:
 
 <p>With this config the pipeline within our Benthos instance would look something
 like the following:</p>
-<pre><code>foo -&gt; memory buffer ---&gt; processor ---&gt; bar
+<pre><code class="text">foo -&gt; memory buffer ---&gt; processor ---&gt; bar
           ( 5MB )    \--&gt; processor -/
                      \--&gt; processor -/
                      \--&gt; processor -/
@@ -255,7 +255,7 @@ output:
 
 <p>With this config the pipeline within our Benthos instance would look something
 like the following:</p>
-<pre><code>baz -\
+<pre><code class="text">baz -\
 baz -\
 baz ---&gt; processor ---&gt; bar
 baz ---&gt; processor -/

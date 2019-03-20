@@ -178,7 +178,7 @@ Benthos falls back to sending the messages sequentially in multiple, individual
 requests.</p>
 <p>This behaviour means that not only can multiple part message protocols be easily
 matched with single part protocols, but also the concept of multiple part
-messages and message batches are interchangable within Benthos.</p>
+messages and message batches are interchangeable within Benthos.</p>
 <h2 id="creating-batches">Creating Batches</h2>
 <p>Most input types have some way of creating batches of messages from their input.
 For example, the <a href="../inputs/#kafka"><code>kafka</code></a> and <a href="../inputs/#kafka_balanced"><code>kafka_balanced</code></a> inputs
@@ -189,7 +189,7 @@ preferred.</p>
 <p>Alternatively, there are also <a href="../processors/">processors</a> within Benthos that can
 expand and contract batches, these are the <a href="../processors/#batch"><code>batch</code></a> and <a href="../processors/#split"><code>split</code></a>
 processors.</p>
-<p>The <code>batch</code> processor continously reads messages until a target size has been
+<p>The <code>batch</code> processor continuously reads messages until a target size has been
 reached, then the batch continues through the pipeline.</p>
 <p>As messages are read and stored in a batch the input they originated from is
 told to grab the next message but defer from acknowledging the current one, this

@@ -252,6 +252,9 @@ argument e.g. <code>${!metadata_json_object:2}</code> would target the metadata 
 third message part in the batch.</p>
 <p>Message metadata can be modified using the
 <a href="../processors/#metadata">metadata processor</a>.</p>
+<h3 id="uuid_v4"><code>uuid_v4</code></h3>
+<p>Generates a new RFC-4122 UUID each time it is invoked and prints a string
+representation.</p>
 <h3 id="timestamp_unix_nano"><code>timestamp_unix_nano</code></h3>
 <p>Resolves to the current unix timestamp in nanoseconds. E.g.
 <code>foo ${!timestamp_unix_nano} bar</code> prints <code>foo 1517412152475689615 bar</code>.</p>

@@ -158,8 +158,8 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#pipeline">Pipeline</a></li>
-            <li><a href="#example-1-single-consumer-multiple-processing-threads">Example 1: Single consumer multiple processing threads</a></li>
-            <li><a href="#example-2-multiple-consumer-multiple-processing-threads">Example 2: Multiple consumer multiple processing threads</a></li>
+            <li><a href="#multiple-consumers">Multiple Consumers</a></li>
+            <li><a href="#single-consumer">Single Consumer</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -174,12 +174,57 @@ input or output they are best suited for the pipeline section. It is
 advantageous to use the pipeline section as it allows you to set an explicit
 number of parallel threads of execution which should ideally match the number of
 available logical CPU cores.</p>
-<p>If <a href="./buffers">a buffer is chosen</a> these processors are applied to messages read
-from it. It is therefore possible to use buffers as a way of distributing
-messages from a single input across multiple parallel processing threads.</p>
-<p>The following are some examples of how to get good performance out of your
-processing pipelines.</p>
-<h3 id="example-1-single-consumer-multiple-processing-threads">Example 1: Single consumer multiple processing threads</h3>
+<p>The following patterns allow you to achieve a distribution of work across these
+processing threads for different input arrangments.</p>
+<h3 id="multiple-consumers">Multiple Consumers</h3>
+<p>Sometimes our source of data can have many multiple connected clients and will
+distribute a stream of messages amongst them. In these circumstances it is
+possible to fully utilise a set of parallel processing threads without a buffer,
+provided that the number of consumers is greater than the number of threads.
+Ideally the number of consumers would be significantly higher than the number of
+threads in order to compensate for occasional IO stalls.</p>
+<p>For example, imagine we are consuming from a source <code>baz</code>, which is
+<a href="https://duckduckgo.com/?q=at+least+once">At-Least-Once</a> and supports multiple connected clients. Our goal is
+to read the stream as fast as possible, perform mutations on the JSON payload
+using the <a href="../processors/#jmespath">jmespath processor</a>, and write the resulting
+stream to <code>bar</code>.</p>
+<p>We also wish to take advantage of the delivery guarantees of the source and
+therefore want acknowledgements to flow directly from our output sink to the
+input source, and therefore need to avoid using a buffer.</p>
+<p>For this purpose we would be able to utilise our processing threads without the
+need for a buffer. We choose four processing threads to match our 4 CPU cores,
+and choose to use eight parallel consumers of the input <code>baz</code>.</p>
+<pre><code class="yaml">input:
+  type: broker
+  broker:
+    copies: 8
+    inputs:
+    - type: baz
+buffer:
+  type: none
+pipeline:
+  threads: 4
+  processors:
+  - type: jmespath
+    jmespath:
+      query: &quot;reservations[].instances[].[tags[?Key=='Name'].Values[] | [0], type, state.name]&quot;
+output:
+  type: bar
+</code></pre>
+
+<p>With this config the pipeline within our Benthos instance would look something
+like the following:</p>
+<pre><code class="text">baz -\
+baz -\
+baz ---&gt; processor ---&gt; bar
+baz ---&gt; processor -/
+baz ---&gt; processor -/
+baz ---&gt; processor -/
+baz -/
+baz -/
+</code></pre>
+
+<h3 id="single-consumer">Single Consumer</h3>
 <p>Sometimes a source of data can only have a single consuming client. In these
 circumstances it is still possible to have the single stream of data processed
 on parallel processing threads by using a <a href="./buffers">buffer</a>.</p>
@@ -218,51 +263,6 @@ like the following:</p>
           ( 5MB )    \--&gt; processor -/
                      \--&gt; processor -/
                      \--&gt; processor -/
-</code></pre>
-
-<h3 id="example-2-multiple-consumer-multiple-processing-threads">Example 2: Multiple consumer multiple processing threads</h3>
-<p>Sometimes our source of data can have many multiple connected clients and will
-distribute a stream of messages amongst them. In these circumstances it is
-possible to fully utilise a set of parallel processing threads without a buffer,
-provided that the number of consumers is greater than the number of threads.
-Ideally the number of consumers would be significantly higher than the number of
-threads in order to compensate for IO blocking.</p>
-<p>For example, imagine we have a similar requirement to example 1 but are
-consuming from an input <code>baz</code>, which is <a href="https://duckduckgo.com/?q=at+least+once">At-Least-Once</a> and supports
-multiple connected clients. We wish to take advantage of the delivery guarantees
-of the source and therefore want acknowledgements to flow directly from our
-output sink all the way up the pipeline to the input source.</p>
-<p>For this purpose we would be able to utilise our processing threads without the
-need for a buffer. We choose four processing threads like before, and choose to
-use eight parallel consumers of the input <code>baz</code>.</p>
-<pre><code class="yaml">input:
-  type: broker
-  broker:
-    copies: 8
-    inputs:
-    - type: baz
-buffer:
-  type: none
-pipeline:
-  threads: 4
-  processors:
-  - type: jmespath
-    jmespath:
-      query: &quot;reservations[].instances[].[tags[?Key=='Name'].Values[] | [0], type, state.name]&quot;
-output:
-  type: bar
-</code></pre>
-
-<p>With this config the pipeline within our Benthos instance would look something
-like the following:</p>
-<pre><code class="text">baz -\
-baz -\
-baz ---&gt; processor ---&gt; bar
-baz ---&gt; processor -/
-baz ---&gt; processor -/
-baz ---&gt; processor -/
-baz -/
-baz -/
 </code></pre></div>
         </div>
 

@@ -103,6 +103,10 @@
 </li>
                                     
 <li >
+    <a href="../cookbooks/">Cookbooks</a>
+</li>
+                                    
+<li >
     <a href="../pipeline/">Pipeline</a>
 </li>
                                     
@@ -127,7 +131,7 @@
 </li>
                                     
 <li >
-    <a href="../examples/">Interesting Examples</a>
+    <a href="../examples/">Applied Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -587,20 +591,21 @@ path <code>id</code> within the message contents:</p>
 </code></pre>
 
 <p>Caches should be configured as a resource, for more information check out the
-<a href="../caches">documentation here</a>.</p>
+<a href="../caches/">documentation here</a>.</p>
+<p>When using this processor with an output target that might fail you should
+always wrap the output within a <a href="../outputs/#retry"><code>retry</code></a>
+block. This ensures that during outages your messages aren't reprocessed after
+failures, which would result in messages being dropped.</p>
 <h3 id="delivery-guarantees">Delivery Guarantees</h3>
-<p>Performing a deduplication step on a payload in transit voids any at-least-once
-guarantees that the payload previously had, as it's impossible to fully
-guarantee that the message is propagated to the next destination. If the message
-is reprocessed due to output failure or a service restart then it will be lost
-due to failing the deduplication step on the second attempt.</p>
-<p>You can avoid reprocessing payloads on failed sends by using either the
-<a href="../outputs/#retry"><code>retry</code></a> output type or the
-<a href="../outputs/#broker"><code>broker</code></a> output type using the 'try'
-pattern. However, if the service is restarted between retry attempts then the
-message can still be lost.</p>
-<p>It is worth strongly considering the delivery guarantees that your pipeline is
-meant to provide when using this processor.</p>
+<p>Performing deduplication on a stream using a distributed cache voids any
+at-least-once guarantees that it previously had. This is because the cache will
+preserve message signatures even if the message fails to leave the Benthos
+pipeline, which would cause message loss in the event of an outage at the output
+sink followed by a restart of the Benthos instance.</p>
+<p>If you intend to preserve at-least-once delivery guarantees you can avoid this
+problem by using a memory based cache. This is a compromise that can achieve
+effective deduplication but parallel deployments of the pipeline as well as
+service restarts increase the chances of duplicates passing undetected.</p>
 <h2 id="encode"><code>encode</code></h2>
 <pre><code class="yaml">type: encode
 encode:

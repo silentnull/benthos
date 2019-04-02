@@ -103,6 +103,10 @@
 </li>
                                     
 <li >
+    <a href="../cookbooks/">Cookbooks</a>
+</li>
+                                    
+<li >
     <a href="../pipeline/">Pipeline</a>
 </li>
                                     
@@ -127,7 +131,7 @@
 </li>
                                     
 <li >
-    <a href="../examples/">Interesting Examples</a>
+    <a href="../examples/">Applied Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -516,6 +520,7 @@ kafka:
   commit_period: 1s
   consumer_group: benthos_consumer_group
   max_batch_count: 1
+  max_processing_period: 100ms
   partition: 0
   start_from_oldest: true
   target_version: 1.0.0
@@ -534,6 +539,8 @@ you wish to balance partitions across a consumer group look at the
 <p>The field <code>max_batch_count</code> specifies the maximum number of prefetched
 messages to be batched together. When more than one message is batched they can
 be split into individual messages with the <code>split</code> processor.</p>
+<p>The field <code>max_processing_period</code> should be set above the maximum
+estimated time taken to process a message.</p>
 <p>The target version by default will be the oldest supported, as it is expected
 that the server will be backwards compatible. In order to support newer client
 features you should increase this version up to the known version of the target
@@ -577,6 +584,7 @@ kafka_balanced:
     rebalance_timeout: 60s
     session_timeout: 10s
   max_batch_count: 1
+  max_processing_period: 100ms
   start_from_oldest: true
   target_version: 1.0.0
   tls:
@@ -594,6 +602,8 @@ across any members of the consumer group.</p>
 <p>The field <code>max_batch_count</code> specifies the maximum number of prefetched
 messages to be batched together. When more than one message is batched they can
 be split into individual messages with the <code>split</code> processor.</p>
+<p>The field <code>max_processing_period</code> should be set above the maximum
+estimated time taken to process a message.</p>
 <h3 id="tls_1">TLS</h3>
 <p>Custom TLS settings can be used to override system defaults. This includes
 providing a collection of root certificate authorities, providing a list of

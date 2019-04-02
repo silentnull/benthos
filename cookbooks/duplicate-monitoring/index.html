@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
         
         
-        <link rel="shortcut icon" href="img/favicon.ico">
-        <title>Benthos</title>
-        <link href="css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/base.css" rel="stylesheet">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Duplicate monitoring - Benthos</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,14 +19,14 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="js/jquery-1.10.2.min.js" defer></script>
-        <script src="js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
@@ -40,7 +40,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href=".">Benthos</a>
+                    <a class="navbar-brand" href="../..">Benthos</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -51,46 +51,46 @@
                                 <a href="/">Home</a>
                             </li>
                             <li >
-                                <a href="concepts/">Concepts</a>
+                                <a href="../../concepts/">Concepts</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="inputs/">Inputs</a>
+    <a href="../../inputs/">Inputs</a>
 </li>
                                     
 <li >
-    <a href="buffers/">Buffers</a>
+    <a href="../../buffers/">Buffers</a>
 </li>
                                     
 <li >
-    <a href="processors/">Processors</a>
+    <a href="../../processors/">Processors</a>
 </li>
                                     
 <li >
-    <a href="conditions/">Conditions</a>
+    <a href="../../conditions/">Conditions</a>
 </li>
                                     
 <li >
-    <a href="outputs/">Outputs</a>
+    <a href="../../outputs/">Outputs</a>
 </li>
                                     
 <li >
-    <a href="caches/">Caches</a>
+    <a href="../../caches/">Caches</a>
 </li>
                                     
 <li >
-    <a href="rate_limits/">Rate Limits</a>
+    <a href="../../rate_limits/">Rate Limits</a>
 </li>
                                     
 <li >
-    <a href="metrics/">Metrics</a>
+    <a href="../../metrics/">Metrics</a>
 </li>
                                     
 <li >
-    <a href="tracers/">Tracers</a>
+    <a href="../../tracers/">Tracers</a>
 </li>
                                 </ul>
                             </li>
@@ -99,39 +99,39 @@
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="getting_started/">Getting Started</a>
+    <a href="../../getting_started/">Getting Started</a>
 </li>
                                     
 <li >
-    <a href="cookbooks/">Cookbooks</a>
+    <a href="../">Cookbooks</a>
 </li>
                                     
 <li >
-    <a href="pipeline/">Pipeline</a>
+    <a href="../../pipeline/">Pipeline</a>
 </li>
                                     
 <li >
-    <a href="batching/">Message Batching</a>
+    <a href="../../batching/">Message Batching</a>
 </li>
                                     
 <li >
-    <a href="error_handling/">Error Handling</a>
+    <a href="../../error_handling/">Error Handling</a>
 </li>
                                     
 <li >
-    <a href="workflows/">Workflows</a>
+    <a href="../../workflows/">Workflows</a>
 </li>
                                     
 <li >
-    <a href="configuration/">Config Cheats</a>
+    <a href="../../configuration/">Config Cheats</a>
 </li>
                                     
 <li >
-    <a href="config_interpolation/">Config Interpolation</a>
+    <a href="../../config_interpolation/">Config Interpolation</a>
 </li>
                                     
 <li >
-    <a href="examples/">Applied Examples</a>
+    <a href="../../examples/">Applied Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -151,56 +151,123 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#documentation">Documentation</a></li>
-            <li><a href="#core-components">Core Components</a></li>
-            <li><a href="#other-components">Other Components</a></li>
-            <li><a href="#other-sections">Other Sections</a></li>
+        <li class="main active"><a href="#duplicate-monitoring">Duplicate Monitoring</a></li>
+            <li><a href="#by-id-field">By ID Field</a></li>
+            <li><a href="#by-document-hash">By Document Hash</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="documentation">Documentation</h1>
-<p>Welcome to the Benthos documentation site, if you haven't used Benthos before
-check out the <a href="getting_started/">getting started guide</a>.</p>
-<h2 id="core-components">Core Components</h2>
-<ul>
-<li><a href="inputs/">Inputs</a></li>
-<li><a href="buffers/">Buffers</a></li>
-<li><a href="pipeline/">Pipeline</a></li>
-<li><a href="processors/">Processors</a></li>
-<li><a href="conditions/">Conditions</a></li>
-<li><a href="outputs/">Outputs</a></li>
-</ul>
-<h2 id="other-components">Other Components</h2>
-<ul>
-<li><a href="caches/">Caches</a></li>
-<li><a href="rate_limits/">Rate Limits</a></li>
-<li><a href="metrics/">Metrics</a></li>
-<li><a href="tracers/">Tracers</a></li>
-</ul>
-<h2 id="other-sections">Other Sections</h2>
-<ul>
-<li><a href="concepts/">Core Concepts</a> describes various Benthos concepts such as:<ul>
-<li>Configuration</li>
-<li>Monitoring</li>
-<li>Mutating And Filtering Content</li>
-<li>Content Based Multiplexing</li>
-<li>Sharing Resources Across Processors</li>
-<li>Maximising IO Throughput</li>
-<li>Maximising CPU Utilisation</li>
-</ul>
-</li>
-<li><a href="batching/">Message Batching</a> explains how multiple part messages and
-  message batching works within Benthos.</li>
-<li><a href="error_handling/">Error Handling</a> explains how you can handle errors from
-  processor steps in order to recover or reroute the data.</li>
-<li><a href="workflows/">Workflows</a> explains how Benthos can be configured to easily
-  support complex processor flows using automatic DAG resolution.</li>
-<li><a href="configuration/">Making Configuration Easier</a> explains some of the tools
-  provided by Benthos that help make writing configs easier.</li>
-<li><a href="config_interpolation/">Config Interpolation</a> explains how to incorporate
-  environment variables and dynamic values into your config files.</li>
-</ul></div>
+<h1 id="duplicate-monitoring">Duplicate Monitoring</h1>
+<p>Benthos has a <a href="../../processors/#dedupe">deduplication processor</a> which makes removing
+duplicates from a stream easy. However, sometimes we might only be interested in
+detecting duplicates without mutating the stream. This cookbook demonstrates how
+to passively count duplicates and expose them via metrics aggregators.</p>
+<p>We can do this by creating a stream passthrough that increments a metric counter
+each time a duplicate is found in a stream using the <a href="../../processors/#cache"><code>cache</code></a> and
+<a href="../../processors/#metric"><code>metric</code></a> processors.</p>
+<p>This method is extremely flexible and therefore it's possible to detect
+duplicates from a combination of any number of uniquely identifying fields
+within the documents, or from a hash of the entire document contents. We'll
+cover both.</p>
+<h3 id="by-id-field">By ID Field</h3>
+<p>Here our chosen metrics aggregator is Prometheus, but this works with any
+available Benthos <a href="../../metrics/">metrics target</a>. We're also going to assume that the
+messages are JSON documents, and that we're detecting duplicates with a
+combination of string fields at the paths <code>document.id</code> and <code>document.user.id</code>.</p>
+<p>Here's the config (omitting our input and output sections for brevity):</p>
+<pre><code class="yaml">pipeline:
+  processors:
+  - type: process_batch
+    process_batch:
+    - type: cache
+      cache:
+        cache: dupes
+        key: &quot;${!json_field:document.id}_${!json_field:document.user.id}&quot;
+        operator: add
+        value: &quot;x&quot;
+    - type: catch
+      catch:
+      - type: metric
+        metric:
+          type: counter
+          path: duplicate_id
+
+resources:
+  caches:
+    dupes:
+      type: memory
+      memory:
+        ttl: 300
+
+metrics:
+  type: prometheus
+</code></pre>
+
+<p>For each message in a stream this pipeline begins by attempting to <code>add</code> a new
+item to a cache, where the key is an
+<a href="../../config_interpolation/#functions">interpolated</a> combination of our identifying fields.</p>
+<p>The cache action fails if the key already exists in the cache, and therefore
+only messages that are duplicates will be caught within the following
+<a href="../../processors/#catch"><code>catch</code></a> block. Within the catch block we then increment a counter
+which tracks the number of duplicates found.</p>
+<p>The cache processor requires a target cache, which in this case we've labelled
+<code>dupes</code>, and the configuration for that can be found within the following
+<code>resources.caches</code> section. We've chosen a memory based cache here with a TTL of
+5 minutes for simplicity, but there <a href="../../caches/">are many options</a> which would allow
+us to share the cache across multiple instances of this pipeline.</p>
+<h4 id="but-theres-more">But there's more!</h4>
+<p>Remember that within the metric processor it's also possible to label these
+counts with extra information. For example, we could label our counters with the
+source Kafka topic and partition:</p>
+<pre><code class="yaml">      - type: metric
+        metric:
+          type: counter
+          path: duplicate_id
+          labels:
+            topic: ${!metadata:kafka_topic}
+            partition: ${!metadata:kafka_partition}
+</code></pre>
+
+<p>This would let us expose duplicate levels per topic per partition in our
+dashboards!</p>
+<h3 id="by-document-hash">By Document Hash</h3>
+<p>In order to detect duplicates by a hash of the entire document we can modify the
+previous configuration by adding a <a href="../../processors/#hash"><code>hash</code> processor</a> to convert
+documents into their hashes. We then dedupe by the new full contents of the
+message (which is now a hash).</p>
+<p>However, this would mutate the contents of the stream, which we need to avoid.
+Therefore, we wrap this action within a <a href="../../processors/#process_map"><code>process_map</code> processor</a>
+and set a <code>postmap_optional</code> target to a path that will never be found, which
+prevents the hash result from being added into the original message contents.</p>
+<p>We then <code>catch</code> any cache errors like in the previous example. The config
+(omitting sections shared with the previous example for brevity) would look like
+this:</p>
+<pre><code class="yaml">pipeline:
+  processors:
+  - type: process_batch
+    process_batch:
+    - type: process_map
+      process_map:
+        processors:
+        - type: hash
+          hash:
+            algorithm: xxhash64
+        - type: cache
+          cache:
+            cache: dupes
+            key: &quot;${!content}&quot;
+            operator: add
+            value: &quot;x&quot;
+        postmap_optional:
+          will: never.exist
+    - type: catch
+      catch:
+      - type: metric
+        metric:
+          type: counter
+          path: duplicate_hash
+</code></pre></div>
         </div>
 
         <footer class="col-md-12">
@@ -208,11 +275,11 @@ check out the <a href="getting_started/">getting started guide</a>.</p>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = ".",
+            var base_url = "../..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="js/base.js" defer></script>
-        <script src="search/main.js" defer></script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
@@ -280,8 +347,3 @@ check out the <a href="getting_started/">getting started guide</a>.</p>
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-04-02 10:39:12
--->

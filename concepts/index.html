@@ -103,6 +103,10 @@
 </li>
                                     
 <li >
+    <a href="../cookbooks/">Cookbooks</a>
+</li>
+                                    
+<li >
     <a href="../pipeline/">Pipeline</a>
 </li>
                                     
@@ -127,7 +131,7 @@
 </li>
                                     
 <li >
-    <a href="../examples/">Interesting Examples</a>
+    <a href="../examples/">Applied Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -251,7 +255,7 @@ that <code>foo</code> doesn't receive, we can achieve that with this config:</p>
 
 <p>Another method of content based multiplexing is with
 <a href="../outputs/#broker">an output broker with the <code>fan_out</code> pattern</a> and a
-<a href="../processors/#filter">filter processor</a> on each output, which is a processor
+<a href="../processors/#filter_parts">filter processor</a> on each output, which is a processor
 that drops messages if the <a href="../conditions/">condition</a> does not pass.</p>
 <p>For example, the equivalent config for the previous example would be:</p>
 <pre><code class="yaml">output:
@@ -263,8 +267,8 @@ that drops messages if the <a href="../conditions/">condition</a> does not pass.
       foo:
         foo_field_1: value1
       processors:
-      - type: filter
-        filter:
+      - type: filter_parts
+        filter_parts:
           type: text
           text:
             operator: contains
@@ -273,8 +277,8 @@ that drops messages if the <a href="../conditions/">condition</a> does not pass.
       bar:
         bar_field_1: value2
       processors:
-      - type: filter
-        filter:
+      - type: filter_parts
+        filter_parts:
           type: not
           not:
             type: text

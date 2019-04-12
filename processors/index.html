@@ -48,7 +48,7 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="https://www.benthos.dev">Home</a>
+                                <a href="/">Home</a>
                             </li>
                             <li >
                                 <a href="../concepts/">Concepts</a>
@@ -194,6 +194,7 @@
             <li><a href="#metadata">metadata</a></li>
             <li><a href="#metric">metric</a></li>
             <li><a href="#noop">noop</a></li>
+            <li><a href="#parallel">parallel</a></li>
             <li><a href="#process_batch">process_batch</a></li>
             <li><a href="#process_dag">process_dag</a></li>
             <li><a href="#process_field">process_field</a></li>
@@ -287,6 +288,7 @@ used.</p>
 <li><a href="#metadata"><code>metadata</code></a></li>
 <li><a href="#metric"><code>metric</code></a></li>
 <li><a href="#noop"><code>noop</code></a></li>
+<li><a href="#parallel"><code>parallel</code></a></li>
 <li><a href="#process_batch"><code>process_batch</code></a></li>
 <li><a href="#process_dag"><code>process_dag</code></a></li>
 <li><a href="#process_field"><code>process_field</code></a></li>
@@ -1148,6 +1150,19 @@ populate them with context about the message.</p>
 
 <p>Noop is a no-op processor that does nothing, the message passes through
 unchanged.</p>
+<h2 id="parallel"><code>parallel</code></h2>
+<pre><code class="yaml">type: parallel
+parallel:
+  cap: 0
+  processors: []
+</code></pre>
+
+<p>A processor that applies a list of child processors to messages of a batch as
+though they were each a batch of one message (similar to the
+<a href="#process_batch"><code>process_batch</code></a> processor), but where each message
+is processed in parallel.</p>
+<p>The field <code>cap</code>, if greater than zero, caps the maximum number of
+parallel processing threads.</p>
 <h2 id="process_batch"><code>process_batch</code></h2>
 <pre><code class="yaml">type: process_batch
 process_batch: []

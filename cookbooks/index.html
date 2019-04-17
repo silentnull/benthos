@@ -40,7 +40,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="..">Benthos</a>
+                    <a class="navbar-brand" href="./">Benthos</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -51,7 +51,7 @@
                                 <a href="/">Home</a>
                             </li>
                             <li >
-                                <a href="../concepts/">Concepts</a>
+                                <a href="./">Cookbooks</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
@@ -162,6 +162,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#cookbooks">Cookbooks</a></li>
+            <li><a href="#joining-streams-of-json-events">Joining Streams of JSON Events</a></li>
             <li><a href="#duplicate-monitoring">Duplicate Monitoring</a></li>
     </ul>
 </div></div>
@@ -170,14 +171,15 @@
 <h1 id="cookbooks">Cookbooks</h1>
 <p>This is a collection of Benthos snippets demonstrating common but more advanced
 patterns in stream processing.</p>
+<h3 id="joining-streams-of-json-events"><a href="joining-streams/">Joining Streams of JSON Events</a></h3>
+<p>This cookbook demonstrates how to merge JSON events from parallel streams using
+content based rules and a cache of your choice.</p>
 <h3 id="duplicate-monitoring"><a href="duplicate-monitoring/">Duplicate Monitoring</a></h3>
 <p>Benthos has a <a href="../processors/#dedupe">deduplication processor</a> which
 makes removing duplicates from a stream easy. However, sometimes we might only
 be interested in detecting duplicates without mutating the stream. This cookbook
 demonstrates how to passively count duplicates and expose them via metrics
-aggregators.</p>
-<p>TODO: Joining streams of JSON documents
-TODO: Parallel enrichment of JSON documents</p></div>
+aggregators.</p></div>
         </div>
 
         <footer class="col-md-12">

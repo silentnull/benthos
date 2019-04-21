@@ -103,11 +103,7 @@
 </li>
                                     
 <li >
-    <a href="../cookbooks/">Cookbooks</a>
-</li>
-                                    
-<li >
-    <a href="../pipeline/">Pipeline</a>
+    <a href="../pipeline/">Processing Pipelines</a>
 </li>
                                     
 <li >
@@ -1432,6 +1428,9 @@ you can find a list of functions <a href="../config_interpolation/#functions">he
 <p>Extract the matching section of the argument regular expression in a message.</p>
 <h4 id="prepend"><code>prepend</code></h4>
 <p>Prepends text to the beginning of the payload.</p>
+<h4 id="quote"><code>quote</code></h4>
+<p>Returns a doubled-quoted string, using escape sequences (\t, \n, \xFF, \u0100)
+for control characters and other non-printable characters.</p>
 <h4 id="replace"><code>replace</code></h4>
 <p>Replaces all occurrences of the argument in a message with a value.</p>
 <h4 id="replace_regexp"><code>replace_regexp</code></h4>
@@ -1450,6 +1449,8 @@ represents the text of the first submatch.</p>
 <p>Removes all leading and trailing occurrences of characters within the arg field.</p>
 <h4 id="trim_space"><code>trim_space</code></h4>
 <p>Removes all leading and trailing whitespace from the payload.</p>
+<h4 id="unquote"><code>unquote</code></h4>
+<p>Unquotes a single, double, or back-quoted string literal</p>
 <h2 id="throttle"><code>throttle</code></h2>
 <pre><code class="yaml">type: throttle
 throttle:

@@ -103,11 +103,7 @@
 </li>
                                     
 <li >
-    <a href="../cookbooks/">Cookbooks</a>
-</li>
-                                    
-<li >
-    <a href="../pipeline/">Pipeline</a>
+    <a href="../pipeline/">Processing Pipelines</a>
 </li>
                                     
 <li >
@@ -164,9 +160,11 @@
         <li class="main active"><a href="#caches">Caches</a></li>
             <li><a href="#contents">Contents</a></li>
             <li><a href="#dynamodb">dynamodb</a></li>
+            <li><a href="#file">file</a></li>
             <li><a href="#memcached">memcached</a></li>
             <li><a href="#memory">memory</a></li>
             <li><a href="#redis">redis</a></li>
+            <li><a href="#s3">s3</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -212,9 +210,11 @@ cache is the same for both inputs.</p>
 <h3 id="contents">Contents</h3>
 <ol>
 <li><a href="#dynamodb"><code>dynamodb</code></a></li>
+<li><a href="#file"><code>file</code></a></li>
 <li><a href="#memcached"><code>memcached</code></a></li>
 <li><a href="#memory"><code>memory</code></a></li>
 <li><a href="#redis"><code>redis</code></a></li>
+<li><a href="#s3"><code>s3</code></a></li>
 </ol>
 <h2 id="dynamodb"><code>dynamodb</code></h2>
 <pre><code class="yaml">type: dynamodb
@@ -248,6 +248,16 @@ DynamoDB table. An optional TTL duration (<code>ttl</code>) and field
 (<code>ttl_key</code>) can be specified if the backing table has TTL enabled.</p>
 <p>Strong read consistency can be enabled using the <code>consistent_read</code>
 configuration field.</p>
+<h2 id="file"><code>file</code></h2>
+<pre><code class="yaml">type: file
+file:
+  directory: &quot;&quot;
+</code></pre>
+
+<p>The file cache stores each item in a directory as a file, where an item ID is
+the path relative to the configured directory.</p>
+<p>This type currently offers no form of item expiry or garbage collection, and is
+intended to be used for development and debugging purposes only.</p>
 <h2 id="memcached"><code>memcached</code></h2>
 <pre><code class="yaml">type: memcached
 memcached:
@@ -286,7 +296,28 @@ redis:
 </code></pre>
 
 <p>Use a Redis instance as a cache. The expiration can be set to zero or an empty
-string in order to set no expiration.</p></div>
+string in order to set no expiration.</p>
+<h2 id="s3"><code>s3</code></h2>
+<pre><code class="yaml">type: s3
+s3:
+  bucket: &quot;&quot;
+  content_type: application/octet-stream
+  credentials:
+    id: &quot;&quot;
+    role: &quot;&quot;
+    role_external_id: &quot;&quot;
+    secret: &quot;&quot;
+    token: &quot;&quot;
+  endpoint: &quot;&quot;
+  region: eu-west-1
+  retries: 3
+  timeout: 5s
+</code></pre>
+
+<p>The s3 cache stores each item in an S3 bucket as a file, where an item ID is
+the path of the item within the bucket.</p>
+<p>It is not possible to atomically upload S3 objects exclusively when the target
+does not already exist, therefore this cache is not suitable for deduplication.</p></div>
         </div>
 
         <footer class="col-md-12">

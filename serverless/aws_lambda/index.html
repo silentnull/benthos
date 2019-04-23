@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
         
         
-        <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Benthos</title>
-        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../css/base.css" rel="stylesheet">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Aws lambda - Benthos</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,14 +19,14 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
@@ -40,7 +40,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="../cookbooks/">Benthos</a>
+                    <a class="navbar-brand" href="../../cookbooks/">Benthos</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -51,46 +51,46 @@
                                 <a href="/">Home</a>
                             </li>
                             <li >
-                                <a href="../cookbooks/">Cookbooks</a>
+                                <a href="../../cookbooks/">Cookbooks</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../inputs/">Inputs</a>
+    <a href="../../inputs/">Inputs</a>
 </li>
                                     
 <li >
-    <a href="../buffers/">Buffers</a>
+    <a href="../../buffers/">Buffers</a>
 </li>
                                     
 <li >
-    <a href="../processors/">Processors</a>
+    <a href="../../processors/">Processors</a>
 </li>
                                     
 <li >
-    <a href="../conditions/">Conditions</a>
+    <a href="../../conditions/">Conditions</a>
 </li>
                                     
 <li >
-    <a href="../outputs/">Outputs</a>
+    <a href="../../outputs/">Outputs</a>
 </li>
                                     
 <li >
-    <a href="../caches/">Caches</a>
+    <a href="../../caches/">Caches</a>
 </li>
                                     
 <li >
-    <a href="../rate_limits/">Rate Limits</a>
+    <a href="../../rate_limits/">Rate Limits</a>
 </li>
                                     
 <li >
-    <a href="../metrics/">Metrics</a>
+    <a href="../../metrics/">Metrics</a>
 </li>
                                     
 <li >
-    <a href="../tracers/">Tracers</a>
+    <a href="../../tracers/">Tracers</a>
 </li>
                                 </ul>
                             </li>
@@ -99,39 +99,39 @@
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../getting_started/">Getting Started</a>
+    <a href="../../getting_started/">Getting Started</a>
 </li>
                                     
 <li >
-    <a href="../serverless/">Serverless</a>
+    <a href="../">Serverless</a>
 </li>
                                     
 <li >
-    <a href="../pipeline/">Processing Pipelines</a>
+    <a href="../../pipeline/">Processing Pipelines</a>
 </li>
                                     
 <li >
-    <a href="../batching/">Message Batching</a>
+    <a href="../../batching/">Message Batching</a>
 </li>
                                     
 <li >
-    <a href="../error_handling/">Error Handling</a>
+    <a href="../../error_handling/">Error Handling</a>
 </li>
                                     
 <li >
-    <a href="../workflows/">Workflows</a>
+    <a href="../../workflows/">Workflows</a>
 </li>
                                     
 <li >
-    <a href="../configuration/">Config Cheats</a>
+    <a href="../../configuration/">Config Cheats</a>
 </li>
                                     
 <li >
-    <a href="../config_interpolation/">Config Interpolation</a>
+    <a href="../../config_interpolation/">Config Interpolation</a>
 </li>
                                     
 <li >
-    <a href="../examples/">Applied Examples</a>
+    <a href="../../examples/">Applied Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -151,31 +151,80 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#streams-mode">Streams Mode</a></li>
+        <li class="main active"><a href="#benthos-lambda">Benthos Lambda</a></li>
+            <li><a href="#running-with-an-output">Running with an output</a></li>
+            <li><a href="#running-without-an-output">Running without an output</a></li>
+            <li><a href="#upload-to-aws">Upload to AWS</a></li>
+            <li><a href="#invoke">Invoke</a></li>
+            <li><a href="#build">Build</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="streams-mode">Streams Mode</h1>
-<p>A Benthos stream consists of four components; an input, an optional buffer,
-processor pipelines and an output. Under normal use a Benthos instance is a
-single stream, and these components are configured within the service config
-file.</p>
-<p>Alternatively, Benthos can be run in <code>--streams</code> mode, where a single running
-Benthos instance is able to run multiple entirely isolated streams. Adding
-streams in this mode can be done in two ways:</p>
-<ol>
-<li>
-<p><a href="using_config_files/">Static configuration files</a> allows you to maintain a directory
-   of static stream configuration files that will be traversed by Benthos.</p>
-</li>
-<li>
-<p>An <a href="using_REST_API/">HTTP REST API</a> allows you to dynamically create, read the
-   status of, update, and delete streams at runtime.</p>
-</li>
-</ol>
-<p>These two methods can be used in combination, i.e. it's possible to update and
-delete streams that were created with static files.</p></div>
+<h1 id="benthos-lambda">Benthos Lambda</h1>
+<p>The <code>benthos-lambda</code> distribution is a version of Benthos specifically tailored
+for deployment as an AWS Lambda function.</p>
+<p>It uses the same configuration format as a regular Benthos instance, except it
+is read from the environment variable <code>BENTHOS_CONFIG</code> (YAML format). Also, the
+<code>input</code> and <code>buffer</code> sections are ignored as messages are inserted via function
+invocations.</p>
+<p>If the <code>output</code> section is omitted in your config then the result of the
+processing pipeline is returned back to the caller, otherwise the resulting data
+is sent to the output destination.</p>
+<h3 id="running-with-an-output">Running with an output</h3>
+<p>The flow of a Benthos lambda function with an output configured looks like this:</p>
+<pre><code class="text">                    benthos-lambda
+           +------------------------------+
+           |                              |
+       -------&gt; Processors ----&gt; Output -----&gt; Somewhere
+invoke     |                              |        |
+       &lt;-------------------------------------------/
+           |         &lt;Ack/Noack&gt;          |
+           |                              |
+           +------------------------------+
+</code></pre>
+
+<p>Where the call will block until the output target has confirmed receipt of the
+resulting payload. An error is returned if the send has failed.</p>
+<h3 id="running-without-an-output">Running without an output</h3>
+<p>The flow when an output is not configured looks like this:</p>
+<pre><code class="text">               benthos-lambda
+           +--------------------+
+           |                    |
+       -------&gt; Processors --\  |
+invoke     |                 |  |
+       &lt;---------------------/  |
+           |     &lt;Result&gt;       |
+           |                    |
+           +--------------------+
+</code></pre>
+
+<p>Where the function returns the result of processing directly back to the caller.</p>
+<h2 id="upload-to-aws">Upload to AWS</h2>
+<p>Grab an archive labelled <code>benthos-lambda</code> from the <a href="https://github.com/Jeffail/benthos/releases">releases page</a>
+page and then create your function:</p>
+<pre><code class="sh">LAMBDA_ENV=`cat yourconfig.yaml | jq -csR {Variables:{BENTHOS_CONFIG:.}}`
+aws lambda create-function \
+  --runtime go1.x \
+  --handler benthos-lambda \
+  --role benthos-example-role \
+  --zip-file fileb://benthos-lambda.zip \
+  --environment &quot;$LAMBDA_ENV&quot; \
+  --function-name benthos-example
+</code></pre>
+
+<h2 id="invoke">Invoke</h2>
+<pre><code class="sh">aws lambda invoke \
+  --function-name benthos-example \
+  --payload '{&quot;your&quot;:&quot;document&quot;}' \
+  out.txt &amp;&amp; cat out.txt &amp;&amp; rm out.txt
+</code></pre>
+
+<h2 id="build">Build</h2>
+<p>You can build and archive the function yourself with:</p>
+<pre><code class="sh">go build github.com/Jeffail/benthos/cmd/serverless/benthos-lambda
+zip benthos-lambda.zip benthos-lambda
+</code></pre></div>
         </div>
 
         <footer class="col-md-12">
@@ -183,11 +232,11 @@ delete streams that were created with static files.</p></div>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "..",
+            var base_url = "../..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="../js/base.js" defer></script>
-        <script src="../search/main.js" defer></script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
@@ -255,8 +304,3 @@ delete streams that were created with static files.</p></div>
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-04-23 12:47:13
--->

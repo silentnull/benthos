@@ -170,6 +170,7 @@
             <li><a href="#amqp">amqp</a></li>
             <li><a href="#broker">broker</a></li>
             <li><a href="#cache">cache</a></li>
+            <li><a href="#drop">drop</a></li>
             <li><a href="#dynamic">dynamic</a></li>
             <li><a href="#dynamodb">dynamodb</a></li>
             <li><a href="#elasticsearch">elasticsearch</a></li>
@@ -247,6 +248,7 @@ a <a href="#broker"><code>broker</code></a> output with the 'try' pattern.</p>
 <li><a href="#amqp"><code>amqp</code></a></li>
 <li><a href="#broker"><code>broker</code></a></li>
 <li><a href="#cache"><code>cache</code></a></li>
+<li><a href="#drop"><code>drop</code></a></li>
 <li><a href="#dynamic"><code>dynamic</code></a></li>
 <li><a href="#dynamodb"><code>dynamodb</code></a></li>
 <li><a href="#elasticsearch"><code>elasticsearch</code></a></li>
@@ -340,9 +342,14 @@ listing them:</p>
 and can be chosen from the following:</p>
 <h4 id="fan_out"><code>fan_out</code></h4>
 <p>With the fan out pattern all outputs will be sent every message that passes
-through Benthos. If an output applies back pressure it will block all subsequent
-messages, and if an output fails to send a message it will be retried
-continuously until completion or service shut down.</p>
+through Benthos in parallel.</p>
+<p>If an output applies back pressure it will block all subsequent messages, and if
+an output fails to send a message it will be retried continuously until
+completion or service shut down.</p>
+<h4 id="fan_out_sequential"><code>fan_out_sequential</code></h4>
+<p>Similar to the fan out pattern except outputs are written to sequentially,
+meaning an output is only written to once the preceding output has confirmed
+receipt of the same message.</p>
 <h4 id="round_robin"><code>round_robin</code></h4>
 <p>With the round robin pattern each message will be assigned a single output
 following their order. If an output applies back pressure it will block all
@@ -411,6 +418,12 @@ resources:
 <p>In order to create a unique <code>key</code> value per item you should use
 function interpolations described <a href="../config_interpolation/#functions">here</a>.
 When sending batched messages the interpolations are performed per message part.</p>
+<h2 id="drop"><code>drop</code></h2>
+<pre><code class="yaml">type: drop
+drop: {}
+</code></pre>
+
+<p>Drops all messages.</p>
 <h2 id="dynamic"><code>dynamic</code></h2>
 <pre><code class="yaml">type: dynamic
 dynamic:

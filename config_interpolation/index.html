@@ -274,6 +274,9 @@ is defined by showing how the reference time, defined to be
 <p>A fractional second is represented by adding a period and zeros to the end of
 the seconds section of layout string, as in <code>15:04:05.000</code> to format a time
 stamp with millisecond precision.</p>
+<h3 id="timestamp_utc"><code>timestamp_utc</code></h3>
+<p>The equivalent of <code>timestamp</code> except the time is printed as UTC instead of the
+local timezone.</p>
 <h3 id="count"><code>count</code></h3>
 <p>The <code>count</code> function is a counter starting at 1 which increments after each time
 it is called. Count takes an argument which is an identifier for the counter,

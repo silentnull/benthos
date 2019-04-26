@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        
+        <meta name="author" content="Ashley Jeffs">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Processors - Benthos</title>
@@ -410,9 +410,12 @@ as a single message with multiple parts. If the output only supports single part
 messages then the parts will be sent as a batch of single part messages. If the
 output supports neither multipart or batches of messages then Benthos falls back
 to sending them individually.</p>
-<p>If a Benthos stream contains multiple brokered inputs or outputs then the batch
-operator should <em>always</em> be applied directly after an input in order to avoid
-unexpected behaviour and message ordering.</p>
+<h3 id="warning">WARNING</h3>
+<p>The batch processor should <em>always</em> be positioned within the <code>input</code>
+section - ideally before any other processor - in order to avoid unexpected
+acknowledgment behaviour and message ordering.</p>
+<p>For more information about batching in Benthos please check out
+<a href="../batching/">this document</a>.</p>
 <h2 id="bounds_check"><code>bounds_check</code></h2>
 <pre><code class="yaml">type: bounds_check
 bounds_check:

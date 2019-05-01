@@ -171,6 +171,7 @@
             <li><a href="#broker">broker</a></li>
             <li><a href="#cache">cache</a></li>
             <li><a href="#drop">drop</a></li>
+            <li><a href="#drop_on_error">drop_on_error</a></li>
             <li><a href="#dynamic">dynamic</a></li>
             <li><a href="#dynamodb">dynamodb</a></li>
             <li><a href="#elasticsearch">elasticsearch</a></li>
@@ -249,6 +250,7 @@ a <a href="#broker"><code>broker</code></a> output with the 'try' pattern.</p>
 <li><a href="#broker"><code>broker</code></a></li>
 <li><a href="#cache"><code>cache</code></a></li>
 <li><a href="#drop"><code>drop</code></a></li>
+<li><a href="#drop_on_error"><code>drop_on_error</code></a></li>
 <li><a href="#dynamic"><code>dynamic</code></a></li>
 <li><a href="#dynamodb"><code>dynamodb</code></a></li>
 <li><a href="#elasticsearch"><code>elasticsearch</code></a></li>
@@ -424,6 +426,28 @@ drop: {}
 </code></pre>
 
 <p>Drops all messages.</p>
+<h2 id="drop_on_error"><code>drop_on_error</code></h2>
+<pre><code class="yaml">type: drop_on_error
+drop_on_error: {}
+</code></pre>
+
+<p>Attempts to write messages to a child output and if the write fails for any
+reason the message is dropped instead of being reattempted. This output can be
+combined with a child <code>retry</code> output in order to set an explicit
+number of retry attempts before dropping a message.</p>
+<p>For example, the following configuration attempts to send to a hypothetical
+output type <code>foo</code> three times, but if all three attempts fail the
+message is dropped entirely:</p>
+<pre><code class="yaml">output:
+  type: drop_on_error
+  drop_on_error:
+    type: retry
+    retry:
+      max_retries: 2
+      output:
+        type: foo
+</code></pre>
+
 <h2 id="dynamic"><code>dynamic</code></h2>
 <pre><code class="yaml">type: dynamic
 dynamic:
@@ -905,6 +929,7 @@ baz\n\n</p>
 <pre><code class="yaml">type: switch
 switch:
   outputs: []
+  retry_until_success: true
 </code></pre>
 
 <p>The switch output type allows you to configure multiple conditional output
@@ -921,6 +946,7 @@ output only.</p>
 <pre><code class="yaml">output:
   type: switch
   switch:
+    retry_until_success: true
     outputs:
     - output:
         type: foo
@@ -956,10 +982,15 @@ output only.</p>
 <p>The switch output requires a minimum of two outputs. If no condition is defined
 for an output, it behaves like a static <code>true</code> condition. If
 <code>fallthrough</code> is set to <code>true</code>, the switch output will
-continue evaluating additional outputs after finding a match. If an output
-applies back pressure it will block all subsequent messages, and if an output
-fails to send a message, it will be retried continuously until completion or
-service shut down. Messages that do not match any outputs will be dropped.</p>
+continue evaluating additional outputs after finding a match.</p>
+<p>Messages that do not match any outputs will be dropped. If an output applies
+back pressure it will block all subsequent messages.</p>
+<p>If an output fails to send a message it will be retried continuously until
+completion or service shut down. You can change this behaviour so that when an
+output returns an error the switch output also returns an error by setting
+<code>retry_until_success</code> to <code>false</code>. This allows you to
+wrap the switch with a <code>try</code> broker, but care must be taken to ensure
+duplicate messages aren't introduced during error conditions.</p>
 <h2 id="websocket"><code>websocket</code></h2>
 <pre><code class="yaml">type: websocket
 websocket:

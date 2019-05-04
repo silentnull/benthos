@@ -873,6 +873,7 @@ use the <a href="#broker"><code>broker</code></a> output type with the pattern '
 <pre><code class="yaml">type: s3
 s3:
   bucket: &quot;&quot;
+  content_encoding: &quot;&quot;
   content_type: application/octet-stream
   credentials:
     id: &quot;&quot;
@@ -881,16 +882,19 @@ s3:
     secret: &quot;&quot;
     token: &quot;&quot;
   endpoint: &quot;&quot;
+  force_path_style_urls: false
   path: ${!count:files}-${!timestamp_unix_nano}.txt
   region: eu-west-1
   timeout: 5s
 </code></pre>
 
 <p>Sends message parts as objects to an Amazon S3 bucket. Each object is uploaded
-with the path specified with the <code>path</code> field. In order to have a
-different path for each object you should use function interpolations described
-<a href="../config_interpolation/#functions">here</a>, which are calculated per message
-of a batch.</p>
+with the path specified with the <code>path</code> field.</p>
+<p>In order to have a different path for each object you should use function
+interpolations described <a href="../config_interpolation/#functions">here</a>, which are
+calculated per message of a batch.</p>
+<p>The fields <code>content_type</code> and <code>content_encoding</code> can also be set
+dynamically using function interpolation.</p>
 <h2 id="sqs"><code>sqs</code></h2>
 <pre><code class="yaml">type: sqs
 sqs:

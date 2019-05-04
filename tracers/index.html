@@ -171,7 +171,7 @@
 <h1 id="tracer-types">Tracer Types</h1>
 <p>This document was generated with <code>benthos --list-tracers</code></p>
 <p>A tracer type represents a destination for Benthos to send opentracing events to
-such as Jaeger.</p>
+such as <a href="https://www.jaegertracing.io/">Jaeger</a>.</p>
 <p>When a tracer is configured all messages will be allocated a root span during
 ingestion that represents their journey through a Benthos pipeline. Many Benthos
 processors create spans, and so opentracing is a great way to analyse the
@@ -202,7 +202,7 @@ jaeger:
   tags: {}
 </code></pre>
 
-<p>Send spans to a Jaeger agent.</p>
+<p>Send spans to a <a href="https://www.jaegertracing.io/">Jaeger</a> agent.</p>
 <p>Available sampler types are: const, probabilistic, ratelimiting and remote.</p>
 <h2 id="none"><code>none</code></h2>
 <pre><code class="yaml">type: none

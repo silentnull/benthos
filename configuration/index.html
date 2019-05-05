@@ -8,7 +8,7 @@
         <meta name="author" content="Ashley Jeffs">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Config Cheats - Benthos</title>
+        <title>Configuration - Benthos</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -106,6 +106,14 @@
     <a href="../serverless/">Serverless</a>
 </li>
                                     
+<li class="active">
+    <a href="./">Configuration</a>
+</li>
+                                    
+<li >
+    <a href="../config_interpolation/">Config Interpolation</a>
+</li>
+                                    
 <li >
     <a href="../pipeline/">Processing Pipelines</a>
 </li>
@@ -122,14 +130,6 @@
     <a href="../workflows/">Workflows</a>
 </li>
                                     
-<li class="active">
-    <a href="./">Config Cheats</a>
-</li>
-                                    
-<li >
-    <a href="../config_interpolation/">Config Interpolation</a>
-</li>
-                                    
 <li >
     <a href="../examples/">Applied Examples</a>
 </li>
@@ -144,7 +144,7 @@
                             </a>
                         </li>
                             <li >
-                                <a rel="next" href="../workflows/">
+                                <a rel="next" href="../serverless/">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
@@ -358,7 +358,6 @@ benthos -c ./your-config.yaml --print-json | jq '.pipeline.processors[0].filter'
 </code></pre>
 
 <h2 id="fragmenting-your-configuration">Fragmenting Your Configuration</h2>
-<p>WARNING: THIS FEATURE IS EXPERIMENTAL AND SUBJECT TO CHANGE</p>
 <p>It's possible to break a large configuration file into smaller parts with
 <a href="https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03">JSON references</a>. Benthos doesn't yet support the full
 specification as it only resolves local or file path URIs, but this still allows

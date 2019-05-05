@@ -165,6 +165,7 @@
             <li><a href="#contents">Contents</a></li>
             <li><a href="#enabling-discovery">Enabling Discovery</a></li>
             <li><a href="#help-with-debugging">Help With Debugging</a></li>
+            <li><a href="#fragmenting-your-configuration">Fragmenting Your Configuration</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -213,6 +214,7 @@ managing these more complex configuration files.</p>
 <ul>
 <li><a href="#enabling-discovery">Enabling Discovery</a></li>
 <li><a href="#help-with-debugging">Help With Debugging</a></li>
+<li><a href="#fragmenting-your-configuration">Fragmenting Your Configuration</a></li>
 </ul>
 <h2 id="enabling-discovery">Enabling Discovery</h2>
 <p>The discoverability of configuration fields is a common headache with any
@@ -353,6 +355,111 @@ benthos -c ./your-config.yaml --print-json | jq '.pipeline.processors[1]'
 
 # Check the condition of a filter processor
 benthos -c ./your-config.yaml --print-json | jq '.pipeline.processors[0].filter'
+</code></pre>
+
+<h2 id="fragmenting-your-configuration">Fragmenting Your Configuration</h2>
+<p>WARNING: THIS FEATURE IS EXPERIMENTAL AND SUBJECT TO CHANGE</p>
+<p>It's possible to break a large configuration file into smaller parts with
+<a href="https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03">JSON references</a>. Benthos doesn't yet support the full
+specification as it only resolves local or file path URIs, but this still allows
+you to break your configs down significantly.</p>
+<p>To reference a config snippet use the <code>$ref</code> keyword:</p>
+<pre><code class="yaml">local_reference:
+  $ref: '#/path/to/field'
+file_reference:
+  $ref: './foo.yaml'
+file_field_reference:
+  $ref: './foo.yaml#/path/to/field'
+</code></pre>
+
+<p>For example, suppose we have a configuration snippet saved under
+<code>./config/foo.yaml</code>:</p>
+<pre><code class="yaml">type: process_map
+process_map:
+  premap:
+    id: foo.id
+  processors:
+  - type: cache
+    cache:
+      operator: get
+      key: ${!json_field:id}
+      cache: objects
+  postmap:
+    result: .
+</code></pre>
+
+<p>And we wished to use this fragment within a larger configuration file. We can do
+so by adding an object with a key <code>$ref</code> and a string value which is a path to
+our snippet:</p>
+<pre><code class="yaml">pipeline:
+  processors:
+  - type: decompress
+    decompress:
+      algorithm: gzip
+
+  - &quot;$ref&quot;: &quot;./foo.yaml&quot;
+</code></pre>
+
+<p>The path of a reference is relative to the configuration file containing the
+reference, and so if this configuration file were saved as <code>./config/bar.yaml</code>
+then the path would resolve and we would end up with:</p>
+<pre><code class="yaml">pipeline:
+  processors:
+  - type: decompress
+    decompress:
+      algorithm: gzip
+
+  - type: process_map
+    process_map:
+      premap:
+        id: foo.id
+      processors:
+      - type: cache
+        cache:
+          operator: get
+          key: ${!json_field:id}
+          cache: objects
+      postmap:
+        result: .
+</code></pre>
+
+<p>These references can be nested. Also, environment variable interpolations within
+configurations are resolved <em>before</em> references are resolved. Therefore, it's
+possible to use them to specify which snippet to load:</p>
+<pre><code class="yaml">pipeline:
+  processors:
+  - type: decompress
+    decompress:
+      algorithm: gzip
+
+  - &quot;$ref&quot;: &quot;./${TARGET_SNIPPET}&quot;
+</code></pre>
+
+<p>Running the above with <code>TARGET_SNIPPET=foo.yaml benthos -c ./config/bar.yaml</code>
+would be equivalent to the previous example.</p>
+<p>Finally, we can extract a specific field from our reference using a fragment
+following the <a href="https://tools.ietf.org/html/rfc6901">JSON Pointer</a> format. For example, the following:</p>
+<pre><code class="yaml">pipeline:
+  processors:
+  - type: decompress
+    decompress:
+      algorithm: gzip
+
+  - &quot;$ref&quot;: &quot;./foo.yaml#/process_map/processors/0&quot;
+</code></pre>
+
+<p>Would result in the following expansion:</p>
+<pre><code class="yaml">pipeline:
+  processors:
+  - type: decompress
+    decompress:
+      algorithm: gzip
+
+  - type: cache
+    cache:
+      operator: get
+      key: ${!json_field:id}
+      cache: objects
 </code></pre></div>
         </div>
 

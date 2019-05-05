@@ -151,14 +151,14 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#enrichments">Enrichments</a></li>
+        <li class="main active"><a href="#enrichment-workflows">Enrichment Workflows</a></li>
             <li><a href="#first-enrichment">First Enrichment</a></li>
-            <li><a href="#enrichment-workflows">Enrichment Workflows</a></li>
+            <li><a href="#enrichment-workflows_1">Enrichment Workflows</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="enrichments">Enrichments</h1>
+<h1 id="enrichment-workflows">Enrichment Workflows</h1>
 <p>This cookbook demonstrates how to enrich a stream of JSON documents with
 HTTP services. This method also works with AWS Lambda functions, subprocesses,
 etc.</p>
@@ -253,7 +253,7 @@ output:
 in parallel, but if we were instead using the <a href="../../processors/#lambda"><code>lambda</code></a> or
 <a href="../../processors/#subprocessor"><code>subprocess</code></a> processors to hit an enrichment we could wrap them
 within the <a href="../../processors/#parallel"><code>parallel</code></a> processor for the same result.</p>
-<h2 id="enrichment-workflows">Enrichment Workflows</h2>
+<h2 id="enrichment-workflows_1">Enrichment Workflows</h2>
 <p>Extracting the claims of an article isn't enough for us to detect fake news, for
 that we need to add two more enrichments.</p>
 <h3 id="hyperbole-detector">Hyperbole Detector</h3>

@@ -23,7 +23,16 @@
         <script src="../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script> 
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-135959729-3', 'docs.benthos.dev');
+            ga('send', 'pageview');
+        </script> 
     </head>
 
     <body>
@@ -40,7 +49,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="../cookbooks/">Benthos</a>
+  <a class="navbar-brand" href="https://www.benthos.dev">Benthos</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -143,6 +152,11 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+    <li class="nav-item">
+      <a href="https://github.com/Jeffail/benthos/" class="nav-link">
+        <i class="fa fa-github"></i> Code
+      </a>
+    </li>
                     </ul>
                 </div>
             </div>
@@ -153,7 +167,6 @@
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#benthos-concepts">Benthos Concepts</a></li>
             <li><a href="#contents">Contents</a></li>
-            <li><a href="#configuration">Configuration</a></li>
             <li><a href="#monitoring">Monitoring</a></li>
             <li><a href="#mutating-and-filtering-content">Mutating And Filtering Content</a></li>
             <li><a href="#content-based-multiplexing">Content Based Multiplexing</a></li>
@@ -167,7 +180,6 @@
 <h1 id="benthos-concepts">Benthos Concepts</h1>
 <h2 id="contents">Contents</h2>
 <ol>
-<li><a href="#configuration">Configuration</a></li>
 <li><a href="#monitoring">Monitoring</a></li>
 <li><a href="#mutating-and-filtering-content">Mutating And Filtering Content</a></li>
 <li><a href="#content-based-multiplexing">Content Based Multiplexing</a></li>
@@ -175,20 +187,6 @@
 <li><a href="#maximising-io-throughput">Maximising IO Throughput</a></li>
 <li><a href="#maximising-cpu-utilisation">Maximising CPU Utilisation</a></li>
 </ol>
-<h2 id="configuration">Configuration</h2>
-<p>A Benthos configuration consists of a number of root sections, the key parts
-being:</p>
-<ul>
-<li><a href="./inputs"><code>input</code></a></li>
-<li><a href="./buffers"><code>buffer</code></a></li>
-<li><a href="../pipeline/"><code>pipeline</code></a></li>
-<li><a href="./outputs"><code>output</code></a></li>
-</ul>
-<p>There are also sections for <code>metrics</code>, <code>logging</code> and <code>http</code> server options.
-Config examples for every input, output and processor type can be found
-<a href="https://github.com/Jeffail/benthos/tree/master/config">here</a>.</p>
-<p>Benthos provides lots of tooling to try and make writing configuration easier,
-you can read about them <a href="../configuration/">here</a>.</p>
 <h2 id="monitoring">Monitoring</h2>
 <h3 id="health-checks">Health Checks</h3>
 <p>Benthos serves two HTTP endpoints for health checks:</p>

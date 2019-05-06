@@ -136,6 +136,14 @@
 </li>
                                     
 <li >
+    <a href="../performance_tuning/">Performance Tuning</a>
+</li>
+                                    
+<li >
+    <a href="../monitoring/">Monitoring</a>
+</li>
+                                    
+<li >
     <a href="../workflows/">Workflows</a>
 </li>
                                     
@@ -239,11 +247,6 @@ expressions.</p>
 
 <p>The above example could be summarised as 'text contains "hello world" and also
 either contains "foo" or does <em>not</em> contain "bar"'.</p>
-<p>Conditions can be extremely useful for creating filters on an output. By using a
-fan out output broker with 'filter' processors on the brokered outputs it is
-possible to build
-<a href="../concepts/#content-based-multiplexing">curated data streams</a> that filter on
-the content of each message.</p>
 <h3 id="batching-and-multipart-messages">Batching and Multipart Messages</h3>
 <p>All conditions can be applied to a multipart message, which is synonymous with a
 batch. Some conditions target a specific part of a message batch, and require

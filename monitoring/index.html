@@ -7,11 +7,11 @@
         
         <meta name="author" content="Ashley Jeffs">
         
-        <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Using config files - Benthos</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Monitoring - Benthos</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
@@ -60,95 +60,95 @@
                                 <a href="/">Home</a>
                             </li>
                             <li >
-                                <a href="../../cookbooks/">Cookbooks</a>
+                                <a href="../cookbooks/">Cookbooks</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../../inputs/">Inputs</a>
+    <a href="../inputs/">Inputs</a>
 </li>
                                     
 <li >
-    <a href="../../buffers/">Buffers</a>
+    <a href="../buffers/">Buffers</a>
 </li>
                                     
 <li >
-    <a href="../../processors/">Processors</a>
+    <a href="../processors/">Processors</a>
 </li>
                                     
 <li >
-    <a href="../../conditions/">Conditions</a>
+    <a href="../conditions/">Conditions</a>
 </li>
                                     
 <li >
-    <a href="../../outputs/">Outputs</a>
+    <a href="../outputs/">Outputs</a>
 </li>
                                     
 <li >
-    <a href="../../caches/">Caches</a>
+    <a href="../caches/">Caches</a>
 </li>
                                     
 <li >
-    <a href="../../rate_limits/">Rate Limits</a>
+    <a href="../rate_limits/">Rate Limits</a>
 </li>
                                     
 <li >
-    <a href="../../metrics/">Metrics</a>
+    <a href="../metrics/">Metrics</a>
 </li>
                                     
 <li >
-    <a href="../../tracers/">Tracers</a>
+    <a href="../tracers/">Tracers</a>
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../../getting_started/">Getting Started</a>
+    <a href="../getting_started/">Getting Started</a>
 </li>
                                     
 <li >
-    <a href="../../serverless/">Serverless</a>
+    <a href="../serverless/">Serverless</a>
 </li>
                                     
 <li >
-    <a href="../../configuration/">Configuration</a>
+    <a href="../configuration/">Configuration</a>
 </li>
                                     
 <li >
-    <a href="../../config_interpolation/">Config Interpolation</a>
+    <a href="../config_interpolation/">Config Interpolation</a>
 </li>
                                     
 <li >
-    <a href="../../pipeline/">Processing Pipelines</a>
+    <a href="../pipeline/">Processing Pipelines</a>
 </li>
                                     
 <li >
-    <a href="../../batching/">Message Batching</a>
+    <a href="../batching/">Message Batching</a>
 </li>
                                     
 <li >
-    <a href="../../error_handling/">Error Handling</a>
+    <a href="../error_handling/">Error Handling</a>
 </li>
                                     
 <li >
-    <a href="../../performance_tuning/">Performance Tuning</a>
+    <a href="../performance_tuning/">Performance Tuning</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Monitoring</a>
 </li>
                                     
 <li >
-    <a href="../../monitoring/">Monitoring</a>
+    <a href="../workflows/">Workflows</a>
 </li>
                                     
 <li >
-    <a href="../../workflows/">Workflows</a>
-</li>
-                                    
-<li >
-    <a href="../../examples/">Applied Examples</a>
+    <a href="../examples/">Applied Examples</a>
 </li>
                                 </ul>
                             </li>
@@ -160,6 +160,16 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+    <li class="nav-item">
+      <a rel="prev" href="../performance_tuning/" class="nav-link">
+        <i class="fa fa-arrow-left"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a rel="next" href="../workflows/" class="nav-link">
+        <i class="fa fa-arrow-right"></i>
+      </a>
+    </li>
     <li class="nav-item">
       <a href="https://github.com/Jeffail/benthos/" class="nav-link">
         <i class="fa fa-github"></i> Code
@@ -173,133 +183,32 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#streams-via-config-files">Streams Via Config Files</a></li>
-            <li><a href="#walkthrough">Walkthrough</a></li>
+        <li class="main active"><a href="#monitoring">Monitoring</a></li>
+            <li><a href="#health-checks">Health Checks</a></li>
+            <li><a href="#metrics">Metrics</a></li>
+            <li><a href="#tracing">Tracing</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="streams-via-config-files">Streams Via Config Files</h1>
-<p>When running Benthos in <code>--streams</code> mode it's possible to create streams with
-their own static configurations by setting the <code>--streams-dir</code> flag to a
-directory containing a config file for each stream (<code>/benthos/streams</code> by
-default).</p>
-<p>Note that stream configs loaded in this way can benefit from
-<a href="../../config_interpolation/">interpolation</a>.</p>
-<h2 id="walkthrough">Walkthrough</h2>
-<p>Make a directory of stream configs:</p>
-<pre><code class="bash">$ mkdir ./streams
-
-$ cat &gt; ./streams/foo.yaml &lt;&lt;EOF
-input:
-  type: http_server
-buffer:
-  type: memory
-pipeline:
-  threads: 4
-  processors:
-  - type: jmespath
-    jmespath:
-      query: &quot;{id: user.id, content: body.content}&quot;
-output:
-  type: http_server
-EOF
-
-$ cat &gt; ./streams/bar.yaml &lt;&lt;EOF
-input:
-  type: kafka
-  kafka:
-    addresses:
-    - localhost:9092
-    topic: my_topic
-buffer:
-  type: none
-pipeline:
-  threads: 1
-  processors:
-  - type: sample
-    sample:
-      retain: 10
-output:
-  type: elasticsearch
-  elasticsearch:
-    urls:
-    - http://localhost:9200
-EOF
-</code></pre>
-
-<p>Run Benthos in streams mode, pointing to our directory of streams:</p>
-<pre><code class="bash">$ benthos --streams --streams-dir ./streams
-</code></pre>
-
-<p>On a separate terminal you can query the set of streams loaded:</p>
-<pre><code class="bash">$ curl http://localhost:4195/streams | jq '.'
-{
-  &quot;bar&quot;: {
-    &quot;active&quot;: true,
-    &quot;uptime&quot;: 19.381001424,
-    &quot;uptime_str&quot;: &quot;19.381001552s&quot;
-  },
-  &quot;foo&quot;: {
-    &quot;active&quot;: true,
-    &quot;uptime&quot;: 19.380582951,
-    &quot;uptime_str&quot;: &quot;19.380583306s&quot;
-  }
-}
-</code></pre>
-
-<p>You can also query a specific stream to see the loaded configuration:</p>
-<pre><code class="bash">$ curl http://localhost:4195/streams/foo | jq '.'
-{
-  &quot;active&quot;: true,
-  &quot;uptime&quot;: 69.334717193,
-  &quot;uptime_str&quot;: &quot;1m9.334717193s&quot;,
-  &quot;config&quot;: {
-    &quot;input&quot;: {
-      &quot;type&quot;: &quot;http_server&quot;,
-      &quot;http_server&quot;: {
-        &quot;address&quot;: &quot;&quot;,
-        &quot;cert_file&quot;: &quot;&quot;,
-        &quot;key_file&quot;: &quot;&quot;,
-        &quot;path&quot;: &quot;/post&quot;,
-        &quot;timeout&quot;: &quot;5s&quot;
-      }
-    },
-    &quot;buffer&quot;: {
-      &quot;type&quot;: &quot;memory&quot;,
-      &quot;memory&quot;: {
-        &quot;limit&quot;: 10000000
-      }
-    },
-    &quot;pipeline&quot;: {
-      &quot;processors&quot;: [
-        {
-          &quot;type&quot;: &quot;jmespath&quot;,
-          &quot;jmespath&quot;: {
-            &quot;parts&quot;: [],
-            &quot;query&quot;: &quot;{id: user.id, content: body.content}&quot;
-          }
-        }
-      ],
-      &quot;threads&quot;: 4
-    },
-    &quot;output&quot;: {
-      &quot;type&quot;: &quot;http_server&quot;,
-      &quot;http_server&quot;: {
-        &quot;address&quot;: &quot;&quot;,
-        &quot;cert_file&quot;: &quot;&quot;,
-        &quot;key_file&quot;: &quot;&quot;,
-        &quot;path&quot;: &quot;/get&quot;,
-        &quot;stream_path&quot;: &quot;/get/stream&quot;,
-        &quot;timeout&quot;: &quot;5s&quot;
-      }
-    }
-  }
-}
-</code></pre>
-
-<p>There are other endpoints <a href="../using_REST_API/">in the REST API</a> for creating, updating and
-deleting streams.</p></div>
+<h1 id="monitoring">Monitoring</h1>
+<h2 id="health-checks">Health Checks</h2>
+<p>Benthos serves two HTTP endpoints for health checks:</p>
+<ul>
+<li><code>/ping</code> can be used as a liveness probe as it always returns a 200.</li>
+<li><code>/ready</code> can be used as a readiness probe as it serves a 200 only when both
+  the input and output are connected, otherwise a 503 is returned.</li>
+</ul>
+<h2 id="metrics">Metrics</h2>
+<p>Benthos <a href="../metrics/paths/">exposes lots of metrics</a> either to Statsd,
+Prometheus or for debugging purposes an HTTP endpoint that returns a JSON
+formatted object.</p>
+<p>The target destination of Benthos metrics is configurable from the
+<a href="../metrics/">metrics section</a>, where it's also possible to rename,
+whitelist or blacklist certain metric paths.</p>
+<h2 id="tracing">Tracing</h2>
+<p>Benthos also <a href="../tracers/">emits opentracing events</a> to a tracer of your
+choice, which can be used to visualise the processors within a pipeline.</p></div>
         </div>
 
         <footer class="col-md-12">
@@ -307,11 +216,11 @@ deleting streams.</p></div>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "../..",
+            var base_url = "..",
                 shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
         </script>
-        <script src="../../js/base.js" defer></script>
-        <script src="../../search/main.js" defer></script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">

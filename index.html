@@ -136,6 +136,14 @@
 </li>
                                     
 <li >
+    <a href="performance_tuning/">Performance Tuning</a>
+</li>
+                                    
+<li >
+    <a href="monitoring/">Monitoring</a>
+</li>
+                                    
+<li >
     <a href="workflows/">Workflows</a>
 </li>
                                     
@@ -168,7 +176,7 @@
         <li class="main active"><a href="#documentation">Documentation</a></li>
             <li><a href="#core-components">Core Components</a></li>
             <li><a href="#other-components">Other Components</a></li>
-            <li><a href="#other-sections">Other Sections</a></li>
+            <li><a href="#guides">Guides</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -192,28 +200,23 @@ check out the <a href="getting_started/">getting started guide</a>.</p>
 <li><a href="metrics/">Metrics</a></li>
 <li><a href="tracers/">Tracers</a></li>
 </ul>
-<h2 id="other-sections">Other Sections</h2>
-<ul>
-<li><a href="configuration/">Configuration</a> explains some config file basics, as well
-  as tools provided by Benthos that make writing and managing them easier.</li>
-<li><a href="concepts/">Core Concepts</a> describes various Benthos concepts such as:<ul>
-<li>Monitoring</li>
-<li>Mutating And Filtering Content</li>
-<li>Content Based Multiplexing</li>
-<li>Sharing Resources Across Processors</li>
-<li>Maximising IO Throughput</li>
-<li>Maximising CPU Utilisation</li>
-</ul>
-</li>
-<li><a href="batching/">Message Batching</a> explains how multiple part messages and
-  message batching works within Benthos.</li>
-<li><a href="error_handling/">Error Handling</a> explains how you can handle errors from
-  processor steps in order to recover or reroute the data.</li>
-<li><a href="workflows/">Workflows</a> explains how Benthos can be configured to easily
-  support complex processor flows using automatic DAG resolution.</li>
-<li><a href="config_interpolation/">Config Interpolation</a> explains how to incorporate
-  environment variables and dynamic values into your config files.</li>
-</ul></div>
+<h2 id="guides">Guides</h2>
+<p><a href="configuration/">Configuration</a> explains some config file basics, as well as
+tools provided by Benthos that make writing and managing them easier.</p>
+<p><a href="config_interpolation/">Config Interpolation</a> explains how to incorporate
+environment variables and dynamic values into your config files.</p>
+<p><a href="pipeline/">Processing Pipelines</a> explains how processing threads are
+orchestrated within Benthos and how to fully utilise them.</p>
+<p><a href="batching/">Message Batching</a> explains how multiple part messages and
+message batching works within Benthos.</p>
+<p><a href="error_handling/">Error Handling</a> explains how you can handle errors from
+processors in order to recover or reroute the data.</p>
+<p><a href="performance_tuning/">Performance Tuning</a> advises on ways of diagnosing and
+improving the performance of your Benthos pipelines.</p>
+<p><a href="monitoring/">Monitoring</a> explains how to hook Benthos up to your choice of
+monitoring and tracing tools.</p>
+<p><a href="workflows/">Workflows</a> explains how Benthos can be configured to easily
+support complex processor flows using automatic DAG resolution.</p></div>
         </div>
 
         <footer class="col-md-12">
@@ -296,5 +299,5 @@ check out the <a href="getting_started/">getting started guide</a>.</p>
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-05-06 08:08:29
+Build Date UTC : 2019-05-06 08:29:12
 -->

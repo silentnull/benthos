@@ -8,7 +8,7 @@
         <meta name="author" content="Ashley Jeffs">
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Concepts - Benthos</title>
+        <title>Performance Tuning - Benthos</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -103,7 +103,7 @@
 </li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
@@ -135,6 +135,14 @@
     <a href="../error_handling/">Error Handling</a>
 </li>
                                     
+<li class="active">
+    <a href="./">Performance Tuning</a>
+</li>
+                                    
+<li >
+    <a href="../monitoring/">Monitoring</a>
+</li>
+                                    
 <li >
     <a href="../workflows/">Workflows</a>
 </li>
@@ -153,6 +161,16 @@
                             </a>
                         </li>
     <li class="nav-item">
+      <a rel="prev" href="../error_handling/" class="nav-link">
+        <i class="fa fa-arrow-left"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a rel="next" href="../monitoring/" class="nav-link">
+        <i class="fa fa-arrow-right"></i>
+      </a>
+    </li>
+    <li class="nav-item">
       <a href="https://github.com/Jeffail/benthos/" class="nav-link">
         <i class="fa fa-github"></i> Code
       </a>
@@ -165,192 +183,20 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#benthos-concepts">Benthos Concepts</a></li>
+        <li class="main active"><a href="#performance-tuning">Performance Tuning</a></li>
             <li><a href="#contents">Contents</a></li>
-            <li><a href="#monitoring">Monitoring</a></li>
-            <li><a href="#mutating-and-filtering-content">Mutating And Filtering Content</a></li>
-            <li><a href="#content-based-multiplexing">Content Based Multiplexing</a></li>
-            <li><a href="#sharing-resources-across-processors">Sharing Resources Across Processors</a></li>
             <li><a href="#maximising-io-throughput">Maximising IO Throughput</a></li>
             <li><a href="#maximising-cpu-utilisation">Maximising CPU Utilisation</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="benthos-concepts">Benthos Concepts</h1>
+<h1 id="performance-tuning">Performance Tuning</h1>
 <h2 id="contents">Contents</h2>
 <ol>
-<li><a href="#monitoring">Monitoring</a></li>
-<li><a href="#mutating-and-filtering-content">Mutating And Filtering Content</a></li>
-<li><a href="#content-based-multiplexing">Content Based Multiplexing</a></li>
-<li><a href="#sharing-resources-across-processors">Sharing Resources Across Processors</a></li>
 <li><a href="#maximising-io-throughput">Maximising IO Throughput</a></li>
 <li><a href="#maximising-cpu-utilisation">Maximising CPU Utilisation</a></li>
 </ol>
-<h2 id="monitoring">Monitoring</h2>
-<h3 id="health-checks">Health Checks</h3>
-<p>Benthos serves two HTTP endpoints for health checks:</p>
-<ul>
-<li><code>/ping</code> can be used as a liveness probe as it always returns a 200.</li>
-<li><code>/ready</code> can be used as a readiness probe as it serves a 200 only when both
-  the input and output are connected, otherwise a 503 is returned.</li>
-</ul>
-<h3 id="metrics">Metrics</h3>
-<p>Benthos <a href="../metrics/paths/">exposes lots of metrics</a> either to Statsd,
-Prometheus or for debugging purposes an HTTP endpoint that returns a JSON
-formatted object.</p>
-<p>The target destination of Benthos metrics is configurable from the
-<a href="../metrics/">metrics section</a>, where it's also possible to rename,
-whitelist or blacklist certain metric paths.</p>
-<h3 id="tracing">Tracing</h3>
-<p>Benthos also <a href="../tracers/">emits opentracing events</a> to a tracer of your
-choice, which can be used to visualise the processors within a pipeline.</p>
-<h2 id="mutating-and-filtering-content">Mutating And Filtering Content</h2>
-<p>Benthos bridges different transport and storage mediums of data, but these often
-require the data to be represented in different ways. For example, we might be
-reading <code>.tgz</code> archives of messages from Amazon S3, but we need to decompress
-and unarchive the messages before sending them to Kafka. For this purpose we
-can use processors, which you <a href="../processors/">can read about in more detail here</a>.</p>
-<p>Processors can be attributed to both inputs and outputs, meaning you can be
-specific about which processors apply to data from specific sources or to
-specific sinks.</p>
-<h2 id="content-based-multiplexing">Content Based Multiplexing</h2>
-<p>It is possible to perform content based multiplexing of messages to specific
-outputs using <a href="../outputs/#switch">a switch output</a> with two or more conditional
-outputs. <a href="../conditions/">Conditions</a> are content aware logical operators that can
-be combined using boolean logic.</p>
-<p>For example, say we have an output <code>foo</code> that we only want to receive messages
-that contain the word <code>foo</code>, and an output <code>bar</code> that we wish to send everything
-that <code>foo</code> doesn't receive, we can achieve that with this config:</p>
-<pre><code class="yaml">output:
-  type: switch
-  switch:
-    outputs:
-    - output:
-        type: foo
-        foo:
-          foo_field_1: value1
-      condition:
-        type: text
-        text:
-          operator: contains
-          arg: foo
-    - output:
-        type: bar
-        bar:
-          bar_field_1: value2
-</code></pre>
-
-<p>Another method of content based multiplexing is with
-<a href="../outputs/#broker">an output broker with the <code>fan_out</code> pattern</a> and a
-<a href="../processors/#filter_parts">filter processor</a> on each output, which is a processor
-that drops messages if the <a href="../conditions/">condition</a> does not pass.</p>
-<p>For example, the equivalent config for the previous example would be:</p>
-<pre><code class="yaml">output:
-  type: broker
-  broker:
-    pattern: fan_out
-    outputs:
-    - type: foo
-      foo:
-        foo_field_1: value1
-      processors:
-      - type: filter_parts
-        filter_parts:
-          type: text
-          text:
-            operator: contains
-            arg: foo
-    - type: bar
-      bar:
-        bar_field_1: value2
-      processors:
-      - type: filter_parts
-        filter_parts:
-          type: not
-          not:
-            type: text
-            text:
-              operator: contains
-              arg: foo
-</code></pre>
-
-<p>For more information regarding conditions, including the full list of
-conditions available, please <a href="../conditions/">read the docs here</a>.</p>
-<h2 id="sharing-resources-across-processors">Sharing Resources Across Processors</h2>
-<p>Sometimes it is advantageous to share configurations for resources such as
-caches or complex conditions between processors when they would otherwise be
-duplicated. For this purpose there is a <code>resource</code> section in a Benthos config
-where <a href="../caches/">caches</a>, <a href="../conditions/">conditions</a> and <a href="../rate_limits/">rate limits</a>
-can be configured to a label that is referred to by any components that wish to
-use them.</p>
-<p>For example, let's imagine we have three inputs, two of which we wish to
-deduplicate using a shared cache. We also have two outputs, one of which only
-receives messages that satisfy a condition and the other receives the logical
-NOT of that same condition. In this example we can save ourselves the trouble of
-configuring the same cache and condition twice by referring to them as resources
-like this:</p>
-<pre><code class="yaml">input:
-  type: broker
-  broker:
-    inputs:
-    - type: foo
-      processors:
-      - type: dedupe
-        dedupe:
-          cache: foobarcache
-          hash: none
-          parts: [0]
-    - type: bar
-      processors:
-      - type: dedupe
-        dedupe:
-          cache: foobarcache
-          hash: none
-          parts: [0]
-    - type: baz
-output:
-  type: broker
-  broker:
-    pattern: fan_out
-    outputs:
-    - type: quz
-      quz:
-        processors:
-        - type: filter
-          filter:
-            type: resource
-            resource: foobarcondition
-    - type: qux
-      qux:
-        processors:
-        - type: filter
-          filter:
-            type: not
-            not:
-              type: resource
-              resource: foobarcondition
-resources:
-  caches:
-    foobarcache:
-      type: memcached
-      memcached:
-        addresses:
-        - localhost:11211
-        ttl: 60
-  conditions:
-    foobarcondition:
-      type: text
-      text:
-        operator: equals_cs
-        part: 1
-        arg: filter me please
-</code></pre>
-
-<p>It is also worth noting that when conditions are used as resources in this way
-they will only be executed once per message, regardless of how many times they
-are referenced (unless the content is modified). Therefore, resource conditions
-can act as a runtime optimisation as well as a config optimisation.</p>
 <h2 id="maximising-io-throughput">Maximising IO Throughput</h2>
 <p>This section outlines a few common throughput issues and ways in which they can
 be solved within Benthos.</p>

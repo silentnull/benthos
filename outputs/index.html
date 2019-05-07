@@ -505,6 +505,7 @@ dynamodb:
     secret: &quot;&quot;
     token: &quot;&quot;
   endpoint: &quot;&quot;
+  json_map_columns: {}
   max_retries: 3
   region: eu-west-1
   string_columns: {}
@@ -513,21 +514,36 @@ dynamodb:
   ttl_key: &quot;&quot;
 </code></pre>
 
-<p>Inserts messages into a DynamoDB table. Columns are populated by writing a map
-of key/value pairs, where the values are
-<a href="../config_interpolation/#functions">function interpolated</a> strings calculated
-per message of a batch. This allows you to populate columns by extracting
+<p>Inserts items into a DynamoDB table.</p>
+<p>The field <code>string_columns</code> is a map of column names to string values,
+where the values are
+<a href="../config_interpolation/#functions">function interpolated</a> per message of a
+batch. This allows you to populate string columns of an item by extracting
 fields within the document payload or metadata like follows:</p>
-<pre><code class="yaml">type: dynamodb
-dynamodb:
-  table: foo
-  string_columns:
-    id: ${!json_field:id}
-    title: ${!json_field:body.title}
-    topic: ${!metadata:kafka_topic}
-    full_content: ${!content}
+<pre><code class="yaml">string_columns:
+  id: ${!json_field:id}
+  title: ${!json_field:body.title}
+  topic: ${!metadata:kafka_topic}
+  full_content: ${!content}
 </code></pre>
 
+<p>The field <code>json_map_columns</code> is a map of column names to json paths,
+where the path is extracted from each document and converted into a map value.
+Both an empty path and the path <code>.</code> are interpreted as the root of the
+document. This allows you to populate map columns of an item like follows:</p>
+<pre><code class="yaml">json_map_columns:
+  user: path.to.user
+  whole_document: .
+</code></pre>
+
+<p>A column name can be empty:</p>
+<pre><code class="yaml">json_map_columns:
+  &quot;&quot;: .
+</code></pre>
+
+<p>In which case the top level document fields will be written at the root of the
+item, potentially overwriting previously defined column values. If a path is not
+found within a document the column will not be populated.</p>
 <h2 id="elasticsearch"><code>elasticsearch</code></h2>
 <pre><code class="yaml">type: elasticsearch
 elasticsearch:

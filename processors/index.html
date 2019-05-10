@@ -229,6 +229,7 @@
             <li><a href="#select_parts">select_parts</a></li>
             <li><a href="#sleep">sleep</a></li>
             <li><a href="#split">split</a></li>
+            <li><a href="#sql">sql</a></li>
             <li><a href="#subprocess">subprocess</a></li>
             <li><a href="#switch">switch</a></li>
             <li><a href="#text">text</a></li>
@@ -323,6 +324,7 @@ used.</p>
 <li><a href="#select_parts"><code>select_parts</code></a></li>
 <li><a href="#sleep"><code>sleep</code></a></li>
 <li><a href="#split"><code>split</code></a></li>
+<li><a href="#sql"><code>sql</code></a></li>
 <li><a href="#subprocess"><code>subprocess</code></a></li>
 <li><a href="#switch"><code>switch</code></a></li>
 <li><a href="#text"><code>text</code></a></li>
@@ -581,7 +583,7 @@ decode:
 </code></pre>
 
 <p>Decodes messages according to the selected scheme. Supported available schemes
-are: base64.</p>
+are: hex, base64.</p>
 <h2 id="decompress"><code>decompress</code></h2>
 <pre><code class="yaml">type: decompress
 decompress:
@@ -645,7 +647,7 @@ encode:
 </code></pre>
 
 <p>Encodes messages according to the selected scheme. Supported schemes are:
-base64.</p>
+hex, base64.</p>
 <h2 id="filter"><code>filter</code></h2>
 <pre><code class="yaml">type: filter
 filter:
@@ -1392,6 +1394,49 @@ bytes (which ever limit is reached first).</p>
 also sent as a single batch. For example, if your target size was 10, and the
 processor received a batch of 95 message parts, the result would be 9 batches of
 10 messages followed by a batch of 5 messages.</p>
+<h2 id="sql"><code>sql</code></h2>
+<pre><code class="yaml">type: sql
+sql:
+  args: []
+  driver: mysql
+  dsn: &quot;&quot;
+  parts: []
+  query: &quot;&quot;
+  response_codec: none
+</code></pre>
+
+<p>SQL is a processor that runs a query against a target database and replaces the
+message with the result.</p>
+<p>If a query contains arguments they can be set as an array of strings supporting
+<a href="../config_interpolation/#functions">interpolation functions</a> in the
+<code>args</code>field:</p>
+<pre><code class="yaml">type: sql
+sql:
+  driver: mysql
+  dsn: foouser:foopassword@tcp(localhost:3306)/foodb
+  query: &quot;INSERT INTO footable (foo, bar, baz) VALUES (?, ?, ?);&quot;
+  args:
+  - ${!json_field:document.foo}
+  - ${!json_field:document.bar}
+  - ${!metadata:kafka_topic}
+</code></pre>
+
+<h3 id="result-codecs">Result Codecs</h3>
+<p>When a query returns rows they are serialised according to a chosen codec, and
+the message contents are replaced with the serialised result.</p>
+<h4 id="none"><code>none</code></h4>
+<p>The result of the query is ignored and the message remains unchanged. If your
+query does not return rows then this is the appropriate codec.</p>
+<h4 id="json_1"><code>json</code></h4>
+<p>The resulting rows are serialised into an array of JSON objects, where each
+object represents a row, where the key is the column name and the value is that
+columns value in the row.</p>
+<h3 id="drivers">Drivers</h3>
+<p>The following is a list of supported drivers and their respective DSN formats:</p>
+<ul>
+<li><code>mysql</code>: <code>[username[:password]@][protocol[(address)]]/dbname[?param1=value1&amp;...&amp;paramN=valueN]</code></li>
+<li><code>postgres</code>: <code>postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&amp;...]</code></li>
+</ul>
 <h2 id="subprocess"><code>subprocess</code></h2>
 <pre><code class="yaml">type: subprocess
 subprocess:

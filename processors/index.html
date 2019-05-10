@@ -1406,11 +1406,12 @@ sql:
 </code></pre>
 
 <p>SQL is a processor that runs a query against a target database for each message
-of a batch and, for queries that return rows, replaces the message with the
-result.</p>
+batch and, for queries that return rows, replaces the batch with the result.</p>
+<p>In order to execute an SQL query for each message of the batch use this
+processor within a <a href="#process_batch"><code>process_batch</code></a> processor.</p>
 <p>If a query contains arguments they can be set as an array of strings supporting
-<a href="../config_interpolation/#functions">interpolation functions</a> executed per
-message of the batch in the <code>args</code> field:</p>
+<a href="../config_interpolation/#functions">interpolation functions</a> in the
+<code>args</code> field:</p>
 <pre><code class="yaml">type: sql
 sql:
   driver: mysql
@@ -1424,11 +1425,11 @@ sql:
 
 <h3 id="result-codecs">Result Codecs</h3>
 <p>When a query returns rows they are serialised according to a chosen codec, and
-the message contents are replaced with the serialised result.</p>
+the batch contents are replaced with the serialised result.</p>
 <h4 id="none"><code>none</code></h4>
-<p>The result of the query is ignored and the message remains unchanged. If your
-query does not return rows then this is the appropriate codec.</p>
-<h4 id="json_1"><code>json</code></h4>
+<p>The result of the query is ignored and the message batch remains unchanged. If
+your query does not return rows then this is the appropriate codec.</p>
+<h4 id="json_array"><code>json_array</code></h4>
 <p>The resulting rows are serialised into an array of JSON objects, where each
 object represents a row, where the key is the column name and the value is that
 columns value in the row.</p>

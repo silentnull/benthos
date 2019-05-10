@@ -190,7 +190,7 @@
         <li class="main active"><a href="#configuration">Configuration</a></li>
             <li><a href="#contents">Contents</a></li>
             <li><a href="#customising-your-configuration">Customising Your Configuration</a></li>
-            <li><a href="#fragmenting-your-configuration">Fragmenting Your Configuration</a></li>
+            <li><a href="#reusing-configuration-snippets">Reusing Configuration Snippets</a></li>
             <li><a href="#enabling-discovery">Enabling Discovery</a></li>
             <li><a href="#help-with-debugging">Help With Debugging</a></li>
     </ul>
@@ -241,7 +241,7 @@ and managing these more complex configuration files.</p>
 <h2 id="contents">Contents</h2>
 <ul>
 <li><a href="#customising-your-configuration">Customising Your Configuration</a></li>
-<li><a href="#fragmenting-your-configuration">Fragmenting Your Configuration</a></li>
+<li><a href="#reusing-configuration-snippets">Reusing Configuration Snippets</a></li>
 <li><a href="#enabling-discovery">Enabling Discovery</a></li>
 <li><a href="#help-with-debugging">Help With Debugging</a></li>
 </ul>
@@ -261,7 +261,7 @@ in your config with environment variables like so:</p>
 
 <p>This is very useful for sharing configuration files across different deployment
 environments.</p>
-<h2 id="fragmenting-your-configuration">Fragmenting Your Configuration</h2>
+<h2 id="reusing-configuration-snippets">Reusing Configuration Snippets</h2>
 <p>It's possible to break a large configuration file into smaller parts with
 <a href="https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03">JSON references</a>. Benthos doesn't yet support the full
 specification as it only resolves local or file path URIs, but this still allows
@@ -288,9 +288,9 @@ file_field_reference:
       cache: objects
 </code></pre>
 
-<p>And we wished to use this fragment within a larger configuration file. We can do
-so by adding an object with a key <code>$ref</code> and a string value which is a path to
-our snippet:</p>
+<p>And we wished to use this snippet within a larger configuration file
+<code>./config/bar.yaml</code>. We can do so by adding an object with a key <code>$ref</code> and a
+string value which is the path to our snippet:</p>
 <pre><code class="yaml">pipeline:
   processors:
   - type: decompress
@@ -300,9 +300,8 @@ our snippet:</p>
   - &quot;$ref&quot;: &quot;./foo.yaml#/pipeline/processors/0&quot;
 </code></pre>
 
-<p>The path of a reference is relative to the configuration file containing the
-reference, and so if this configuration file were saved as <code>./config/bar.yaml</code>
-then the path would resolve and we would end up with:</p>
+<p>When Benthos loads this config, it will resolve the reference, resulting in this
+configuration:</p>
 <pre><code class="yaml">pipeline:
   processors:
   - type: decompress
@@ -316,9 +315,13 @@ then the path would resolve and we would end up with:</p>
       cache: objects
 </code></pre>
 
-<p>These references can be nested. Also, environment variable interpolations within
-configurations are resolved <em>before</em> references are resolved. Therefore, it's
-possible to use them to specify which snippet to load:</p>
+<p>Note that the path of a reference is relative to the configuration file
+containing the reference, therefore the path used above is <code>./foo.yaml</code> and not
+<code>./config/foo.yaml</code>.</p>
+<p>If you like, these references can even be nested. </p>
+<p>It is further possible to use environment variables to specify which snippet 
+to load. This works because environment variable interpolations within 
+configurations are resolved <em>before</em> references are resolved.</p>
 <pre><code class="yaml">pipeline:
   processors:
   - type: decompress
@@ -401,7 +404,8 @@ config discovery when the full repo isn't at hand.</p>
 
 <p>And simply delete all lines for sections you aren't interested in, then you are
 left with the full set of fields you want.</p>
-<p>Alternatively, using tools such as <code>jq</code> you can extract specific type fields:</p>
+<p>Alternatively, using tools such as <a href="https://stedolan.github.io/jq/">jq</a> you can extract specific type
+fields:</p>
 <pre><code class="sh"># Get a list of all input types:
 benthos --print-json --all | jq '.input | keys'
 
@@ -425,7 +429,8 @@ driven services, performs validation on configs and tries to provide sensible
 error messages.</p>
 <p>However, with validation it can be hard to capture all problems, and the user
 usually understands their intentions better than the service. In order to help
-expose and diagnose config errors Benthos provides two mechanisms, linting and echoing.</p>
+expose and diagnose config errors Benthos provides two mechanisms, linting and
+echoing.</p>
 <h3 id="linting">Linting</h3>
 <p>Benthos has a lint command (<code>--lint</code>) that, after parsing a config file, will
 print any errors it detects.</p>
@@ -463,7 +468,7 @@ missing or fields are incorrect, which allows you to pinpoint typos in the
 config.</p>
 <p>If your configuration is complex, and the behaviour that you notice implies a
 certain section is at fault, then you can drill down into that section by using
-tools such as <code>jq</code>:</p>
+tools such as <a href="https://stedolan.github.io/jq/">jq</a>:</p>
 <pre><code class="sh"># Check the second processor config
 benthos -c ./your-config.yaml --print-json | jq '.pipeline.processors[1]'
 

@@ -226,9 +226,9 @@ messages that failed a previous stage using the <a href="../processors/#try"><co
 <p>Once messages finish the catch block they will have their failure flags removed
 and are treated like regular messages. If this behaviour is not desired then it
 is possible to simulate a catch block with a <a href="../processors/#conditional"><code>conditional</code></a>
-processor:</p>
-<pre><code class="yaml">  - type: process_batch
-    process_batch:
+processor placed within a <a href="../processors/#for_each"><code>for_each</code></a> processor:</p>
+<pre><code class="yaml">  - type: for_each
+    for_each:
     - type: conditional
       conditional:
         condition:
@@ -240,8 +240,8 @@ processor:</p>
 <h3 id="attempt-until-success">Attempt Until Success</h3>
 <p>It's possible to reattempt a processor for a particular message until it is
 successful with a <a href="../processors/#while"><code>while</code></a> processor:</p>
-<pre><code class="yaml">  - type: process_batch
-    process_batch:
+<pre><code class="yaml">  - type: for_each
+    for_each:
     - type: while
       while:
         at_least_once: true

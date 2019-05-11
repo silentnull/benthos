@@ -258,15 +258,15 @@ For example, imagine we batch our messages for the purpose of throughput
 optimisation but also need to perform deduplication on the payloads. The
 <code>dedupe</code> processor works batch wide, so in this case we need to force the
 processor to work as though each batched message is its own batch. We can do
-this with the <a href="../processors/#process_batch"><code>process_batch</code></a> processor:</p>
+this with the <a href="../processors/#for_each"><code>for_each</code></a> processor:</p>
 <pre><code class="yaml">input:
   type: foo
   processors:
   - type: batch
     batch:
       byte_size: 20_000_000
-  - type: process_batch
-    process_batch:
+  - type: for_each
+    for_each:
     - type: dedupe
       dedupe:
         cache: foocache

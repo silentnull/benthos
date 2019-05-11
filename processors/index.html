@@ -205,6 +205,7 @@
             <li><a href="#encode">encode</a></li>
             <li><a href="#filter">filter</a></li>
             <li><a href="#filter_parts">filter_parts</a></li>
+            <li><a href="#for_each">for_each</a></li>
             <li><a href="#grok">grok</a></li>
             <li><a href="#group_by">group_by</a></li>
             <li><a href="#group_by_value">group_by_value</a></li>
@@ -282,8 +283,7 @@ will be the last part of the message, if part = -2 then the part before the last
 element will be selected, and so on.</p>
 <p>Some processors such as <code>filter</code> and <code>dedupe</code> act across an entire
 batch, when instead we'd like to perform them on individual messages of a batch.
-In this case the <a href="#process_batch"><code>process_batch</code></a> processor can be
-used.</p>
+In this case the <a href="#for_each"><code>for_each</code></a> processor can be used.</p>
 <h3 id="contents">Contents</h3>
 <ol>
 <li><a href="#archive"><code>archive</code></a></li>
@@ -300,6 +300,7 @@ used.</p>
 <li><a href="#encode"><code>encode</code></a></li>
 <li><a href="#filter"><code>filter</code></a></li>
 <li><a href="#filter_parts"><code>filter_parts</code></a></li>
+<li><a href="#for_each"><code>for_each</code></a></li>
 <li><a href="#grok"><code>grok</code></a></li>
 <li><a href="#group_by"><code>group_by</code></a></li>
 <li><a href="#group_by_value"><code>group_by_value</code></a></li>
@@ -524,10 +525,10 @@ using the <a href="#process_dag"><code>process_dag</code></a> processor:</p>
 catch: []
 </code></pre>
 
-<p>Behaves similarly to the <a href="#process_batch"><code>process_batch</code></a> processor,
-where a list of child processors are applied to individual messages of a batch.
-However, processors are only applied to messages that failed a processing step
-prior to the catch.</p>
+<p>Behaves similarly to the <a href="#for_each"><code>for_each</code></a> processor, where a
+list of child processors are applied to individual messages of a batch. However,
+processors are only applied to messages that failed a processing step prior to
+the catch.</p>
 <p>For example, with the following config:</p>
 <pre><code class="yaml">- type: foo
 - type: catch
@@ -573,7 +574,7 @@ condition passes, the child <code>processors</code> will be applied, otherwise
 the <code>else_processors</code> are applied. This processor is useful for
 applying processors based on the content of message batches.</p>
 <p>In order to conditionally process each message of a batch individually use this
-processor with the <a href="#process_batch"><code>process_batch</code></a> processor.</p>
+processor with the <a href="#for_each"><code>for_each</code></a> processor.</p>
 <p>You can find a <a href="../conditions">full list of conditions here</a>.</p>
 <h2 id="decode"><code>decode</code></h2>
 <pre><code class="yaml">type: decode
@@ -609,7 +610,7 @@ dropping batches that are already cached. The hash type can be chosen from:
 none or xxhash.</p>
 <p>This processor acts across an entire batch, in order to deduplicate individual
 messages within a batch use this processor with the
-<a href="#process_batch"><code>process_batch</code></a> processor.</p>
+<a href="#for_each"><code>for_each</code></a> processor.</p>
 <p>Optionally, the <code>key</code> field can be populated in order to hash on a
 function interpolated string rather than the full contents of messages. This
 allows you to deduplicate based on dynamic fields within a message, such as its
@@ -679,6 +680,18 @@ case each condition will be applied to a message as if it were a single message
 batch.</p>
 <p>This processor is useful if you are combining messages into batches using the
 <a href="#batch"><code>batch</code></a> processor and wish to remove specific parts.</p>
+<h2 id="for_each"><code>for_each</code></h2>
+<pre><code class="yaml">type: for_each
+for_each: []
+</code></pre>
+
+<p>A processor that applies a list of child processors to messages of a batch as
+though they were each a batch of one message. This is useful for forcing batch
+wide processors such as <a href="#dedupe"><code>dedupe</code></a> or interpolations such as
+the <code>value</code> field of the <code>metadata</code> processor to execute on
+individual message parts of a batch instead.</p>
+<p>Please note that most processors already process per message of a batch, and
+this processor is not needed in those cases.</p>
 <h2 id="grok"><code>grok</code></h2>
 <pre><code class="yaml">type: grok
 grok:
@@ -833,7 +846,7 @@ messages and checking the hash against a valid range, dropping all others.</p>
 results in dropping half of the input stream, and setting <code>retain_min</code>
 to <code>50.0</code> and <code>retain_max</code> to <code>100.1</code> will drop the <em>other</em> half.</p>
 <p>In order to sample individual messages of a batch use this processor with the
-<a href="#process_batch"><code>process_batch</code></a> processor.</p>
+<a href="#for_each"><code>for_each</code></a> processor.</p>
 <h2 id="http"><code>http</code></h2>
 <pre><code class="yaml">type: http
 http:
@@ -1058,13 +1071,13 @@ batch is then sent onwards unchanged. The log message can be set using function
 interpolations described <a href="../config_interpolation/#functions">here</a> which
 allows you to log the contents and metadata of a messages within a batch.</p>
 <p>In order to print a log message per message of a batch place it within a
-<a href="#process_batch"><code>process_batch</code></a> processor.</p>
+<a href="#for_each"><code>for_each</code></a> processor.</p>
 <p>For example, if we wished to create a debug log event for each message in a
 pipeline in order to expose the JSON field <code>foo.bar</code> as well as the
 metadata field <code>kafka_partition</code> we can achieve that with the
 following config:</p>
-<pre><code class="yaml">type: process_batch
-process_batch:
+<pre><code class="yaml">type: for_each
+for_each:
 - type: log
   log:
     level: DEBUG
@@ -1118,10 +1131,10 @@ you can find a list of functions <a href="../config_interpolation/#functions">he
 This allows you to set the contents of a metadata field using values taken from
 the message payload.</p>
 <p>Value interpolations are resolved once per batch. In order to resolve them per
-message of a batch place it within a <a href="#process_batch"><code>process_batch</code></a>
+message of a batch place it within a <a href="#for_each"><code>for_each</code></a>
 processor:</p>
-<pre><code class="yaml">type: process_batch
-process_batch:
+<pre><code class="yaml">type: for_each
+for_each:
 - type: metadata
   metadata:
     operator: set
@@ -1148,9 +1161,9 @@ metric:
 
 <p>Expose custom metrics by extracting values from message batches. This processor
 executes once per batch, in order to execute once per message place it within a
-<a href="#process_batch"><code>process_batch</code></a> processor:</p>
-<pre><code class="yaml">type: process_batch
-process_batch:
+<a href="#for_each"><code>for_each</code></a> processor:</p>
+<pre><code class="yaml">type: for_each
+for_each:
 - type: metric
   metric:
     type: counter_by
@@ -1217,8 +1230,8 @@ parallel:
 
 <p>A processor that applies a list of child processors to messages of a batch as
 though they were each a batch of one message (similar to the
-<a href="#process_batch"><code>process_batch</code></a> processor), but where each message
-is processed in parallel.</p>
+<a href="#for_each"><code>for_each</code></a> processor), but where each message is
+processed in parallel.</p>
 <p>The field <code>cap</code>, if greater than zero, caps the maximum number of
 parallel processing threads.</p>
 <h2 id="process_batch"><code>process_batch</code></h2>
@@ -1226,12 +1239,8 @@ parallel processing threads.</p>
 process_batch: []
 </code></pre>
 
-<p>A processor that applies a list of child processors to messages of a batch as
-though they were each a batch of one message. This is useful for forcing batch
-wide processors such as <a href="#dedupe"><code>dedupe</code></a> to apply to individual
-message parts of a batch instead.</p>
-<p>Please note that most processors already process per message of a batch, and
-this processor is not needed in those cases.</p>
+<p>Alias for the <a href="#for_each"><code>for_each</code></a> processor, which should be used
+instead.</p>
 <h2 id="process_dag"><code>process_dag</code></h2>
 <pre><code class="yaml">type: process_dag
 process_dag: {}
@@ -1408,9 +1417,9 @@ interpolate functions within the <code>duration</code> field, you can find a lis
 of functions <a href="../config_interpolation/#functions">here</a>.</p>
 <p>This processor executes once per message batch. In order to execute once for
 each message of a batch place it within a
-<a href="#process_batch"><code>process_batch</code></a> processor:</p>
-<pre><code class="yaml">type: process_batch
-process_batch:
+<a href="#for_each"><code>for_each</code></a> processor:</p>
+<pre><code class="yaml">type: for_each
+for_each:
 - type: sleep
   sleep:
     duration: ${!metadata:sleep_for}
@@ -1444,7 +1453,7 @@ sql:
 <p>SQL is a processor that runs a query against a target database for each message
 batch and, for queries that return rows, replaces the batch with the result.</p>
 <p>In order to execute an SQL query for each message of the batch use this
-processor within a <a href="#process_batch"><code>process_batch</code></a> processor.</p>
+processor within a <a href="#for_each"><code>for_each</code></a> processor.</p>
 <p>If a query contains arguments they can be set as an array of strings supporting
 <a href="../config_interpolation/#functions">interpolation functions</a> in the
 <code>args</code> field:</p>
@@ -1519,7 +1528,7 @@ the next case should be executed after it (the default is <code>false</code>.)</
 </code></pre>
 
 <p>In order to switch each message of a batch individually use this processor with
-the <a href="#process_batch"><code>process_batch</code></a> processor.</p>
+the <a href="#for_each"><code>for_each</code></a> processor.</p>
 <p>You can find a <a href="../conditions">full list of conditions here</a>.</p>
 <h2 id="text"><code>text</code></h2>
 <pre><code class="yaml">type: text
@@ -1535,9 +1544,9 @@ text:
 you can find a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
 <p>Value interpolations are resolved once per message batch, in order to resolve it
 for each message of the batch place it within a
-<a href="#process_batch"><code>process_batch</code></a> processor:</p>
-<pre><code class="yaml">type: process_batch
-process_batch:
+<a href="#for_each"><code>for_each</code></a> processor:</p>
+<pre><code class="yaml">type: for_each
+for_each:
 - type: text
   text:
     operator: set
@@ -1594,10 +1603,10 @@ would be 1 second, '10ms' would be 10 milliseconds, etc.</p>
 try: []
 </code></pre>
 
-<p>Behaves similarly to the <a href="#process_batch"><code>process_batch</code></a> processor,
-where a list of child processors are applied to individual messages of a batch.
-However, if a processor fails for a message then that message will skip all
-following processors.</p>
+<p>Behaves similarly to the <a href="#for_each"><code>for_each</code></a> processor, where a
+list of child processors are applied to individual messages of a batch. However,
+if a processor fails for a message then that message will skip all following
+processors.</p>
 <p>For example, with the following config:</p>
 <pre><code class="yaml">- type: try
   try:

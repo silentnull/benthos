@@ -1053,18 +1053,22 @@ log:
   message: &quot;&quot;
 </code></pre>
 
-<p>Log is a processor that prints a log event each time it processes a message. The
-message is then sent onwards unchanged. The log message can be set using
-function interpolations described <a href="../config_interpolation/#functions">here</a>
-which allows you to log the contents and metadata of a message.</p>
+<p>Log is a processor that prints a log event each time it processes a batch. The
+batch is then sent onwards unchanged. The log message can be set using function
+interpolations described <a href="../config_interpolation/#functions">here</a> which
+allows you to log the contents and metadata of a messages within a batch.</p>
+<p>In order to print a log message per message of a batch place it within a
+<a href="#process_batch"><code>process_batch</code></a> processor.</p>
 <p>For example, if we wished to create a debug log event for each message in a
 pipeline in order to expose the JSON field <code>foo.bar</code> as well as the
 metadata field <code>kafka_partition</code> we can achieve that with the
 following config:</p>
-<pre><code class="yaml">type: log
-log:
-  level: DEBUG
-  message: &quot;field: ${!json_field:foo.bar}, part: ${!metadata:kafka_partition}&quot;
+<pre><code class="yaml">type: process_batch
+process_batch:
+- type: log
+  log:
+    level: DEBUG
+    message: &quot;field: ${!json_field:foo.bar}, part: ${!metadata:kafka_partition}&quot;
 </code></pre>
 
 <p>The <code>level</code> field determines the log level of the printed events and
@@ -1113,6 +1117,18 @@ which allow you to set fields in certain outputs using these dynamic values.</p>
 you can find a list of functions <a href="../config_interpolation/#functions">here</a>.
 This allows you to set the contents of a metadata field using values taken from
 the message payload.</p>
+<p>Value interpolations are resolved once per batch. In order to resolve them per
+message of a batch place it within a <a href="#process_batch"><code>process_batch</code></a>
+processor:</p>
+<pre><code class="yaml">type: process_batch
+process_batch:
+- type: metadata
+  metadata:
+    operator: set
+    key: foo
+    value: ${!json_field:document.foo}
+</code></pre>
+
 <h3 id="operators_2">Operators</h3>
 <h4 id="set_2"><code>set</code></h4>
 <p>Sets the value of a metadata key.</p>
@@ -1130,7 +1146,18 @@ metric:
   value: &quot;&quot;
 </code></pre>
 
-<p>Creates metrics by extracting values from messages.</p>
+<p>Expose custom metrics by extracting values from message batches. This processor
+executes once per batch, in order to execute once per message place it within a
+<a href="#process_batch"><code>process_batch</code></a> processor:</p>
+<pre><code class="yaml">type: process_batch
+process_batch:
+- type: metric
+  metric:
+    type: counter_by
+    path: count.custom.field
+    value: ${!json_field:field.some.value}
+</code></pre>
+
 <p>The <code>path</code> field should be a dot separated path of the metric to be
 set and will automatically be converted into the correct format of the
 configured metric aggregator.</p>
@@ -1379,6 +1406,16 @@ sleep:
 <p>Sleep for a period of time specified as a duration string. This processor will
 interpolate functions within the <code>duration</code> field, you can find a list
 of functions <a href="../config_interpolation/#functions">here</a>.</p>
+<p>This processor executes once per message batch. In order to execute once for
+each message of a batch place it within a
+<a href="#process_batch"><code>process_batch</code></a> processor:</p>
+<pre><code class="yaml">type: process_batch
+process_batch:
+- type: sleep
+  sleep:
+    duration: ${!metadata:sleep_for}
+</code></pre>
+
 <h2 id="split"><code>split</code></h2>
 <pre><code class="yaml">type: split
 split:
@@ -1496,6 +1533,17 @@ text:
 <p>Performs text based mutations on payloads.</p>
 <p>This processor will interpolate functions within the <code>value</code> field,
 you can find a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
+<p>Value interpolations are resolved once per message batch, in order to resolve it
+for each message of the batch place it within a
+<a href="#process_batch"><code>process_batch</code></a> processor:</p>
+<pre><code class="yaml">type: process_batch
+process_batch:
+- type: text
+  text:
+    operator: set
+    value: ${!json_field:document.content}
+</code></pre>
+
 <h3 id="operators_3">Operators</h3>
 <h4 id="append_1"><code>append</code></h4>
 <p>Appends text to the end of the payload.</p>

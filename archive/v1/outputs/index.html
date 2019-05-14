@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Ashley Jeffs">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Outputs - Benthos</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-135959729-3', 'docs.benthos.dev');
+            ga('send', 'pageview');
+        </script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+  <a class="navbar-brand" href="https://www.benthos.dev">Benthos</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="/">Home</a>
+                            </li>
+                            <li >
+                                <a href="../cookbooks/">Cookbooks</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../inputs/">Inputs</a>
+</li>
+                                    
+<li >
+    <a href="../buffers/">Buffers</a>
+</li>
+                                    
+<li >
+    <a href="../processors/">Processors</a>
+</li>
+                                    
+<li >
+    <a href="../conditions/">Conditions</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Outputs</a>
+</li>
+                                    
+<li >
+    <a href="../caches/">Caches</a>
+</li>
+                                    
+<li >
+    <a href="../rate_limits/">Rate Limits</a>
+</li>
+                                    
+<li >
+    <a href="../metrics/">Metrics</a>
+</li>
+                                    
+<li >
+    <a href="../tracers/">Tracers</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../getting_started/">Getting Started</a>
+</li>
+                                    
+<li >
+    <a href="../serverless/">Serverless</a>
+</li>
+                                    
+<li >
+    <a href="../configuration/">Configuration</a>
+</li>
+                                    
+<li >
+    <a href="../config_interpolation/">Config Interpolation</a>
+</li>
+                                    
+<li >
+    <a href="../pipeline/">Processing Pipelines</a>
+</li>
+                                    
+<li >
+    <a href="../batching/">Message Batching</a>
+</li>
+                                    
+<li >
+    <a href="../error_handling/">Error Handling</a>
+</li>
+                                    
+<li >
+    <a href="../performance_tuning/">Performance Tuning</a>
+</li>
+                                    
+<li >
+    <a href="../monitoring/">Monitoring</a>
+</li>
+                                    
+<li >
+    <a href="../workflows/">Workflows</a>
+</li>
+                                    
+<li >
+    <a href="../streams/">Streams Mode</a>
+</li>
+                                    
+<li >
+    <a href="../examples/">Applied Examples</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+    <li class="nav-item">
+      <a rel="prev" href="../conditions/" class="nav-link">
+        <i class="fa fa-arrow-left"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a rel="next" href="../caches/" class="nav-link">
+        <i class="fa fa-arrow-right"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="https://github.com/Jeffail/benthos/" class="nav-link">
+        <i class="fa fa-github"></i> Code
+      </a>
+    </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#outputs">Outputs</a></li>
+            <li><a href="#back-pressure">Back Pressure</a></li>
+            <li><a href="#retries">Retries</a></li>
+            <li><a href="#multiplexing-outputs">Multiplexing Outputs</a></li>
+            <li><a href="#dead-letter-queues">Dead Letter Queues</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#amqp">amqp</a></li>
+            <li><a href="#broker">broker</a></li>
+            <li><a href="#cache">cache</a></li>
+            <li><a href="#drop">drop</a></li>
+            <li><a href="#drop_on_error">drop_on_error</a></li>
+            <li><a href="#dynamic">dynamic</a></li>
+            <li><a href="#dynamodb">dynamodb</a></li>
+            <li><a href="#elasticsearch">elasticsearch</a></li>
+            <li><a href="#file">file</a></li>
+            <li><a href="#files">files</a></li>
+            <li><a href="#gcp_pubsub">gcp_pubsub</a></li>
+            <li><a href="#hdfs">hdfs</a></li>
+            <li><a href="#http_client">http_client</a></li>
+            <li><a href="#http_server">http_server</a></li>
+            <li><a href="#inproc">inproc</a></li>
+            <li><a href="#kafka">kafka</a></li>
+            <li><a href="#kinesis">kinesis</a></li>
+            <li><a href="#mqtt">mqtt</a></li>
+            <li><a href="#nanomsg">nanomsg</a></li>
+            <li><a href="#nats">nats</a></li>
+            <li><a href="#nats_stream">nats_stream</a></li>
+            <li><a href="#nsq">nsq</a></li>
+            <li><a href="#redis_list">redis_list</a></li>
+            <li><a href="#redis_pubsub">redis_pubsub</a></li>
+            <li><a href="#redis_streams">redis_streams</a></li>
+            <li><a href="#retry">retry</a></li>
+            <li><a href="#s3">s3</a></li>
+            <li><a href="#sqs">sqs</a></li>
+            <li><a href="#stdout">stdout</a></li>
+            <li><a href="#switch">switch</a></li>
+            <li><a href="#websocket">websocket</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="outputs">Outputs</h1>
+<p>This document was generated with <code>benthos --list-outputs</code></p>
+<p>An output is a sink where we wish to send our consumed data after applying an
+optional array of <a href="../processors">processors</a>. Only one output is configured at
+the root of a Benthos config. However, the output can be a <a href="#broker">broker</a>
+which combines multiple outputs under a chosen brokering pattern.</p>
+<p>An output config section looks like this:</p>
+<pre><code class="yaml">output:
+  type: foo
+  foo:
+    bar: baz
+  processors:
+  - type: qux
+</code></pre>
+
+<h3 id="back-pressure">Back Pressure</h3>
+<p>Benthos outputs apply back pressure to components upstream. This means if your
+output target starts blocking traffic Benthos will gracefully stop consuming
+until the issue is resolved.</p>
+<h3 id="retries">Retries</h3>
+<p>When a Benthos output fails to send a message the error is propagated back up to
+the input, where depending on the protocol it will either be pushed back to the
+source as a Noack (AMQP) or will be reattempted indefinitely with the commit
+witheld until success (Kafka).</p>
+<p>It's possible to instead have Benthos indefinitely retry an output until success
+with a <a href="#retry"><code>retry</code></a> output. Some other outputs, such as the
+<a href="#broker"><code>broker</code></a>, might also retry indefinitely depending on their
+configuration.</p>
+<h3 id="multiplexing-outputs">Multiplexing Outputs</h3>
+<p>It is possible to perform content based multiplexing of messages to specific
+outputs either by using the <a href="#switch"><code>switch</code></a> output, or a
+<a href="#broker"><code>broker</code></a> with the <code>fan_out</code> pattern and a
+<a href="../processors/#filter_parts">filter processor</a> on each output, which
+is a processor that drops messages if the condition does not pass.
+Conditions are content aware logical operators that can be combined using
+boolean logic.</p>
+<p>For more information regarding conditions, including a full list of available
+conditions please <a href="../conditions/">read the docs here</a>.</p>
+<h3 id="dead-letter-queues">Dead Letter Queues</h3>
+<p>It's possible to create fallback outputs for when an output target fails using
+a <a href="#broker"><code>broker</code></a> output with the 'try' pattern.</p>
+<h3 id="contents">Contents</h3>
+<ol>
+<li><a href="#amqp"><code>amqp</code></a></li>
+<li><a href="#broker"><code>broker</code></a></li>
+<li><a href="#cache"><code>cache</code></a></li>
+<li><a href="#drop"><code>drop</code></a></li>
+<li><a href="#drop_on_error"><code>drop_on_error</code></a></li>
+<li><a href="#dynamic"><code>dynamic</code></a></li>
+<li><a href="#dynamodb"><code>dynamodb</code></a></li>
+<li><a href="#elasticsearch"><code>elasticsearch</code></a></li>
+<li><a href="#file"><code>file</code></a></li>
+<li><a href="#files"><code>files</code></a></li>
+<li><a href="#gcp_pubsub"><code>gcp_pubsub</code></a></li>
+<li><a href="#hdfs"><code>hdfs</code></a></li>
+<li><a href="#http_client"><code>http_client</code></a></li>
+<li><a href="#http_server"><code>http_server</code></a></li>
+<li><a href="#inproc"><code>inproc</code></a></li>
+<li><a href="#kafka"><code>kafka</code></a></li>
+<li><a href="#kinesis"><code>kinesis</code></a></li>
+<li><a href="#mqtt"><code>mqtt</code></a></li>
+<li><a href="#nanomsg"><code>nanomsg</code></a></li>
+<li><a href="#nats"><code>nats</code></a></li>
+<li><a href="#nats_stream"><code>nats_stream</code></a></li>
+<li><a href="#nsq"><code>nsq</code></a></li>
+<li><a href="#redis_list"><code>redis_list</code></a></li>
+<li><a href="#redis_pubsub"><code>redis_pubsub</code></a></li>
+<li><a href="#redis_streams"><code>redis_streams</code></a></li>
+<li><a href="#retry"><code>retry</code></a></li>
+<li><a href="#s3"><code>s3</code></a></li>
+<li><a href="#sqs"><code>sqs</code></a></li>
+<li><a href="#stdout"><code>stdout</code></a></li>
+<li><a href="#switch"><code>switch</code></a></li>
+<li><a href="#websocket"><code>websocket</code></a></li>
+</ol>
+<h2 id="amqp"><code>amqp</code></h2>
+<pre><code class="yaml">type: amqp
+amqp:
+  exchange: benthos-exchange
+  exchange_declare:
+    durable: true
+    enabled: false
+    type: direct
+  immediate: false
+  key: benthos-key
+  mandatory: false
+  persistent: false
+  tls:
+    client_certs: []
+    enabled: false
+    root_cas_file: &quot;&quot;
+    skip_cert_verify: false
+  url: amqp://guest:guest@localhost:5672/
+</code></pre>
+
+<p>Sends messages to an AMQP (0.91) exchange. AMQP is a messaging protocol used by
+various message brokers, including RabbitMQ. The metadata from each message are
+delivered as headers.</p>
+<p>It's possible for this output type to create the target exchange by setting
+<code>exchange_declare.enabled</code> to <code>true</code>, if the exchange already exists
+then the declaration passively verifies that the settings match.</p>
+<p>Exchange type options are: direct|fanout|topic|x-custom</p>
+<p>TLS is automatic when connecting to an <code>amqps</code> URL, but custom
+settings can be enabled in the <code>tls</code> section.</p>
+<p>The field 'key' can be dynamically set using function interpolations described
+<a href="../config_interpolation/#functions">here</a>.</p>
+<h2 id="broker"><code>broker</code></h2>
+<pre><code class="yaml">type: broker
+broker:
+  copies: 1
+  outputs: []
+  pattern: fan_out
+</code></pre>
+
+<p>The broker output type allows you to configure multiple output targets by
+listing them:</p>
+<pre><code class="yaml">output:
+  type: broker
+  broker:
+    pattern: fan_out
+    outputs:
+    - type: foo
+      foo:
+        foo_field_1: value1
+    - type: bar
+      bar:
+        bar_field_1: value2
+        bar_field_2: value3
+    - type: baz
+      baz:
+        baz_field_1: value4
+      processors:
+      - type: baz_processor
+  processors:
+  - type: some_processor
+</code></pre>
+
+<p>The broker pattern determines the way in which messages are allocated to outputs
+and can be chosen from the following:</p>
+<h4 id="fan_out"><code>fan_out</code></h4>
+<p>With the fan out pattern all outputs will be sent every message that passes
+through Benthos in parallel.</p>
+<p>If an output applies back pressure it will block all subsequent messages, and if
+an output fails to send a message it will be retried continuously until
+completion or service shut down.</p>
+<h4 id="fan_out_sequential"><code>fan_out_sequential</code></h4>
+<p>Similar to the fan out pattern except outputs are written to sequentially,
+meaning an output is only written to once the preceding output has confirmed
+receipt of the same message.</p>
+<h4 id="round_robin"><code>round_robin</code></h4>
+<p>With the round robin pattern each message will be assigned a single output
+following their order. If an output applies back pressure it will block all
+subsequent messages. If an output fails to send a message then the message will
+be re-attempted with the next input, and so on.</p>
+<h4 id="greedy"><code>greedy</code></h4>
+<p>The greedy pattern results in higher output throughput at the cost of
+potentially disproportionate message allocations to those outputs. Each message
+is sent to a single output, which is determined by allowing outputs to claim
+messages as soon as they are able to process them. This results in certain
+faster outputs potentially processing more messages at the cost of slower
+outputs.</p>
+<h4 id="try"><code>try</code></h4>
+<p>The try pattern attempts to send each message to only one output, starting from
+the first output on the list. If an output attempt fails then the broker
+attempts to send to the next output in the list and so on.</p>
+<p>This pattern is useful for triggering events in the case where certain output
+targets have broken. For example, if you had an output type <code>http_client</code>
+but wished to reroute messages whenever the endpoint becomes unreachable you
+could use a try broker.</p>
+<h3 id="utilising-more-outputs">Utilising More Outputs</h3>
+<p>When using brokered outputs with patterns such as round robin or greedy it is
+possible to have multiple messages in-flight at the same time. In order to fully
+utilise this you either need to have a greater number of input sources than
+output sources <a href="../buffers/">or use a buffer</a>.</p>
+<h3 id="processors">Processors</h3>
+<p>It is possible to configure <a href="../processors/">processors</a> at the broker
+level, where they will be applied to <em>all</em> child outputs, as well as on the
+individual child outputs. If you have processors at both the broker level <em>and</em>
+on child outputs then the broker processors will be applied <em>before</em> the child
+nodes processors.</p>
+<h2 id="cache"><code>cache</code></h2>
+<pre><code class="yaml">type: cache
+cache:
+  key: ${!count:items}-${!timestamp_unix_nano}
+  target: &quot;&quot;
+</code></pre>
+
+<p>Stores message parts as items in a cache. Caches are configured within the
+<a href="../caches/">resources section</a> and can target any of the following
+types:</p>
+<ul>
+<li>dynamodb</li>
+<li>file</li>
+<li>memcached</li>
+<li>memory</li>
+<li>redis</li>
+<li>s3</li>
+</ul>
+<p>Like follows:</p>
+<pre><code class="yaml">output:
+  type: cache
+  cache:
+    target: foo
+    key: ${!json_field:document.id}
+resources:
+  caches:
+    foo:
+      type: memcached
+      memcached:
+        addresses:
+        - localhost:11211
+        ttl: 60
+</code></pre>
+
+<p>In order to create a unique <code>key</code> value per item you should use
+function interpolations described <a href="../config_interpolation/#functions">here</a>.
+When sending batched messages the interpolations are performed per message part.</p>
+<h2 id="drop"><code>drop</code></h2>
+<pre><code class="yaml">type: drop
+drop: {}
+</code></pre>
+
+<p>Drops all messages.</p>
+<h2 id="drop_on_error"><code>drop_on_error</code></h2>
+<pre><code class="yaml">type: drop_on_error
+drop_on_error: {}
+</code></pre>
+
+<p>Attempts to write messages to a child output and if the write fails for any
+reason the message is dropped instead of being reattempted. This output can be
+combined with a child <code>retry</code> output in order to set an explicit
+number of retry attempts before dropping a message.</p>
+<p>For example, the following configuration attempts to send to a hypothetical
+output type <code>foo</code> three times, but if all three attempts fail the
+message is dropped entirely:</p>
+<pre><code class="yaml">output:
+  type: drop_on_error
+  drop_on_error:
+    type: retry
+    retry:
+      max_retries: 2
+      output:
+        type: foo
+</code></pre>
+
+<h2 id="dynamic"><code>dynamic</code></h2>
+<pre><code class="yaml">type: dynamic
+dynamic:
+  outputs: {}
+  prefix: &quot;&quot;
+  timeout: 5s
+</code></pre>
+
+<p>The dynamic type is a special broker type where the outputs are identified by
+unique labels and can be created, changed and removed during runtime via a REST
+HTTP interface. The broker pattern used is always <code>fan_out</code>, meaning
+each message will be delivered to each dynamic output.</p>
+<p>To GET a JSON map of output identifiers with their current uptimes use the
+'/outputs' endpoint.</p>
+<p>To perform CRUD actions on the outputs themselves use POST, DELETE, and GET
+methods on the <code>/outputs/{output_id}</code> endpoint. When using POST the
+body of the request should be a JSON configuration for the output, if the output
+already exists it will be changed.</p>
+<h2 id="dynamodb"><code>dynamodb</code></h2>
+<pre><code class="yaml">type: dynamodb
+dynamodb:
+  backoff:
+    initial_interval: 1s
+    max_elapsed_time: 30s
+    max_interval: 5s
+  credentials:
+    id: &quot;&quot;
+    role: &quot;&quot;
+    role_external_id: &quot;&quot;
+    secret: &quot;&quot;
+    token: &quot;&quot;
+  endpoint: &quot;&quot;
+  json_map_columns: {}
+  max_retries: 3
+  region: eu-west-1
+  string_columns: {}
+  table: &quot;&quot;
+  ttl: &quot;&quot;
+  ttl_key: &quot;&quot;
+</code></pre>
+
+<p>Inserts items into a DynamoDB table.</p>
+<p>The field <code>string_columns</code> is a map of column names to string values,
+where the values are
+<a href="../config_interpolation/#functions">function interpolated</a> per message of a
+batch. This allows you to populate string columns of an item by extracting
+fields within the document payload or metadata like follows:</p>
+<pre><code class="yaml">string_columns:
+  id: ${!json_field:id}
+  title: ${!json_field:body.title}
+  topic: ${!metadata:kafka_topic}
+  full_content: ${!content}
+</code></pre>
+
+<p>The field <code>json_map_columns</code> is a map of column names to json paths,
+where the path is extracted from each document and converted into a map value.
+Both an empty path and the path <code>.</code> are interpreted as the root of the
+document. This allows you to populate map columns of an item like follows:</p>
+<pre><code class="yaml">json_map_columns:
+  user: path.to.user
+  whole_document: .
+</code></pre>
+
+<p>A column name can be empty:</p>
+<pre><code class="yaml">json_map_columns:
+  &quot;&quot;: .
+</code></pre>
+
+<p>In which case the top level document fields will be written at the root of the
+item, potentially overwriting previously defined column values. If a path is not
+found within a document the column will not be populated.</p>
+<h2 id="elasticsearch"><code>elasticsearch</code></h2>
+<pre><code class="yaml">type: elasticsearch
+elasticsearch:
+  aws:
+    credentials:
+      id: &quot;&quot;
+      role: &quot;&quot;
+      role_external_id: &quot;&quot;
+      secret: &quot;&quot;
+      token: &quot;&quot;
+    enabled: false
+    endpoint: &quot;&quot;
+    region: eu-west-1
+  backoff:
+    initial_interval: 1s
+    max_elapsed_time: 30s
+    max_interval: 5s
+  basic_auth:
+    enabled: false
+    password: &quot;&quot;
+    username: &quot;&quot;
+  id: ${!count:elastic_ids}-${!timestamp_unix}
+  index: benthos_index
+  max_retries: 0
+  pipeline: &quot;&quot;
+  sniff: true
+  timeout: 5s
+  type: doc
+  urls:
+  - http://localhost:9200
+</code></pre>
+
+<p>Publishes messages into an Elasticsearch index. This output currently does not
+support creating the target index.</p>
+<p>Both the <code>id</code> and <code>index</code> fields can be dynamically set using function
+interpolations described <a href="../config_interpolation/#functions">here</a>. When
+sending batched messages these interpolations are performed per message part.</p>
+<h2 id="file"><code>file</code></h2>
+<pre><code class="yaml">type: file
+file:
+  delimiter: &quot;&quot;
+  path: &quot;&quot;
+</code></pre>
+
+<p>The file output type simply appends all messages to an output file. Single part
+messages are printed with a delimiter (defaults to '\n' if left empty).
+Multipart messages are written with each part delimited, with the final part
+followed by two delimiters, e.g. a multipart message [ "foo", "bar", "baz" ]
+would be written as:</p>
+<p>foo\n
+bar\n
+baz\n\n</p>
+<h2 id="files"><code>files</code></h2>
+<pre><code class="yaml">type: files
+files:
+  path: ${!count:files}-${!timestamp_unix_nano}.txt
+</code></pre>
+
+<p>Writes each individual part of each message to a new file.</p>
+<p>Message parts only contain raw data, and therefore in order to create a unique
+file for each part you need to generate unique file names. This can be done by
+using function interpolations on the <code>path</code> field as described
+<a href="../config_interpolation/#functions">here</a>. When sending batched messages
+these interpolations are performed per message part.</p>
+<h2 id="gcp_pubsub"><code>gcp_pubsub</code></h2>
+<pre><code class="yaml">type: gcp_pubsub
+gcp_pubsub:
+  project: &quot;&quot;
+  topic: &quot;&quot;
+</code></pre>
+
+<p>Sends messages to a GCP Cloud Pub/Sub topic. Metadata from messages are sent as
+attributes.</p>
+<h2 id="hdfs"><code>hdfs</code></h2>
+<pre><code class="yaml">type: hdfs
+hdfs:
+  directory: &quot;&quot;
+  hosts:
+  - localhost:9000
+  path: ${!count:files}-${!timestamp_unix_nano}.txt
+  user: benthos_hdfs
+</code></pre>
+
+<p>Sends message parts as files to a HDFS directory. Each file is written
+with the path specified with the 'path' field, in order to have a different path
+for each object you should use function interpolations described
+<a href="../config_interpolation/#functions">here</a>. When sending batched messages the
+interpolations are performed per message part.</p>
+<h2 id="http_client"><code>http_client</code></h2>
+<pre><code class="yaml">type: http_client
+http_client:
+  backoff_on:
+  - 429
+  basic_auth:
+    enabled: false
+    password: &quot;&quot;
+    username: &quot;&quot;
+  drop_on: []
+  headers:
+    Content-Type: application/octet-stream
+  max_retry_backoff: 300s
+  oauth:
+    access_token: &quot;&quot;
+    access_token_secret: &quot;&quot;
+    consumer_key: &quot;&quot;
+    consumer_secret: &quot;&quot;
+    enabled: false
+    request_url: &quot;&quot;
+  rate_limit: &quot;&quot;
+  retries: 3
+  retry_period: 1s
+  timeout: 5s
+  tls:
+    client_certs: []
+    enabled: false
+    root_cas_file: &quot;&quot;
+    skip_cert_verify: false
+  url: http://localhost:4195/post
+  verb: POST
+</code></pre>
+
+<p>Sends messages to an HTTP server. The request will be retried for each message
+whenever the response code is outside the range of 200 -&gt; 299 inclusive. It is
+possible to list codes outside of this range in the <code>drop_on</code> field in
+order to prevent retry attempts.</p>
+<p>The period of time between retries is linear by default. Response codes that are
+within the <code>backoff_on</code> list will instead apply exponential backoff
+between retry attempts.</p>
+<p>When the number of retries expires the output will reject the message, the
+behaviour after this will depend on the pipeline but usually this simply means
+the send is attempted again until successful whilst applying back pressure.</p>
+<p>The URL and header values of this type can be dynamically set using function
+interpolations described <a href="../config_interpolation/#functions">here</a>.</p>
+<p>The body of the HTTP request is the raw contents of the message payload. If the
+message has multiple parts the request will be sent according to
+<a href="https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html">RFC1341</a></p>
+<h2 id="http_server"><code>http_server</code></h2>
+<pre><code class="yaml">type: http_server
+http_server:
+  address: &quot;&quot;
+  cert_file: &quot;&quot;
+  key_file: &quot;&quot;
+  path: /get
+  stream_path: /get/stream
+  timeout: 5s
+  ws_path: /get/ws
+</code></pre>
+
+<p>Sets up an HTTP server that will send messages over HTTP(S) GET requests. HTTP
+2.0 is supported when using TLS, which is enabled when key and cert files are
+specified.</p>
+<p>You can leave the 'address' config field blank in order to use the default
+service, but this will ignore TLS options.</p>
+<p>You can receive a single, discrete message on the configured 'path' endpoint, or
+receive a constant stream of line delimited messages on the configured
+'stream_path' endpoint.</p>
+<h2 id="inproc"><code>inproc</code></h2>
+<pre><code class="yaml">type: inproc
+inproc: &quot;&quot;
+</code></pre>
+
+<p>Sends data directly to Benthos inputs by connecting to a unique ID. This allows
+you to hook up isolated streams whilst running Benthos in
+<a href="../streams/"><code>--streams</code> mode</a> mode, it is NOT recommended
+that you connect the inputs of a stream with an output of the same stream, as
+feedback loops can lead to deadlocks in your message flow.</p>
+<p>It is possible to connect multiple inputs to the same inproc ID, but only one
+output can connect to an inproc ID, and will replace existing outputs if a
+collision occurs.</p>
+<h2 id="kafka"><code>kafka</code></h2>
+<pre><code class="yaml">type: kafka
+kafka:
+  ack_replicas: false
+  addresses:
+  - localhost:9092
+  client_id: benthos_kafka_output
+  compression: none
+  key: &quot;&quot;
+  max_msg_bytes: 1e+06
+  round_robin_partitions: false
+  target_version: 1.0.0
+  timeout: 5s
+  tls:
+    client_certs: []
+    enabled: false
+    root_cas_file: &quot;&quot;
+    skip_cert_verify: false
+  topic: benthos_stream
+</code></pre>
+
+<p>The kafka output type writes messages to a kafka broker, these messages are
+acknowledged, which is propagated back to the input. The config field
+<code>ack_replicas</code> determines whether we wait for acknowledgement from all
+replicas or just a single broker.</p>
+<p>It is possible to specify a compression codec to use out of the following
+options: none, snappy, lz4 and gzip.</p>
+<p>If the field <code>key</code> is not empty then each message will be given its
+contents as a key.</p>
+<p>Both the <code>key</code> and <code>topic</code> fields can be dynamically set using
+function interpolations described <a href="../config_interpolation/#functions">here</a>.
+When sending batched messages these interpolations are performed per message
+part.</p>
+<p>By default the paritioner will select partitions based on a hash of the key
+value. If the key is empty then a partition is chosen at random. You can
+alternatively force the partitioner to round-robin partitions with the field
+<code>round_robin_partitions</code>.</p>
+<h3 id="tls">TLS</h3>
+<p>Custom TLS settings can be used to override system defaults. This includes
+providing a collection of root certificate authorities, providing a list of
+client certificates to use for client verification and skipping certificate
+verification.</p>
+<p>Client certificates can either be added by file or by raw contents:</p>
+<pre><code class="yaml">enabled: true
+client_certs:
+  - cert_file: ./example.pem
+    key_file: ./example.key
+  - cert: foo
+    key: bar
+</code></pre>
+
+<h2 id="kinesis"><code>kinesis</code></h2>
+<pre><code class="yaml">type: kinesis
+kinesis:
+  backoff:
+    initial_interval: 1s
+    max_elapsed_time: 30s
+    max_interval: 5s
+  credentials:
+    id: &quot;&quot;
+    role: &quot;&quot;
+    role_external_id: &quot;&quot;
+    secret: &quot;&quot;
+    token: &quot;&quot;
+  endpoint: &quot;&quot;
+  hash_key: &quot;&quot;
+  max_retries: 0
+  partition_key: &quot;&quot;
+  region: eu-west-1
+  stream: &quot;&quot;
+</code></pre>
+
+<p>Sends messages to a Kinesis stream.</p>
+<p>Both the <code>partition_key</code>(required) and <code>hash_key</code> (optional)
+fields can be dynamically set using function interpolations described
+<a href="../config_interpolation/#functions">here</a>. When sending batched messages the
+interpolations are performed per message part.</p>
+<h2 id="mqtt"><code>mqtt</code></h2>
+<pre><code class="yaml">type: mqtt
+mqtt:
+  client_id: benthos_output
+  qos: 1
+  topic: benthos_topic
+  urls:
+  - tcp://localhost:1883
+</code></pre>
+
+<p>Pushes messages to an MQTT broker.</p>
+<h2 id="nanomsg"><code>nanomsg</code></h2>
+<pre><code class="yaml">type: nanomsg
+nanomsg:
+  bind: false
+  poll_timeout: 5s
+  socket_type: PUSH
+  urls:
+  - tcp://localhost:5556
+</code></pre>
+
+<p>The scalability protocols are common communication patterns. This output should
+be compatible with any implementation, but specifically targets Nanomsg.</p>
+<p>Currently only PUSH and PUB sockets are supported.</p>
+<h2 id="nats"><code>nats</code></h2>
+<pre><code class="yaml">type: nats
+nats:
+  subject: benthos_messages
+  urls:
+  - nats://localhost:4222
+</code></pre>
+
+<p>Publish to an NATS subject. NATS is at-most-once, so delivery is not guaranteed.
+For at-least-once behaviour with NATS look at NATS Stream.</p>
+<p>This output will interpolate functions within the subject field, you
+can find a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
+<h2 id="nats_stream"><code>nats_stream</code></h2>
+<pre><code class="yaml">type: nats_stream
+nats_stream:
+  client_id: benthos_client
+  cluster_id: test-cluster
+  subject: benthos_messages
+  urls:
+  - nats://localhost:4222
+</code></pre>
+
+<p>Publish to a NATS Stream subject.</p>
+<h2 id="nsq"><code>nsq</code></h2>
+<pre><code class="yaml">type: nsq
+nsq:
+  nsqd_tcp_address: localhost:4150
+  topic: benthos_messages
+  user_agent: benthos_producer
+</code></pre>
+
+<p>Publish to an NSQ topic. The <code>topic</code> field can be dynamically set
+using function interpolations described
+<a href="../config_interpolation/#functions">here</a>. When sending batched messages
+these interpolations are performed per message part.</p>
+<h2 id="redis_list"><code>redis_list</code></h2>
+<pre><code class="yaml">type: redis_list
+redis_list:
+  key: benthos_list
+  url: tcp://localhost:6379
+</code></pre>
+
+<p>Pushes messages onto the end of a Redis list (which is created if it doesn't
+already exist) using the RPUSH command.</p>
+<h2 id="redis_pubsub"><code>redis_pubsub</code></h2>
+<pre><code class="yaml">type: redis_pubsub
+redis_pubsub:
+  channel: benthos_chan
+  url: tcp://localhost:6379
+</code></pre>
+
+<p>Publishes messages through the Redis PubSub model. It is not possible to
+guarantee that messages have been received.</p>
+<p>This output will interpolate functions within the channel field, you
+can find a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
+<h2 id="redis_streams"><code>redis_streams</code></h2>
+<pre><code class="yaml">type: redis_streams
+redis_streams:
+  body_key: body
+  max_length: 0
+  stream: benthos_stream
+  url: tcp://localhost:6379
+</code></pre>
+
+<p>Pushes messages to a Redis (v5.0+) Stream (which is created if it doesn't
+already exist) using the XADD command. It's possible to specify a maximum length
+of the target stream by setting it to a value greater than 0, in which case this
+cap is applied only when Redis is able to remove a whole macro node, for
+efficiency.</p>
+<p>Redis stream entries are key/value pairs, as such it is necessary to specify the
+key to be set to the body of the message. All metadata fields of the message
+will also be set as key/value pairs, if there is a key collision between
+a metadata item and the body then the body takes precedence.</p>
+<h2 id="retry"><code>retry</code></h2>
+<pre><code class="yaml">type: retry
+retry:
+  backoff:
+    initial_interval: 500ms
+    max_elapsed_time: 0s
+    max_interval: 3s
+  max_retries: 0
+  output: {}
+</code></pre>
+
+<p>Attempts to write messages to a child output and if the write fails for any
+reason the message is retried either until success or, if the retries or max
+elapsed time fields are non-zero, either is reached.</p>
+<p>All messages in Benthos are always retried on an output error, but this would
+usually involve propagating the error back to the source of the message, whereby
+it would be reprocessed before reaching the output layer once again.</p>
+<p>This output type is useful whenever we wish to avoid reprocessing a message on
+the event of a failed send. We might, for example, have a dedupe processor that
+we want to avoid reapplying to the same message more than once in the pipeline.</p>
+<p>Rather than retrying the same output you may wish to retry the send using a
+different output target (a dead letter queue). In which case you should instead
+use the <a href="#broker"><code>broker</code></a> output type with the pattern 'try'.</p>
+<h2 id="s3"><code>s3</code></h2>
+<pre><code class="yaml">type: s3
+s3:
+  bucket: &quot;&quot;
+  content_encoding: &quot;&quot;
+  content_type: application/octet-stream
+  credentials:
+    id: &quot;&quot;
+    role: &quot;&quot;
+    role_external_id: &quot;&quot;
+    secret: &quot;&quot;
+    token: &quot;&quot;
+  endpoint: &quot;&quot;
+  force_path_style_urls: false
+  path: ${!count:files}-${!timestamp_unix_nano}.txt
+  region: eu-west-1
+  timeout: 5s
+</code></pre>
+
+<p>Sends message parts as objects to an Amazon S3 bucket. Each object is uploaded
+with the path specified with the <code>path</code> field.</p>
+<p>In order to have a different path for each object you should use function
+interpolations described <a href="../config_interpolation/#functions">here</a>, which are
+calculated per message of a batch.</p>
+<p>The fields <code>content_type</code> and <code>content_encoding</code> can also be set
+dynamically using function interpolation.</p>
+<h2 id="sqs"><code>sqs</code></h2>
+<pre><code class="yaml">type: sqs
+sqs:
+  backoff:
+    initial_interval: 1s
+    max_elapsed_time: 30s
+    max_interval: 5s
+  credentials:
+    id: &quot;&quot;
+    role: &quot;&quot;
+    role_external_id: &quot;&quot;
+    secret: &quot;&quot;
+    token: &quot;&quot;
+  endpoint: &quot;&quot;
+  max_retries: 0
+  region: eu-west-1
+  url: &quot;&quot;
+</code></pre>
+
+<p>Sends messages to an SQS queue.</p>
+<h2 id="stdout"><code>stdout</code></h2>
+<pre><code class="yaml">type: stdout
+stdout:
+  delimiter: &quot;&quot;
+</code></pre>
+
+<p>The stdout output type prints messages to stdout. Single part messages are
+printed with a delimiter (defaults to '\n' if left empty). Multipart messages
+are written with each part delimited, with the final part followed by two
+delimiters, e.g. a multipart message [ "foo", "bar", "baz" ] would be written
+as:</p>
+<p>foo\n
+bar\n
+baz\n\n</p>
+<h2 id="switch"><code>switch</code></h2>
+<pre><code class="yaml">type: switch
+switch:
+  outputs: []
+  retry_until_success: true
+</code></pre>
+
+<p>The switch output type allows you to configure multiple conditional output
+targets by listing child outputs paired with conditions. Conditional logic is
+currently applied per whole message batch. In order to multiplex per message of
+a batch use the <a href="#broker"><code>broker</code></a> output with the pattern
+<code>fan_out</code>.</p>
+<p>In the following example, messages containing "foo" will be sent to both the
+<code>foo</code> and <code>baz</code> outputs. Messages containing "bar" will be
+sent to both the <code>bar</code> and <code>baz</code> outputs. Messages
+containing both "foo" and "bar" will be sent to all three outputs. And finally,
+messages that do not contain "foo" or "bar" will be sent to the <code>baz</code>
+output only.</p>
+<pre><code class="yaml">output:
+  type: switch
+  switch:
+    retry_until_success: true
+    outputs:
+    - output:
+        type: foo
+        foo:
+          foo_field_1: value1
+      condition:
+        type: text
+        text:
+          operator: contains
+          arg: foo
+      fallthrough: true
+    - output:
+        type: bar
+        bar:
+          bar_field_1: value2
+          bar_field_2: value3
+      condition:
+        type: text
+        text:
+          operator: contains
+          arg: bar
+      fallthrough: true
+    - output:
+        type: baz
+        baz:
+          baz_field_1: value4
+        processors:
+        - type: baz_processor
+  processors:
+  - type: some_processor
+</code></pre>
+
+<p>The switch output requires a minimum of two outputs. If no condition is defined
+for an output, it behaves like a static <code>true</code> condition. If
+<code>fallthrough</code> is set to <code>true</code>, the switch output will
+continue evaluating additional outputs after finding a match.</p>
+<p>Messages that do not match any outputs will be dropped. If an output applies
+back pressure it will block all subsequent messages.</p>
+<p>If an output fails to send a message it will be retried continuously until
+completion or service shut down. You can change this behaviour so that when an
+output returns an error the switch output also returns an error by setting
+<code>retry_until_success</code> to <code>false</code>. This allows you to
+wrap the switch with a <code>try</code> broker, but care must be taken to ensure
+duplicate messages aren't introduced during error conditions.</p>
+<h2 id="websocket"><code>websocket</code></h2>
+<pre><code class="yaml">type: websocket
+websocket:
+  basic_auth:
+    enabled: false
+    password: &quot;&quot;
+    username: &quot;&quot;
+  oauth:
+    access_token: &quot;&quot;
+    access_token_secret: &quot;&quot;
+    consumer_key: &quot;&quot;
+    consumer_secret: &quot;&quot;
+    enabled: false
+    request_url: &quot;&quot;
+  url: ws://localhost:4195/post/ws
+</code></pre>
+
+<p>Sends messages to an HTTP server via a websocket connection.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

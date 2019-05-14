@@ -1,0 +1,1750 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Ashley Jeffs">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Processors - Benthos</title>
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-135959729-3', 'docs.benthos.dev');
+            ga('send', 'pageview');
+        </script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+  <a class="navbar-brand" href="https://www.benthos.dev">Benthos</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="/">Home</a>
+                            </li>
+                            <li >
+                                <a href="../cookbooks/">Cookbooks</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Components <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../inputs/">Inputs</a>
+</li>
+                                    
+<li >
+    <a href="../buffers/">Buffers</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Processors</a>
+</li>
+                                    
+<li >
+    <a href="../conditions/">Conditions</a>
+</li>
+                                    
+<li >
+    <a href="../outputs/">Outputs</a>
+</li>
+                                    
+<li >
+    <a href="../caches/">Caches</a>
+</li>
+                                    
+<li >
+    <a href="../rate_limits/">Rate Limits</a>
+</li>
+                                    
+<li >
+    <a href="../metrics/">Metrics</a>
+</li>
+                                    
+<li >
+    <a href="../tracers/">Tracers</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Guides <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../getting_started/">Getting Started</a>
+</li>
+                                    
+<li >
+    <a href="../serverless/">Serverless</a>
+</li>
+                                    
+<li >
+    <a href="../configuration/">Configuration</a>
+</li>
+                                    
+<li >
+    <a href="../config_interpolation/">Config Interpolation</a>
+</li>
+                                    
+<li >
+    <a href="../pipeline/">Processing Pipelines</a>
+</li>
+                                    
+<li >
+    <a href="../batching/">Message Batching</a>
+</li>
+                                    
+<li >
+    <a href="../error_handling/">Error Handling</a>
+</li>
+                                    
+<li >
+    <a href="../performance_tuning/">Performance Tuning</a>
+</li>
+                                    
+<li >
+    <a href="../monitoring/">Monitoring</a>
+</li>
+                                    
+<li >
+    <a href="../workflows/">Workflows</a>
+</li>
+                                    
+<li >
+    <a href="../streams/">Streams Mode</a>
+</li>
+                                    
+<li >
+    <a href="../examples/">Applied Examples</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+    <li class="nav-item">
+      <a rel="prev" href="../buffers/" class="nav-link">
+        <i class="fa fa-arrow-left"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a rel="next" href="../conditions/" class="nav-link">
+        <i class="fa fa-arrow-right"></i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="https://github.com/Jeffail/benthos/" class="nav-link">
+        <i class="fa fa-github"></i> Code
+      </a>
+    </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#processors">Processors</a></li>
+            <li><a href="#error-handling">Error Handling</a></li>
+            <li><a href="#batching-and-multiple-part-messages">Batching and Multiple Part Messages</a></li>
+            <li><a href="#contents">Contents</a></li>
+            <li><a href="#archive">archive</a></li>
+            <li><a href="#awk">awk</a></li>
+            <li><a href="#batch">batch</a></li>
+            <li><a href="#bounds_check">bounds_check</a></li>
+            <li><a href="#cache">cache</a></li>
+            <li><a href="#catch">catch</a></li>
+            <li><a href="#compress">compress</a></li>
+            <li><a href="#conditional">conditional</a></li>
+            <li><a href="#decode">decode</a></li>
+            <li><a href="#decompress">decompress</a></li>
+            <li><a href="#dedupe">dedupe</a></li>
+            <li><a href="#encode">encode</a></li>
+            <li><a href="#filter">filter</a></li>
+            <li><a href="#filter_parts">filter_parts</a></li>
+            <li><a href="#for_each">for_each</a></li>
+            <li><a href="#grok">grok</a></li>
+            <li><a href="#group_by">group_by</a></li>
+            <li><a href="#group_by_value">group_by_value</a></li>
+            <li><a href="#hash">hash</a></li>
+            <li><a href="#hash_sample">hash_sample</a></li>
+            <li><a href="#http">http</a></li>
+            <li><a href="#insert_part">insert_part</a></li>
+            <li><a href="#jmespath">jmespath</a></li>
+            <li><a href="#json">json</a></li>
+            <li><a href="#lambda">lambda</a></li>
+            <li><a href="#log">log</a></li>
+            <li><a href="#merge_json">merge_json</a></li>
+            <li><a href="#metadata">metadata</a></li>
+            <li><a href="#metric">metric</a></li>
+            <li><a href="#noop">noop</a></li>
+            <li><a href="#parallel">parallel</a></li>
+            <li><a href="#process_batch">process_batch</a></li>
+            <li><a href="#process_dag">process_dag</a></li>
+            <li><a href="#process_field">process_field</a></li>
+            <li><a href="#process_map">process_map</a></li>
+            <li><a href="#sample">sample</a></li>
+            <li><a href="#select_parts">select_parts</a></li>
+            <li><a href="#sleep">sleep</a></li>
+            <li><a href="#split">split</a></li>
+            <li><a href="#sql">sql</a></li>
+            <li><a href="#subprocess">subprocess</a></li>
+            <li><a href="#switch">switch</a></li>
+            <li><a href="#text">text</a></li>
+            <li><a href="#throttle">throttle</a></li>
+            <li><a href="#try">try</a></li>
+            <li><a href="#unarchive">unarchive</a></li>
+            <li><a href="#while">while</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="processors">Processors</h1>
+<p>This document was generated with <code>benthos --list-processors</code>.</p>
+<p>Benthos processors are functions applied to messages passing through a pipeline.
+The function signature allows a processor to mutate or drop messages depending
+on the content of the message.</p>
+<p>Processors are set via config, and depending on where in the config they are
+placed they will be run either immediately after a specific input (set in the
+input section), on all messages (set in the pipeline section) or before a
+specific output (set in the output section). Most processors apply to all
+messages and can be placed in the pipeline section:</p>
+<pre><code class="yaml">pipeline:
+  threads: 1
+  processors:
+  - type: foo
+    foo:
+      bar: baz
+</code></pre>
+
+<p>The <code>threads</code> field in the pipeline section determines how many
+parallel processing threads are created. You can read more about parallel
+processing in the <a href="../pipeline/">pipeline guide</a>.</p>
+<p>By organising processors you can configure complex behaviours in your pipeline.
+You can <a href="../examples/">find some examples here</a>.</p>
+<h3 id="error-handling">Error Handling</h3>
+<p>Some processors have conditions whereby they might fail. Benthos has mechanisms
+for detecting and recovering from these failures which can be read about
+<a href="../error_handling/">here</a>.</p>
+<h3 id="batching-and-multiple-part-messages">Batching and Multiple Part Messages</h3>
+<p>All Benthos processors support multiple part messages, which are synonymous with
+batches. Some processors such as <a href="#batch">batch</a> and <a href="#split">split</a> are able to
+create, expand and break down batches.</p>
+<p>Many processors are able to perform their behaviours on specific parts of a
+message batch, or on all parts, and have a field <code>parts</code> for
+specifying an array of part indexes they should apply to. If the list of target
+parts is empty these processors will be applied to all message parts.</p>
+<p>Part indexes can be negative, and if so the part will be selected from the end
+counting backwards starting from -1. E.g. if part = -1 then the selected part
+will be the last part of the message, if part = -2 then the part before the last
+element will be selected, and so on.</p>
+<p>Some processors such as <code>filter</code> and <code>dedupe</code> act across an entire
+batch, when instead we'd like to perform them on individual messages of a batch.
+In this case the <a href="#for_each"><code>for_each</code></a> processor can be used.</p>
+<h3 id="contents">Contents</h3>
+<ol>
+<li><a href="#archive"><code>archive</code></a></li>
+<li><a href="#awk"><code>awk</code></a></li>
+<li><a href="#batch"><code>batch</code></a></li>
+<li><a href="#bounds_check"><code>bounds_check</code></a></li>
+<li><a href="#cache"><code>cache</code></a></li>
+<li><a href="#catch"><code>catch</code></a></li>
+<li><a href="#compress"><code>compress</code></a></li>
+<li><a href="#conditional"><code>conditional</code></a></li>
+<li><a href="#decode"><code>decode</code></a></li>
+<li><a href="#decompress"><code>decompress</code></a></li>
+<li><a href="#dedupe"><code>dedupe</code></a></li>
+<li><a href="#encode"><code>encode</code></a></li>
+<li><a href="#filter"><code>filter</code></a></li>
+<li><a href="#filter_parts"><code>filter_parts</code></a></li>
+<li><a href="#for_each"><code>for_each</code></a></li>
+<li><a href="#grok"><code>grok</code></a></li>
+<li><a href="#group_by"><code>group_by</code></a></li>
+<li><a href="#group_by_value"><code>group_by_value</code></a></li>
+<li><a href="#hash"><code>hash</code></a></li>
+<li><a href="#hash_sample"><code>hash_sample</code></a></li>
+<li><a href="#http"><code>http</code></a></li>
+<li><a href="#insert_part"><code>insert_part</code></a></li>
+<li><a href="#jmespath"><code>jmespath</code></a></li>
+<li><a href="#json"><code>json</code></a></li>
+<li><a href="#lambda"><code>lambda</code></a></li>
+<li><a href="#log"><code>log</code></a></li>
+<li><a href="#merge_json"><code>merge_json</code></a></li>
+<li><a href="#metadata"><code>metadata</code></a></li>
+<li><a href="#metric"><code>metric</code></a></li>
+<li><a href="#noop"><code>noop</code></a></li>
+<li><a href="#parallel"><code>parallel</code></a></li>
+<li><a href="#process_batch"><code>process_batch</code></a></li>
+<li><a href="#process_dag"><code>process_dag</code></a></li>
+<li><a href="#process_field"><code>process_field</code></a></li>
+<li><a href="#process_map"><code>process_map</code></a></li>
+<li><a href="#sample"><code>sample</code></a></li>
+<li><a href="#select_parts"><code>select_parts</code></a></li>
+<li><a href="#sleep"><code>sleep</code></a></li>
+<li><a href="#split"><code>split</code></a></li>
+<li><a href="#sql"><code>sql</code></a></li>
+<li><a href="#subprocess"><code>subprocess</code></a></li>
+<li><a href="#switch"><code>switch</code></a></li>
+<li><a href="#text"><code>text</code></a></li>
+<li><a href="#throttle"><code>throttle</code></a></li>
+<li><a href="#try"><code>try</code></a></li>
+<li><a href="#unarchive"><code>unarchive</code></a></li>
+<li><a href="#while"><code>while</code></a></li>
+</ol>
+<h2 id="archive"><code>archive</code></h2>
+<pre><code class="yaml">type: archive
+archive:
+  format: binary
+  path: ${!count:files}-${!timestamp_unix_nano}.txt
+</code></pre>
+
+<p>Archives all the messages of a batch into a single message according to the
+selected archive format. Supported archive formats are:
+<code>tar</code>, <code>zip</code>, <code>binary</code>, <code>lines</code> and <code>json_array</code>.</p>
+<p>Some archive formats (such as tar, zip) treat each archive item (message part)
+as a file with a path. Since message parts only contain raw data a unique path
+must be generated for each part. This can be done by using function
+interpolations on the 'path' field as described
+<a href="../config_interpolation/#functions">here</a>. For types that aren't file based
+(such as binary) the file field is ignored.</p>
+<p>The <code>json_array</code> format attempts to JSON parse each message and append
+the result to an array, which becomes the contents of the resulting message.</p>
+<p>The resulting archived message adopts the metadata of the <em>first</em> message part
+of the batch.</p>
+<h2 id="awk"><code>awk</code></h2>
+<pre><code class="yaml">type: awk
+awk:
+  codec: text
+  parts: []
+  program: BEGIN { x = 0 } { print $0, x; x++ }
+</code></pre>
+
+<p>Executes an AWK program on messages by feeding contents as the input based on a
+codec and replaces the contents with the result. If the result is empty (nothing
+is printed by the program) then the original message contents remain unchanged.</p>
+<p>Comes with a wide range of <a href="awk_functions/">custom functions</a> for accessing
+message metadata, json fields, printing logs, etc. These functions can be
+overridden by functions within the program.</p>
+<h3 id="codecs">Codecs</h3>
+<p>A codec can be specified that determines how the contents of the message are fed
+into the program. This does not change the custom functions.</p>
+<p><code>none</code></p>
+<p>An empty string is fed into the program. Functions can still be used in order to
+extract and mutate metadata and message contents. This is useful for when your
+program only uses functions and doesn't need the full text of the message to be
+parsed by the program.</p>
+<p><code>text</code></p>
+<p>The full contents of the message are fed into the program as a string, allowing
+you to reference tokenised segments of the message with variables ($0, $1, etc).
+Custom functions can still be used with this codec.</p>
+<p>This is the default codec as it behaves most similar to typical usage of the awk
+command line tool.</p>
+<p><code>json</code></p>
+<p>No contents are fed into the program. Instead, variables are extracted from the
+message by walking the flattened JSON structure. Each value is converted into a
+variable by taking its full path, e.g. the object:</p>
+<pre><code class="json">{
+    &quot;foo&quot;: {
+        &quot;bar&quot;: {
+            &quot;value&quot;: 10
+        },
+        &quot;created_at&quot;: &quot;2018-12-18T11:57:32&quot;
+    }
+}
+</code></pre>
+
+<p>Would result in the following variable declarations:</p>
+<pre><code>foo_bar_value = 10
+foo_created_at = &quot;2018-12-18T11:57:32&quot;
+</code></pre>
+
+<p>Custom functions can also still be used with this codec.</p>
+<h2 id="batch"><code>batch</code></h2>
+<pre><code class="yaml">type: batch
+batch:
+  byte_size: 0
+  condition:
+    type: static
+    static: false
+  count: 0
+  period: &quot;&quot;
+</code></pre>
+
+<p>Reads a number of discrete messages, buffering (but not acknowledging) the
+message parts until either:</p>
+<ul>
+<li>The <code>byte_size</code> field is non-zero and the total size of the batch in
+  bytes matches or exceeds it.</li>
+<li>The <code>count</code> field is non-zero and the total number of messages in
+  the batch matches or exceeds it.</li>
+<li>A message added to the batch causes the condition to resolve <code>true</code>.</li>
+<li>The <code>period</code> field is non-empty and the time since the last batch
+  exceeds its value.</li>
+</ul>
+<p>Once one of these events trigger the parts are combined into a single batch of
+messages and sent through the pipeline. After reaching a destination the
+acknowledgment is sent out for all messages inside the batch at the same time,
+preserving at-least-once delivery guarantees.</p>
+<p>The <code>period</code> field - when non-empty - defines a period of time whereby
+a batch is sent even if the <code>byte_size</code> has not yet been reached.
+Batch parameters are only triggered when a message is added, meaning a pending
+batch can last beyond this period if no messages are added since the period was
+reached.</p>
+<p>When a batch is sent to an output the behaviour will differ depending on the
+protocol. If the output type supports multipart messages then the batch is sent
+as a single message with multiple parts. If the output only supports single part
+messages then the parts will be sent as a batch of single part messages. If the
+output supports neither multipart or batches of messages then Benthos falls back
+to sending them individually.</p>
+<h3 id="warning">WARNING</h3>
+<p>The batch processor should <em>always</em> be positioned within the <code>input</code>
+section - ideally before any other processor - in order to avoid unexpected
+acknowledgment behaviour and message ordering.</p>
+<p>For more information about batching in Benthos please check out
+<a href="../batching/">this document</a>.</p>
+<h2 id="bounds_check"><code>bounds_check</code></h2>
+<pre><code class="yaml">type: bounds_check
+bounds_check:
+  max_part_size: 1.073741824e+09
+  max_parts: 100
+  min_part_size: 1
+  min_parts: 1
+</code></pre>
+
+<p>Checks whether each message batch fits within certain boundaries, and drops
+batches that do not.</p>
+<h2 id="cache"><code>cache</code></h2>
+<pre><code class="yaml">type: cache
+cache:
+  cache: &quot;&quot;
+  key: &quot;&quot;
+  operator: set
+  parts: []
+  value: &quot;&quot;
+</code></pre>
+
+<p>Performs operations against a <a href="../caches">cache resource</a> for each message of a
+batch, allowing you to store or retrieve data within message payloads.</p>
+<p>This processor will interpolate functions within the <code>key</code> and <code>value</code>
+fields individually for each message of the batch. This allows you to specify
+dynamic keys and values based on the contents of the message payloads and
+metadata. You can find a list of functions
+<a href="../config_interpolation/#functions">here</a>.</p>
+<h3 id="operators">Operators</h3>
+<h4 id="set"><code>set</code></h4>
+<p>Set a key in the cache to a value. If the key already exists the contents are
+overridden.</p>
+<h4 id="add"><code>add</code></h4>
+<p>Set a key in the cache to a value. If the key already exists the action fails
+with a 'key already exists' error, which can be detected with
+<a href="../error_handling/">processor error handling</a>.</p>
+<h4 id="get"><code>get</code></h4>
+<p>Retrieve the contents of a cached key and replace the original message payload
+with the result. If the key does not exist the action fails with an error, which
+can be detected with <a href="../error_handling/">processor error handling</a>.</p>
+<h3 id="examples">Examples</h3>
+<p>The <code>cache</code> processor can be used in combination with other processors
+in order to solve a variety of data stream problems.</p>
+<h4 id="deduplication">Deduplication</h4>
+<p>Deduplication can be done using the add operator with a key extracted from the
+message payload, since it fails when a key already exists we can remove the
+duplicates using a
+<a href="../conditions/#processor_failed"><code>processor_failed</code></a>
+condition:</p>
+<pre><code class="yaml">- type: cache
+  cache:
+    cache: TODO
+    operator: add
+    key: &quot;${!json_field:message.id}&quot;
+    value: &quot;storeme&quot;
+- type: filter_parts
+  filter_parts:
+    type: processor_failed
+</code></pre>
+
+<h4 id="hydration">Hydration</h4>
+<p>It's possible to enrich payloads with content previously stored in a cache by
+using the <a href="#process_dag"><code>process_dag</code></a> processor:</p>
+<pre><code class="yaml">- type: process_map
+  process_map:
+    processors:
+    - type: cache
+      cache:
+        cache: TODO
+        operator: get
+        key: &quot;${!json_field:message.document_id}&quot;
+    postmap:
+      message.document: .
+</code></pre>
+
+<h2 id="catch"><code>catch</code></h2>
+<pre><code class="yaml">type: catch
+catch: []
+</code></pre>
+
+<p>Behaves similarly to the <a href="#for_each"><code>for_each</code></a> processor, where a
+list of child processors are applied to individual messages of a batch. However,
+processors are only applied to messages that failed a processing step prior to
+the catch.</p>
+<p>For example, with the following config:</p>
+<pre><code class="yaml">- type: foo
+- type: catch
+  catch:
+  - type: bar
+  - type: baz
+</code></pre>
+
+<p>If the processor <code>foo</code> fails for a particular message, that message
+will be fed into the processors <code>bar</code> and <code>baz</code>. Messages that do not
+fail for the processor <code>foo</code> will skip these processors.</p>
+<p>When messages leave the catch block their fail flags are cleared. This processor
+is useful for when it's possible to recover failed messages, or when special
+actions (such as logging/metrics) are required before dropping them.</p>
+<p>More information about error handing can be found <a href="../error_handling/">here</a>.</p>
+<h2 id="compress"><code>compress</code></h2>
+<pre><code class="yaml">type: compress
+compress:
+  algorithm: gzip
+  level: -1
+  parts: []
+</code></pre>
+
+<p>Compresses messages according to the selected algorithm. Supported compression
+algorithms are: gzip, zlib, flate.</p>
+<p>The 'level' field might not apply to all algorithms.</p>
+<h2 id="conditional"><code>conditional</code></h2>
+<pre><code class="yaml">type: conditional
+conditional:
+  condition:
+    type: text
+    text:
+      arg: &quot;&quot;
+      operator: equals_cs
+      part: 0
+  else_processors: []
+  processors: []
+</code></pre>
+
+<p>Conditional is a processor that has a list of child <code>processors</code>,
+<code>else_processors</code>, and a condition. For each message batch, if the
+condition passes, the child <code>processors</code> will be applied, otherwise
+the <code>else_processors</code> are applied. This processor is useful for
+applying processors based on the content of message batches.</p>
+<p>In order to conditionally process each message of a batch individually use this
+processor with the <a href="#for_each"><code>for_each</code></a> processor.</p>
+<p>You can find a <a href="../conditions">full list of conditions here</a>.</p>
+<h2 id="decode"><code>decode</code></h2>
+<pre><code class="yaml">type: decode
+decode:
+  parts: []
+  scheme: base64
+</code></pre>
+
+<p>Decodes messages according to the selected scheme. Supported available schemes
+are: hex, base64.</p>
+<h2 id="decompress"><code>decompress</code></h2>
+<pre><code class="yaml">type: decompress
+decompress:
+  algorithm: gzip
+  parts: []
+</code></pre>
+
+<p>Decompresses messages according to the selected algorithm. Supported
+decompression types are: gzip, zlib, bzip2, flate.</p>
+<h2 id="dedupe"><code>dedupe</code></h2>
+<pre><code class="yaml">type: dedupe
+dedupe:
+  cache: &quot;&quot;
+  drop_on_err: true
+  hash: none
+  key: &quot;&quot;
+  parts:
+  - 0
+</code></pre>
+
+<p>Dedupes message batches by caching selected (and optionally hashed) messages,
+dropping batches that are already cached. The hash type can be chosen from:
+none or xxhash.</p>
+<p>This processor acts across an entire batch, in order to deduplicate individual
+messages within a batch use this processor with the
+<a href="#for_each"><code>for_each</code></a> processor.</p>
+<p>Optionally, the <code>key</code> field can be populated in order to hash on a
+function interpolated string rather than the full contents of messages. This
+allows you to deduplicate based on dynamic fields within a message, such as its
+metadata, JSON fields, etc. A full list of interpolation functions can be found
+<a href="../config_interpolation/#functions">here</a>.</p>
+<p>For example, the following config would deduplicate based on the concatenated
+values of the metadata field <code>kafka_key</code> and the value of the JSON
+path <code>id</code> within the message contents:</p>
+<pre><code class="yaml">dedupe:
+  cache: foocache
+  key: ${!metadata:kafka_key}-${!json_field:id}
+</code></pre>
+
+<p>Caches should be configured as a resource, for more information check out the
+<a href="../caches/">documentation here</a>.</p>
+<p>When using this processor with an output target that might fail you should
+always wrap the output within a <a href="../outputs/#retry"><code>retry</code></a>
+block. This ensures that during outages your messages aren't reprocessed after
+failures, which would result in messages being dropped.</p>
+<h3 id="delivery-guarantees">Delivery Guarantees</h3>
+<p>Performing deduplication on a stream using a distributed cache voids any
+at-least-once guarantees that it previously had. This is because the cache will
+preserve message signatures even if the message fails to leave the Benthos
+pipeline, which would cause message loss in the event of an outage at the output
+sink followed by a restart of the Benthos instance.</p>
+<p>If you intend to preserve at-least-once delivery guarantees you can avoid this
+problem by using a memory based cache. This is a compromise that can achieve
+effective deduplication but parallel deployments of the pipeline as well as
+service restarts increase the chances of duplicates passing undetected.</p>
+<h2 id="encode"><code>encode</code></h2>
+<pre><code class="yaml">type: encode
+encode:
+  parts: []
+  scheme: base64
+</code></pre>
+
+<p>Encodes messages according to the selected scheme. Supported schemes are:
+hex, base64.</p>
+<h2 id="filter"><code>filter</code></h2>
+<pre><code class="yaml">type: filter
+filter:
+  type: text
+  text:
+    arg: &quot;&quot;
+    operator: equals_cs
+    part: 0
+</code></pre>
+
+<p>Tests each message batch against a condition, if the condition fails then the
+batch is dropped. You can find a <a href="../conditions">full list of conditions here</a>.</p>
+<p>In order to filter individual messages of a batch use the
+<a href="#filter_parts"><code>filter_parts</code></a> processor.</p>
+<h2 id="filter_parts"><code>filter_parts</code></h2>
+<pre><code class="yaml">type: filter_parts
+filter_parts:
+  type: text
+  text:
+    arg: &quot;&quot;
+    operator: equals_cs
+    part: 0
+</code></pre>
+
+<p>Tests each individual message of a batch against a condition, if the condition
+fails then the message is dropped. If the resulting batch is empty it will be
+dropped. You can find a <a href="../conditions">full list of conditions here</a>, in this
+case each condition will be applied to a message as if it were a single message
+batch.</p>
+<p>This processor is useful if you are combining messages into batches using the
+<a href="#batch"><code>batch</code></a> processor and wish to remove specific parts.</p>
+<h2 id="for_each"><code>for_each</code></h2>
+<pre><code class="yaml">type: for_each
+for_each: []
+</code></pre>
+
+<p>A processor that applies a list of child processors to messages of a batch as
+though they were each a batch of one message. This is useful for forcing batch
+wide processors such as <a href="#dedupe"><code>dedupe</code></a> or interpolations such as
+the <code>value</code> field of the <code>metadata</code> processor to execute on
+individual message parts of a batch instead.</p>
+<p>Please note that most processors already process per message of a batch, and
+this processor is not needed in those cases.</p>
+<h2 id="grok"><code>grok</code></h2>
+<pre><code class="yaml">type: grok
+grok:
+  named_captures_only: true
+  output_format: json
+  parts: []
+  patterns: []
+  remove_empty_values: true
+  use_default_patterns: true
+</code></pre>
+
+<p>Parses message payloads by attempting to apply a list of Grok patterns, if a
+pattern returns at least one value a resulting structured object is created
+according to the chosen output format and will replace the payload. Currently
+only json is a valid output format.</p>
+<p>This processor respects type hints in the grok patterns, therefore with the
+pattern <code>%{WORD:first},%{INT:second:int}</code> and a payload of <code>foo,1</code>
+the resulting payload would be <code>{"first":"foo","second":1}</code>.</p>
+<h2 id="group_by"><code>group_by</code></h2>
+<pre><code class="yaml">type: group_by
+group_by: []
+</code></pre>
+
+<p>Splits a batch of messages into N batches, where each resulting batch contains a
+group of messages determined by conditions that are applied per message of the
+original batch. Once the groups are established a list of processors are applied
+to their respective grouped batch, which can be used to label the batch as per
+their grouping.</p>
+<p>Each group is configured in a list with a condition and a list of processors:</p>
+<pre><code class="yaml">type: group_by
+group_by:
+  - condition:
+      type: static
+      static: true
+    processors:
+      - type: noop
+</code></pre>
+
+<p>Messages are added to the first group that passes and can only belong to a
+single group. Messages that do not pass the conditions of any group are placed
+in a final batch with no processors applied.</p>
+<p>For example, imagine we have a batch of messages that we wish to split into two
+groups - the foos and the bars - which should be sent to different output
+destinations based on those groupings. We also need to send the foos as a tar
+gzip archive. For this purpose we can use the <code>group_by</code> processor
+with a <a href="../outputs/#switch"><code>switch</code></a> output:</p>
+<pre><code class="yaml">pipeline:
+  processors:
+  - type: group_by
+    group_by:
+    - condition:
+        type: text
+        text:
+          operator: contains
+          arg: &quot;this is a foo&quot;
+      processors:
+      - type: archive
+        archive:
+          format: tar
+      - type: compress
+        compress:
+          algorithm: gzip
+      - type: metadata
+        metadata:
+          operator: set
+          key: grouping
+          value: foo
+output:
+  type: switch
+  switch:
+    outputs:
+    - output:
+        type: foo_output
+      condition:
+        type: metadata
+        metadata:
+          operator: equals
+          key: grouping
+          arg: foo
+    - output:
+        type: bar_output
+</code></pre>
+
+<p>Since any message that isn't a foo is a bar, and bars do not require their own
+processing steps, we only need a single grouping configuration.</p>
+<h2 id="group_by_value"><code>group_by_value</code></h2>
+<pre><code class="yaml">type: group_by_value
+group_by_value:
+  value: ${!metadata:example}
+</code></pre>
+
+<p>Splits a batch of messages into N batches, where each resulting batch contains a
+group of messages determined by a
+<a href="../config_interpolation/#functions">function interpolated string</a> evaluated
+per message. This allows you to group messages using arbitrary fields within
+their content or metadata, process them individually, and send them to unique
+locations as per their group.</p>
+<p>For example, if we were consuming Kafka messages and needed to group them by
+their key, archive the groups, and send them to S3 with the key as part of the
+path we could achieve that with the following:</p>
+<pre><code class="yaml">pipeline:
+  processors:
+  - type: group_by_value
+    group_by_value:
+      value: ${!metadata:kafka_key}
+  - type: archive
+    archive:
+      format: tar
+  - type: compress
+    compress:
+      algorithm: gzip
+output:
+  type: s3
+  s3:
+    bucket: TODO
+    path: docs/${!metadata:kafka_key}/${!count:files}-${!timestamp_unix_nano}.tar.gz
+</code></pre>
+
+<h2 id="hash"><code>hash</code></h2>
+<pre><code class="yaml">type: hash
+hash:
+  algorithm: sha256
+  parts: []
+</code></pre>
+
+<p>Hashes messages according to the selected algorithm. Supported algorithms are:
+sha256, sha512, sha1, xxhash64.</p>
+<p>This processor is mostly useful when combined with the
+<a href="#process_field"><code>process_field</code></a> processor as it allows you to hash a
+specific field of a document like this:</p>
+<pre><code class="yaml"># Hash the contents of 'foo.bar'
+process_field:
+  path: foo.bar
+  processors:
+  - type: hash
+    hash:
+      algorithm: sha256
+</code></pre>
+
+<h2 id="hash_sample"><code>hash_sample</code></h2>
+<pre><code class="yaml">type: hash_sample
+hash_sample:
+  parts:
+  - 0
+  retain_max: 10
+  retain_min: 0
+</code></pre>
+
+<p>Retains a percentage of message batches deterministically by hashing selected
+messages and checking the hash against a valid range, dropping all others.</p>
+<p>For example, setting <code>retain_min</code> to <code>0.0</code> and <code>remain_max</code> to <code>50.0</code>
+results in dropping half of the input stream, and setting <code>retain_min</code>
+to <code>50.0</code> and <code>retain_max</code> to <code>100.1</code> will drop the <em>other</em> half.</p>
+<p>In order to sample individual messages of a batch use this processor with the
+<a href="#for_each"><code>for_each</code></a> processor.</p>
+<h2 id="http"><code>http</code></h2>
+<pre><code class="yaml">type: http
+http:
+  max_parallel: 0
+  parallel: false
+  request:
+    backoff_on:
+    - 429
+    basic_auth:
+      enabled: false
+      password: &quot;&quot;
+      username: &quot;&quot;
+    drop_on: []
+    headers:
+      Content-Type: application/octet-stream
+    max_retry_backoff: 300s
+    oauth:
+      access_token: &quot;&quot;
+      access_token_secret: &quot;&quot;
+      consumer_key: &quot;&quot;
+      consumer_secret: &quot;&quot;
+      enabled: false
+      request_url: &quot;&quot;
+    rate_limit: &quot;&quot;
+    retries: 3
+    retry_period: 1s
+    timeout: 5s
+    tls:
+      client_certs: []
+      enabled: false
+      root_cas_file: &quot;&quot;
+      skip_cert_verify: false
+    url: http://localhost:4195/post
+    verb: POST
+</code></pre>
+
+<p>Performs an HTTP request using a message batch as the request body, and replaces
+the original message parts with the body of the response.</p>
+<p>If the batch contains only a single message part then it will be sent as the
+body of the request. If the batch contains multiple messages then they will be
+sent as a multipart HTTP request using a <code>Content-Type: multipart</code>
+header.</p>
+<p>If you are sending batches and wish to avoid this behaviour then you can set the
+<code>parallel</code> flag to <code>true</code> and the messages of a batch will
+be sent as individual requests in parallel. You can also cap the max number of
+parallel requests with <code>max_parallel</code>. Alternatively, you can use the
+<a href="#archive"><code>archive</code></a> processor to create a single message
+from the batch.</p>
+<p>The <code>rate_limit</code> field can be used to specify a rate limit
+<a href="../rate_limits/">resource</a> to cap the rate of requests across all
+parallel components service wide.</p>
+<p>The URL and header values of this type can be dynamically set using function
+interpolations described <a href="../config_interpolation/#functions">here</a>.</p>
+<p>In order to map or encode the payload to a specific request body, and map the
+response back into the original payload instead of replacing it entirely, you
+can use the <a href="#process_map"><code>process_map</code></a> or
+ <a href="#process_field"><code>process_field</code></a> processors.</p>
+<h3 id="error-handling_1">Error Handling</h3>
+<p>When all retry attempts for a message are exhausted the processor cancels the
+attempt. These failed messages will continue through the pipeline unchanged, but
+can be dropped or placed in a dead letter queue according to your config, you
+can read about these patterns <a href="../error_handling/">here</a>.</p>
+<h2 id="insert_part"><code>insert_part</code></h2>
+<pre><code class="yaml">type: insert_part
+insert_part:
+  content: &quot;&quot;
+  index: -1
+</code></pre>
+
+<p>Insert a new message into a batch at an index. If the specified index is greater
+than the length of the existing batch it will be appended to the end.</p>
+<p>The index can be negative, and if so the message will be inserted from the end
+counting backwards starting from -1. E.g. if index = -1 then the new message
+will become the last of the batch, if index = -2 then the new message will be
+inserted before the last message, and so on. If the negative index is greater
+than the length of the existing batch it will be inserted at the beginning.</p>
+<p>This processor will interpolate functions within the 'content' field, you can
+find a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
+<h2 id="jmespath"><code>jmespath</code></h2>
+<pre><code class="yaml">type: jmespath
+jmespath:
+  parts: []
+  query: &quot;&quot;
+</code></pre>
+
+<p>Parses a message as a JSON document and attempts to apply a JMESPath expression
+to it, replacing the contents of the part with the result. Please refer to the
+<a href="http://jmespath.org/">JMESPath website</a> for information and tutorials regarding
+the syntax of expressions.</p>
+<p>For example, with the following config:</p>
+<pre><code class="yaml">jmespath:
+  query: locations[?state == 'WA'].name | sort(@) | {Cities: join(', ', @)}
+</code></pre>
+
+<p>If the initial contents of a message were:</p>
+<pre><code class="json">{
+  &quot;locations&quot;: [
+    {&quot;name&quot;: &quot;Seattle&quot;, &quot;state&quot;: &quot;WA&quot;},
+    {&quot;name&quot;: &quot;New York&quot;, &quot;state&quot;: &quot;NY&quot;},
+    {&quot;name&quot;: &quot;Bellevue&quot;, &quot;state&quot;: &quot;WA&quot;},
+    {&quot;name&quot;: &quot;Olympia&quot;, &quot;state&quot;: &quot;WA&quot;}
+  ]
+}
+</code></pre>
+
+<p>Then the resulting contents would be:</p>
+<pre><code class="json">{&quot;Cities&quot;: &quot;Bellevue, Olympia, Seattle&quot;}
+</code></pre>
+
+<p>It is possible to create boolean queries with JMESPath, in order to filter
+messages with boolean queries please instead use the
+<a href="../conditions/#jmespath"><code>jmespath</code></a> condition.</p>
+<h2 id="json"><code>json</code></h2>
+<pre><code class="yaml">type: json
+json:
+  operator: get
+  parts: []
+  path: &quot;&quot;
+  value: &quot;&quot;
+</code></pre>
+
+<p>Parses messages as a JSON document, performs a mutation on the data, and then
+overwrites the previous contents with the new value.</p>
+<p>If the path is empty or "." the root of the data will be targeted.</p>
+<p>This processor will interpolate functions within the 'value' field, you can find
+a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
+<h3 id="operators_1">Operators</h3>
+<h4 id="append"><code>append</code></h4>
+<p>Appends a value to an array at a target dot path. If the path does not exist all
+objects in the path are created (unless there is a collision).</p>
+<p>If a non-array value already exists in the target path it will be replaced by an
+array containing the original value as well as the new value.</p>
+<p>If the value is an array the elements of the array are expanded into the new
+array. E.g. if the target is an array <code>[0,1]</code> and the value is also an
+array <code>[2,3]</code>, the result will be <code>[0,1,2,3]</code> as opposed to
+<code>[0,1,[2,3]]</code>.</p>
+<h4 id="clean"><code>clean</code></h4>
+<p>Walks the JSON structure and deletes any fields where the value is:</p>
+<ul>
+<li>An empty array</li>
+<li>An empty object</li>
+<li>An empty string</li>
+<li>null</li>
+</ul>
+<h4 id="copy"><code>copy</code></h4>
+<p>Copies the value of a target dot path (if it exists) to a location. The
+destination path is specified in the <code>value</code> field. If the destination
+path does not exist all objects in the path are created (unless there is a
+collision).</p>
+<h4 id="delete"><code>delete</code></h4>
+<p>Removes a key identified by the dot path. If the path does not exist this is a
+no-op.</p>
+<h4 id="move"><code>move</code></h4>
+<p>Moves the value of a target dot path (if it exists) to a new location. The
+destination path is specified in the <code>value</code> field. If the destination
+path does not exist all objects in the path are created (unless there is a
+collision).</p>
+<h4 id="select"><code>select</code></h4>
+<p>Reads the value found at a dot path and replaced the original contents entirely
+by the new value.</p>
+<h4 id="set_1"><code>set</code></h4>
+<p>Sets the value of a field at a dot path. If the path does not exist all objects
+in the path are created (unless there is a collision).</p>
+<p>The value can be any type, including objects and arrays. When using YAML
+configuration files a YAML object will be converted into a JSON object, i.e.
+with the config:</p>
+<pre><code class="yaml">json:
+  operator: set
+  parts: [0]
+  path: some.path
+  value:
+    foo:
+      bar: 5
+</code></pre>
+
+<p>The value will be converted into '{"foo":{"bar":5}}'. If the YAML object
+contains keys that aren't strings those fields will be ignored.</p>
+<h2 id="lambda"><code>lambda</code></h2>
+<pre><code class="yaml">type: lambda
+lambda:
+  credentials:
+    id: &quot;&quot;
+    role: &quot;&quot;
+    role_external_id: &quot;&quot;
+    secret: &quot;&quot;
+    token: &quot;&quot;
+  endpoint: &quot;&quot;
+  function: &quot;&quot;
+  parallel: false
+  rate_limit: &quot;&quot;
+  region: eu-west-1
+  retries: 3
+  timeout: 5s
+</code></pre>
+
+<p>Invokes an AWS lambda for each message part of a batch. The contents of the
+message part is the payload of the request, and the result of the invocation
+will become the new contents of the message.</p>
+<p>It is possible to perform requests per message of a batch in parallel by setting
+the <code>parallel</code> flag to <code>true</code>. The <code>rate_limit</code>
+field can be used to specify a rate limit <a href="../rate_limits/">resource</a>
+to cap the rate of requests across parallel components service wide.</p>
+<p>In order to map or encode the payload to a specific request body, and map the
+response back into the original payload instead of replacing it entirely, you
+can use the <a href="#process_map"><code>process_map</code></a> or
+ <a href="#process_field"><code>process_field</code></a> processors.</p>
+<h3 id="error-handling_2">Error Handling</h3>
+<p>When all retry attempts for a message are exhausted the processor cancels the
+attempt. These failed messages will continue through the pipeline unchanged, but
+can be dropped or placed in a dead letter queue according to your config, you
+can read about these patterns <a href="../error_handling/">here</a>.</p>
+<h2 id="log"><code>log</code></h2>
+<pre><code class="yaml">type: log
+log:
+  fields: {}
+  level: INFO
+  message: &quot;&quot;
+</code></pre>
+
+<p>Log is a processor that prints a log event each time it processes a batch. The
+batch is then sent onwards unchanged. The log message can be set using function
+interpolations described <a href="../config_interpolation/#functions">here</a> which
+allows you to log the contents and metadata of a messages within a batch.</p>
+<p>In order to print a log message per message of a batch place it within a
+<a href="#for_each"><code>for_each</code></a> processor.</p>
+<p>For example, if we wished to create a debug log event for each message in a
+pipeline in order to expose the JSON field <code>foo.bar</code> as well as the
+metadata field <code>kafka_partition</code> we can achieve that with the
+following config:</p>
+<pre><code class="yaml">type: for_each
+for_each:
+- type: log
+  log:
+    level: DEBUG
+    message: &quot;field: ${!json_field:foo.bar}, part: ${!metadata:kafka_partition}&quot;
+</code></pre>
+
+<p>The <code>level</code> field determines the log level of the printed events and
+can be any of the following values: TRACE, DEBUG, INFO, WARN, ERROR.</p>
+<h3 id="structured-fields">Structured Fields</h3>
+<p>It's also possible to output a map of structured fields, this only works when
+the service log is set to output as JSON. The field values are function
+interpolated, meaning it's possible to output structured fields containing
+message contents and metadata, e.g.:</p>
+<pre><code class="yaml">type: log
+log:
+  level: DEBUG
+  message: &quot;foo&quot;
+  fields:
+    id: &quot;${!json_field:id}&quot;
+    kafka_topic: &quot;${!metadata:kafka_topic}&quot;
+</code></pre>
+
+<h2 id="merge_json"><code>merge_json</code></h2>
+<pre><code class="yaml">type: merge_json
+merge_json:
+  parts: []
+  retain_parts: false
+</code></pre>
+
+<p>Parses selected messages of a batch as JSON documents, attempts to merge them
+into one single JSON document and then writes it to a new message at the end of
+the batch. Merged parts are removed unless <code>retain_parts</code> is set to
+true. The new merged message will contain the metadata of the first part to be
+merged.</p>
+<h2 id="metadata"><code>metadata</code></h2>
+<pre><code class="yaml">type: metadata
+metadata:
+  key: example
+  operator: set
+  parts: []
+  value: ${!hostname}
+</code></pre>
+
+<p>Performs operations on the metadata of a message. Metadata are key/value pairs
+that are associated with message parts of a batch. Metadata values can be
+referred to using configuration
+<a href="../config_interpolation/#metadata">interpolation functions</a>,
+which allow you to set fields in certain outputs using these dynamic values.</p>
+<p>This processor will interpolate functions within the <code>value</code> field,
+you can find a list of functions <a href="../config_interpolation/#functions">here</a>.
+This allows you to set the contents of a metadata field using values taken from
+the message payload.</p>
+<p>Value interpolations are resolved once per batch. In order to resolve them per
+message of a batch place it within a <a href="#for_each"><code>for_each</code></a>
+processor:</p>
+<pre><code class="yaml">type: for_each
+for_each:
+- type: metadata
+  metadata:
+    operator: set
+    key: foo
+    value: ${!json_field:document.foo}
+</code></pre>
+
+<h3 id="operators_2">Operators</h3>
+<h4 id="set_2"><code>set</code></h4>
+<p>Sets the value of a metadata key.</p>
+<h4 id="delete_all"><code>delete_all</code></h4>
+<p>Removes all metadata values from the message.</p>
+<h4 id="delete_prefix"><code>delete_prefix</code></h4>
+<p>Removes all metadata values from the message where the key is prefixed with the
+value provided.</p>
+<h2 id="metric"><code>metric</code></h2>
+<pre><code class="yaml">type: metric
+metric:
+  labels: {}
+  path: &quot;&quot;
+  type: counter
+  value: &quot;&quot;
+</code></pre>
+
+<p>Expose custom metrics by extracting values from message batches. This processor
+executes once per batch, in order to execute once per message place it within a
+<a href="#for_each"><code>for_each</code></a> processor:</p>
+<pre><code class="yaml">type: for_each
+for_each:
+- type: metric
+  metric:
+    type: counter_by
+    path: count.custom.field
+    value: ${!json_field:field.some.value}
+</code></pre>
+
+<p>The <code>path</code> field should be a dot separated path of the metric to be
+set and will automatically be converted into the correct format of the
+configured metric aggregator.</p>
+<p>The <code>value</code> field can be set using function interpolations described
+<a href="../config_interpolation/#functions">here</a> and is used according to the
+specific type.</p>
+<h3 id="types">Types</h3>
+<h4 id="counter"><code>counter</code></h4>
+<p>Increments a counter by exactly 1, the contents of <code>value</code> are ignored
+by this type.</p>
+<h4 id="counter_parts"><code>counter_parts</code></h4>
+<p>Increments a counter by the number of parts within the message batch, the
+contents of <code>value</code> are ignored by this type.</p>
+<h4 id="counter_by"><code>counter_by</code></h4>
+<p>If the contents of <code>value</code> can be parsed as a positive integer value
+then the counter is incremented by this value.</p>
+<p>For example, the following configuration will increment the value of the
+<code>count.custom.field</code> metric by the contents of <code>field.some.value</code>:</p>
+<pre><code class="yaml">type: metric
+metric:
+  type: counter_by
+  path: count.custom.field
+  value: ${!json_field:field.some.value}
+</code></pre>
+
+<h4 id="gauge"><code>gauge</code></h4>
+<p>If the contents of <code>value</code> can be parsed as a positive integer value
+then the gauge is set to this value.</p>
+<p>For example, the following configuration will set the value of the
+<code>gauge.custom.field</code> metric to the contents of <code>field.some.value</code>:</p>
+<pre><code class="yaml">type: metric
+metric:
+  type: gauge
+  path: gauge.custom.field
+  value: ${!json_field:field.some.value}
+</code></pre>
+
+<h4 id="timing"><code>timing</code></h4>
+<p>Equivalent to <code>gauge</code> where instead the metric is a timing.</p>
+<h3 id="labels">Labels</h3>
+<p>Some metrics aggregators, such as Prometheus, support arbitrary labels, in which
+case the <code>labels</code> field can be used in order to create them. Label
+values can also be set using function interpolations in order to dynamically
+populate them with context about the message.</p>
+<h2 id="noop"><code>noop</code></h2>
+<pre><code class="yaml">type: noop
+</code></pre>
+
+<p>Noop is a no-op processor that does nothing, the message passes through
+unchanged.</p>
+<h2 id="parallel"><code>parallel</code></h2>
+<pre><code class="yaml">type: parallel
+parallel:
+  cap: 0
+  processors: []
+</code></pre>
+
+<p>A processor that applies a list of child processors to messages of a batch as
+though they were each a batch of one message (similar to the
+<a href="#for_each"><code>for_each</code></a> processor), but where each message is
+processed in parallel.</p>
+<p>The field <code>cap</code>, if greater than zero, caps the maximum number of
+parallel processing threads.</p>
+<h2 id="process_batch"><code>process_batch</code></h2>
+<pre><code class="yaml">type: process_batch
+process_batch: []
+</code></pre>
+
+<p>Alias for the <a href="#for_each"><code>for_each</code></a> processor, which should be used
+instead.</p>
+<h2 id="process_dag"><code>process_dag</code></h2>
+<pre><code class="yaml">type: process_dag
+process_dag: {}
+</code></pre>
+
+<p>A processor that manages a map of <code>process_map</code> processors and
+calculates a Directed Acyclic Graph (DAG) of their dependencies by referring to
+their postmap targets for provided fields and their premap targets for required
+fields.</p>
+<p>The DAG is then used to execute the children in the necessary order with the
+maximum parallelism possible.</p>
+<p>The field <code>dependencies</code> is an optional array of fields that a child
+depends on. This is useful for when fields are required but don't appear within
+a premap such as those used in conditions.</p>
+<p>This processor is extremely useful for performing a complex mesh of enrichments
+where network requests mean we desire maximum parallelism across those
+enrichments.</p>
+<p>For example, if we had three target HTTP services that we wished to enrich each
+document with - foo, bar and baz - where baz relies on the result of both foo
+and bar, we might express that relationship here like so:</p>
+<pre><code class="yaml">type: process_dag
+process_dag:
+  foo:
+    premap:
+      .: .
+    processors:
+    - type: http
+      http:
+        request:
+          url: http://foo/enrich
+    postmap:
+      foo_result: .
+  bar:
+    premap:
+      .: msg.sub.path
+    processors:
+    - type: http
+      http:
+        request:
+          url: http://bar/enrich
+    postmap:
+      bar_result: .
+  baz:
+    premap:
+      foo_obj: foo_result
+      bar_obj: bar_result
+    processors:
+    - type: http
+      http:
+        request:
+          url: http://baz/enrich
+    postmap:
+      baz_obj: .
+</code></pre>
+
+<p>With this config the DAG would determine that the children foo and bar can be
+executed in parallel, and once they are both finished we may proceed onto baz.</p>
+<h2 id="process_field"><code>process_field</code></h2>
+<pre><code class="yaml">type: process_field
+process_field:
+  parts: []
+  path: &quot;&quot;
+  processors: []
+</code></pre>
+
+<p>A processor that extracts the value of a field within payloads (currently only
+JSON format is supported) then applies a list of processors to the extracted
+value, and finally sets the field within the original payloads to the processed
+result.</p>
+<p>If the number of messages resulting from the processing steps does not match the
+original count then this processor fails and the messages continue unchanged.
+Therefore, you should avoid using batch and filter type processors in this list.</p>
+<h2 id="process_map"><code>process_map</code></h2>
+<pre><code class="yaml">type: process_map
+process_map:
+  conditions: []
+  parts: []
+  postmap: {}
+  postmap_optional: {}
+  premap: {}
+  premap_optional: {}
+  processors: []
+</code></pre>
+
+<p>A processor that extracts and maps fields from the original payload into new
+objects, applies a list of processors to the newly constructed objects, and
+finally maps the result back into the original payload.</p>
+<p>This processor is useful for performing processors on subsections of a payload.
+For example, you could extract sections of a JSON object in order to construct
+a request object for an <code>http</code> processor, then map the result back
+into a field within the original object.</p>
+<p>The order of stages of this processor are as follows:</p>
+<ul>
+<li>Conditions are applied to each <em>individual</em> message part in the batch,
+  determining whether the part will be mapped. If the conditions are empty all
+  message parts will be mapped. If the field <code>parts</code> is populated the
+  message parts not in this list are also excluded from mapping.</li>
+<li>Message parts that are flagged for mapping are mapped according to the premap
+  fields, creating a new object. If the premap stage fails (targets are not
+  found) the message part will not be processed.</li>
+<li>Message parts that are mapped are processed as a batch. You may safely break
+  the batch into individual parts during processing with the <code>split</code>
+  processor.</li>
+<li>After all child processors are applied to the mapped messages they are mapped
+  back into the original message parts they originated from as per your postmap.
+  If the postmap stage fails the mapping is skipped and the message payload
+  remains as it started.</li>
+</ul>
+<p>Map paths are arbitrary dot paths, target path hierarchies are constructed if
+they do not yet exist. Processing is skipped for message parts where the premap
+targets aren't found, for optional premap targets use <code>premap_optional</code>.</p>
+<p>Map target paths that are parents of other map target paths will always be
+mapped first, therefore it is possible to map subpath overrides.</p>
+<p>If postmap targets are not found the merge is abandoned, for optional postmap
+targets use <code>postmap_optional</code>.</p>
+<p>If the premap is empty then the full payload is sent to the processors, if the
+postmap is empty then the processed result replaces the original contents
+entirely.</p>
+<p>Maps can reference the root of objects either with an empty string or '.', for
+example the maps:</p>
+<pre><code class="yaml">premap:
+  .: foo.bar
+postmap:
+  foo.bar: .
+</code></pre>
+
+<p>Would create a new object where the root is the value of <code>foo.bar</code> and
+would map the full contents of the result back into <code>foo.bar</code>.</p>
+<p>If the number of total message parts resulting from the processing steps does
+not match the original count then this processor fails and the messages continue
+unchanged. Therefore, you should avoid using batch and filter type processors in
+this list.</p>
+<h3 id="batch-ordering">Batch Ordering</h3>
+<p>This processor supports batch messages. When message parts are post-mapped after
+processing they will be correctly aligned with the original batch. However, the
+ordering of premapped message parts as they are sent through processors are not
+guaranteed to match the ordering of the original batch.</p>
+<h2 id="sample"><code>sample</code></h2>
+<pre><code class="yaml">type: sample
+sample:
+  retain: 10
+  seed: 0
+</code></pre>
+
+<p>Retains a randomly sampled percentage of message batches (0 to 100) and drops
+all others. The random seed is static in order to sample deterministically, but
+can be set in config to allow parallel samples that are unique.</p>
+<h2 id="select_parts"><code>select_parts</code></h2>
+<pre><code class="yaml">type: select_parts
+select_parts:
+  parts:
+  - 0
+</code></pre>
+
+<p>Cherry pick a set of messages from a batch by their index. Indexes larger than
+the number of messages are simply ignored.</p>
+<p>The selected parts are added to the new message batch in the same order as the
+selection array. E.g. with 'parts' set to [ 2, 0, 1 ] and the message parts
+[ '0', '1', '2', '3' ], the output will be [ '2', '0', '1' ].</p>
+<p>If none of the selected parts exist in the input batch (resulting in an empty
+output message) the batch is dropped entirely.</p>
+<p>Message indexes can be negative, and if so the part will be selected from the
+end counting backwards starting from -1. E.g. if index = -1 then the selected
+part will be the last part of the message, if index = -2 then the part before
+the last element with be selected, and so on.</p>
+<h2 id="sleep"><code>sleep</code></h2>
+<pre><code class="yaml">type: sleep
+sleep:
+  duration: 100us
+</code></pre>
+
+<p>Sleep for a period of time specified as a duration string. This processor will
+interpolate functions within the <code>duration</code> field, you can find a list
+of functions <a href="../config_interpolation/#functions">here</a>.</p>
+<p>This processor executes once per message batch. In order to execute once for
+each message of a batch place it within a
+<a href="#for_each"><code>for_each</code></a> processor:</p>
+<pre><code class="yaml">type: for_each
+for_each:
+- type: sleep
+  sleep:
+    duration: ${!metadata:sleep_for}
+</code></pre>
+
+<h2 id="split"><code>split</code></h2>
+<pre><code class="yaml">type: split
+split:
+  byte_size: 0
+  size: 1
+</code></pre>
+
+<p>Breaks message batches (synonymous with multiple part messages) into smaller
+batches. The size of the resulting batches are determined either by a discrete
+size or, if the field <code>byte_size</code> is non-zero, then by total size in
+bytes (which ever limit is reached first).</p>
+<p>If there is a remainder of messages after splitting a batch the remainder is
+also sent as a single batch. For example, if your target size was 10, and the
+processor received a batch of 95 message parts, the result would be 9 batches of
+10 messages followed by a batch of 5 messages.</p>
+<h2 id="sql"><code>sql</code></h2>
+<pre><code class="yaml">type: sql
+sql:
+  args: []
+  driver: mysql
+  dsn: &quot;&quot;
+  query: &quot;&quot;
+  result_codec: none
+</code></pre>
+
+<p>SQL is a processor that runs a query against a target database for each message
+batch and, for queries that return rows, replaces the batch with the result.</p>
+<p>In order to execute an SQL query for each message of the batch use this
+processor within a <a href="#for_each"><code>for_each</code></a> processor.</p>
+<p>If a query contains arguments they can be set as an array of strings supporting
+<a href="../config_interpolation/#functions">interpolation functions</a> in the
+<code>args</code> field:</p>
+<pre><code class="yaml">type: sql
+sql:
+  driver: mysql
+  dsn: foouser:foopassword@tcp(localhost:3306)/foodb
+  query: &quot;INSERT INTO footable (foo, bar, baz) VALUES (?, ?, ?);&quot;
+  args:
+  - ${!json_field:document.foo}
+  - ${!json_field:document.bar}
+  - ${!metadata:kafka_topic}
+</code></pre>
+
+<h3 id="result-codecs">Result Codecs</h3>
+<p>When a query returns rows they are serialised according to a chosen codec, and
+the batch contents are replaced with the serialised result.</p>
+<h4 id="none"><code>none</code></h4>
+<p>The result of the query is ignored and the message batch remains unchanged. If
+your query does not return rows then this is the appropriate codec.</p>
+<h4 id="json_array"><code>json_array</code></h4>
+<p>The resulting rows are serialised into an array of JSON objects, where each
+object represents a row, where the key is the column name and the value is that
+columns value in the row.</p>
+<h3 id="drivers">Drivers</h3>
+<p>The following is a list of supported drivers and their respective DSN formats:</p>
+<ul>
+<li><code>mysql</code>: <code>[username[:password]@][protocol[(address)]]/dbname[?param1=value1&amp;...&amp;paramN=valueN]</code></li>
+<li><code>postgres</code>: <code>postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&amp;...]</code></li>
+</ul>
+<h2 id="subprocess"><code>subprocess</code></h2>
+<pre><code class="yaml">type: subprocess
+subprocess:
+  args: []
+  name: cat
+  parts: []
+</code></pre>
+
+<p>Subprocess is a processor that runs a process in the background and, for each
+message, will pipe its contents to the stdin stream of the process followed by a
+newline.</p>
+<p>The subprocess must then either return a line over stdout or stderr. If a
+response is returned over stdout then its contents will replace the message. If
+a response is instead returned from stderr will be logged and the message will
+continue unchanged and will be marked as failed.</p>
+<h4 id="subprocess-requirements">Subprocess requirements</h4>
+<p>It is required that subprocesses flush their stdout and stderr pipes for each
+line.</p>
+<p>Benthos will attempt to keep the process alive for as long as the pipeline is
+running. If the process exits early it will be restarted.</p>
+<h4 id="messages-containing-line-breaks">Messages containing line breaks</h4>
+<p>If a message contains line breaks each line of the message is piped to the
+subprocess and flushed, and a response is expected from the subprocess before
+another line is fed in.</p>
+<h2 id="switch"><code>switch</code></h2>
+<pre><code class="yaml">type: switch
+switch: []
+</code></pre>
+
+<p>Switch is a processor that lists child case objects each containing a condition
+and processors. Each batch of messages is tested against the condition of each
+child case until a condition passes, whereby the processors of that case will be
+executed on the batch.</p>
+<p>Each case may specify a boolean <code>fallthrough</code> field indicating whether
+the next case should be executed after it (the default is <code>false</code>.)</p>
+<p>A case takes this form:</p>
+<pre><code class="yaml">- condition:
+    type: foo
+  processors:
+  - type: foo
+  fallthrough: false
+</code></pre>
+
+<p>In order to switch each message of a batch individually use this processor with
+the <a href="#for_each"><code>for_each</code></a> processor.</p>
+<p>You can find a <a href="../conditions">full list of conditions here</a>.</p>
+<h2 id="text"><code>text</code></h2>
+<pre><code class="yaml">type: text
+text:
+  arg: &quot;&quot;
+  operator: trim_space
+  parts: []
+  value: &quot;&quot;
+</code></pre>
+
+<p>Performs text based mutations on payloads.</p>
+<p>This processor will interpolate functions within the <code>value</code> field,
+you can find a list of functions <a href="../config_interpolation/#functions">here</a>.</p>
+<p>Value interpolations are resolved once per message batch, in order to resolve it
+for each message of the batch place it within a
+<a href="#for_each"><code>for_each</code></a> processor:</p>
+<pre><code class="yaml">type: for_each
+for_each:
+- type: text
+  text:
+    operator: set
+    value: ${!json_field:document.content}
+</code></pre>
+
+<h3 id="operators_3">Operators</h3>
+<h4 id="append_1"><code>append</code></h4>
+<p>Appends text to the end of the payload.</p>
+<h4 id="escape_url_query"><code>escape_url_query</code></h4>
+<p>Escapes text so that it is safe to place within the query section of a URL.</p>
+<h4 id="unescape_url_query"><code>unescape_url_query</code></h4>
+<p>Unescapes text that has been url escaped.</p>
+<h4 id="find_regexp"><code>find_regexp</code></h4>
+<p>Extract the matching section of the argument regular expression in a message.</p>
+<h4 id="prepend"><code>prepend</code></h4>
+<p>Prepends text to the beginning of the payload.</p>
+<h4 id="quote"><code>quote</code></h4>
+<p>Returns a doubled-quoted string, using escape sequences (\t, \n, \xFF, \u0100)
+for control characters and other non-printable characters.</p>
+<h4 id="replace"><code>replace</code></h4>
+<p>Replaces all occurrences of the argument in a message with a value.</p>
+<h4 id="replace_regexp"><code>replace_regexp</code></h4>
+<p>Replaces all occurrences of the argument regular expression in a message with a
+value. Inside the value $ signs are interpreted as submatch expansions, e.g. $1
+represents the text of the first submatch.</p>
+<h4 id="set_3"><code>set</code></h4>
+<p>Replace the contents of a message entirely with a value.</p>
+<h4 id="strip_html"><code>strip_html</code></h4>
+<p>Removes all HTML tags from a message.</p>
+<h4 id="to_lower"><code>to_lower</code></h4>
+<p>Converts all text into lower case.</p>
+<h4 id="to_upper"><code>to_upper</code></h4>
+<p>Converts all text into upper case.</p>
+<h4 id="trim"><code>trim</code></h4>
+<p>Removes all leading and trailing occurrences of characters within the arg field.</p>
+<h4 id="trim_space"><code>trim_space</code></h4>
+<p>Removes all leading and trailing whitespace from the payload.</p>
+<h4 id="unquote"><code>unquote</code></h4>
+<p>Unquotes a single, double, or back-quoted string literal</p>
+<h2 id="throttle"><code>throttle</code></h2>
+<pre><code class="yaml">type: throttle
+throttle:
+  period: 100us
+</code></pre>
+
+<p>Throttles the throughput of a pipeline to a maximum of one message batch per
+period. This throttle is per processing pipeline, and therefore four threads
+each with a throttle would result in four times the rate specified.</p>
+<p>The period should be specified as a time duration string. For example, '1s'
+would be 1 second, '10ms' would be 10 milliseconds, etc.</p>
+<h2 id="try"><code>try</code></h2>
+<pre><code class="yaml">type: try
+try: []
+</code></pre>
+
+<p>Behaves similarly to the <a href="#for_each"><code>for_each</code></a> processor, where a
+list of child processors are applied to individual messages of a batch. However,
+if a processor fails for a message then that message will skip all following
+processors.</p>
+<p>For example, with the following config:</p>
+<pre><code class="yaml">- type: try
+  try:
+  - type: foo
+  - type: bar
+  - type: baz
+</code></pre>
+
+<p>If the processor <code>foo</code> fails for a particular message, that message
+will skip the processors <code>bar</code> and <code>baz</code>.</p>
+<p>This processor is useful for when child processors depend on the successful
+output of previous processors. This processor can be followed with a
+<a href="#catch">catch</a> processor for defining child processors to be applied
+only to failed messages.</p>
+<p>More information about error handing can be found <a href="../error_handling/">here</a>.</p>
+<h2 id="unarchive"><code>unarchive</code></h2>
+<pre><code class="yaml">type: unarchive
+unarchive:
+  format: binary
+  parts: []
+</code></pre>
+
+<p>Unarchives messages according to the selected archive format into multiple
+messages within a batch. Supported archive formats are:
+<code>tar</code>, <code>zip</code>, <code>binary</code>, <code>lines</code>, <code>json_documents</code> and <code>json_array</code>.</p>
+<p>When a message is unarchived the new messages replaces the original message in
+the batch. Messages that are selected but fail to unarchive (invalid format)
+will remain unchanged in the message batch but will be flagged as having failed.</p>
+<p>The <code>json_documents</code> format attempts to parse the message as a stream
+of concatenated JSON documents. Each parsed document is expanded into a new
+message.</p>
+<p>The <code>json_array</code> format attempts to parse the message as a JSON array
+and for each element of the array expands its contents into a new message.</p>
+<p>For the unarchive formats that contain file information (tar, zip), a metadata
+field is added to each message called <code>archive_filename</code> with the
+extracted filename.</p>
+<h2 id="while"><code>while</code></h2>
+<pre><code class="yaml">type: while
+while:
+  at_least_once: false
+  condition:
+    type: text
+    text:
+      arg: &quot;&quot;
+      operator: equals_cs
+      part: 0
+  max_loops: 0
+  processors: []
+</code></pre>
+
+<p>While is a processor that has a condition and a list of child processors. The
+child processors are executed continously on a message batch for as long as the
+child condition resolves to true.</p>
+<p>The field <code>at_least_once</code>, if true, ensures that the child processors
+are always executed at least one time (like a do .. while loop.)</p>
+<p>The field <code>max_loops</code>, if greater than zero, caps the number of loops
+for a message batch to this value.</p>
+<p>If following a loop execution the number of messages in a batch is reduced to
+zero the loop is exited regardless of the condition result. If following a loop
+execution there are more than 1 message batches the condition is checked against
+the first batch only.</p>
+<p>You can find a <a href="../conditions">full list of conditions here</a>.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

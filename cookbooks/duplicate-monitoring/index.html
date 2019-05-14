@@ -204,23 +204,19 @@ combination of string fields at the paths <code>document.id</code> and <code>doc
 <p>Here's the config (omitting our input and output sections for brevity):</p>
 <pre><code class="yaml">pipeline:
   processors:
-  - type: cache
-    cache:
+  - cache:
       cache: dupes
       key: &quot;${!json_field:document.id}_${!json_field:document.user.id}&quot;
       operator: add
       value: &quot;x&quot;
-  - type: catch
-    catch:
-    - type: metric
-      metric:
+  - catch:
+    - metric:
         type: counter
         path: duplicate_id
 
 resources:
   caches:
     dupes:
-      type: memory
       memory:
         ttl: 300
 
@@ -244,8 +240,7 @@ us to share the cache across multiple instances of this pipeline.</p>
 <p>Remember that within the metric processor it's also possible to label these
 counts with extra information. For example, we could label our counters with the
 source Kafka topic and partition:</p>
-<pre><code class="yaml">      - type: metric
-        metric:
+<pre><code class="yaml">      - metric:
           type: counter
           path: duplicate_id
           labels:
@@ -269,24 +264,19 @@ prevents the hash result from being added into the original message contents.</p
 this:</p>
 <pre><code class="yaml">pipeline:
   processors:
-  - type: process_map
-    process_map:
+  - process_map:
       processors:
-      - type: hash
-        hash:
+      - hash:
           algorithm: xxhash64
-      - type: cache
-        cache:
+      - cache:
           cache: dupes
           key: &quot;${!content}&quot;
           operator: add
           value: &quot;x&quot;
       postmap_optional:
         will: never.exist
-  - type: catch
-    catch:
-    - type: metric
-      metric:
+  - catch:
+    - metric:
         type: counter
         path: duplicate_hash
 </code></pre></div>

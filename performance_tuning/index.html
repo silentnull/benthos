@@ -230,19 +230,16 @@ AMQP consumer can greatly increase the rate at which it is consumed.</p>
 that within Benthos by using a <a href="../inputs/#broker">broker</a>. For example, if you
 started with:</p>
 <pre><code class="yaml">input:
-  type: foo
   foo:
     field1: etc
 </code></pre>
 
 <p>You could change to:</p>
 <pre><code class="yaml">input:
-  type: broker
   broker:
     copies: 4
     inputs:
-    - type: foo
-      foo:
+    - foo:
         field1: etc
 </code></pre>
 
@@ -284,8 +281,7 @@ config:</p>
 <pre><code class="yaml">input:
   type: foo
   processors:
-  - type: batch
-    batch:
+  - batch:
       count: 8
 output:
   type: kafka
@@ -313,20 +309,17 @@ type supports a few different routing patterns depending on your intention. In
 this case we want to maximize throughput so our best choice is a <code>greedy</code>
 pattern. For example, if you started with:</p>
 <pre><code class="yaml">output:
-  type: foo
   foo:
     field1: etc
 </code></pre>
 
 <p>You could change to:</p>
 <pre><code class="yaml">output:
-  type: broker
   broker:
     pattern: greedy
     copies: 4
     outputs:
-    - type: foo
-      foo:
+    - foo:
         field1: etc
 </code></pre>
 

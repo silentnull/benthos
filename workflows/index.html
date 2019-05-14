@@ -294,8 +294,7 @@ failure after those attempts as the equivalent of a <code>400</code> status code
 The postmap targets are either the object <code>bar</code> or <code>baz</code>, and both are optional
 since we aren't sure which will be present.</p>
 <pre><code class="yaml">processors:
-- type: http
-  http:
+- http:
     parallel: true
     request:
       url: http://fooserve/enrich
@@ -320,8 +319,7 @@ stage.</p>
 <pre><code class="yaml">premap:
   .: tmp.enrichments.bar
 processors:
-- type: http
-  http:
+- http:
     parallel: true
     request:
       url: http://barserve/enrich
@@ -342,8 +340,7 @@ provide this target they will both be run before this stage.</p>
 <pre><code class="yaml">premap:
   .: tmp.enrichments.baz
 processors:
-- type: http
-  http:
+- http:
     parallel: true
     request:
       url: http://bazserve/enrich
@@ -368,12 +365,10 @@ from the payload, therefore we add a condition that performs this check.</p>
 <pre><code class="yaml">dependencies:
 - tmp.enrichments.qux
 conditions:
-- type: jmespath
-  jmespath:
+- jmespath:
     query: 'tmp.enrichments.qux == `null`'
 processors:
-- type: http
-  http:
+- http:
     parallel: true
     request:
       url: http://recoverserve/enrich
@@ -396,12 +391,10 @@ already have our enrichment at <code>tmp.enrichments.qux</code>.</p>
 
 pipeline:
   processors:
-  - type: process_dag
-    process_dag:
+  - process_dag:
       A:
         processors:
-        - type: http
-          http:
+        - http:
             parallel: true
             request:
               url: http://fooserve/enrich
@@ -419,8 +412,7 @@ pipeline:
         premap:
           .: tmp.enrichments.bar
         processors:
-        - type: http
-          http:
+        - http:
             parallel: true
             request:
               url: http://barserve/enrich
@@ -437,8 +429,7 @@ pipeline:
         premap:
           .: tmp.enrichments.baz
         processors:
-        - type: http
-          http:
+        - http:
             parallel: true
             request:
               url: http://bazserve/enrich
@@ -455,12 +446,10 @@ pipeline:
         dependencies:
         - tmp.enrichments.qux
         conditions:
-        - type: jmespath
-          jmespath:
+        - jmespath:
             query: 'tmp.enrichments.qux == `null`'
         processors:
-        - type: http
-          http:
+        - http:
             parallel: true
             request:
               url: http://recoverserve/enrich

@@ -189,6 +189,7 @@
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#configuration">Configuration</a></li>
             <li><a href="#contents">Contents</a></li>
+            <li><a href="#concise-configuration">Concise Configuration</a></li>
             <li><a href="#customising-your-configuration">Customising Your Configuration</a></li>
             <li><a href="#reusing-configuration-snippets">Reusing Configuration Snippets</a></li>
             <li><a href="#enabling-discovery">Enabling Discovery</a></li>
@@ -240,11 +241,33 @@ files. This document outlines tooling provided by Benthos to help with writing
 and managing these more complex configuration files.</p>
 <h2 id="contents">Contents</h2>
 <ul>
+<li><a href="#concise-configuration">Concise Configuration</a></li>
 <li><a href="#customising-your-configuration">Customising Your Configuration</a></li>
 <li><a href="#reusing-configuration-snippets">Reusing Configuration Snippets</a></li>
 <li><a href="#enabling-discovery">Enabling Discovery</a></li>
 <li><a href="#help-with-debugging">Help With Debugging</a></li>
 </ul>
+<h2 id="concise-configuration">Concise Configuration</h2>
+<p>It's often possible to make your configuration files more concise but less
+explicit by omitting the <code>type</code> field in components as well as any fields that
+are default. For example, the above configuration could be written as:</p>
+<pre><code class="yaml">input:
+  kafka_balanced:
+    addresses: [ TODO ]
+    topics: [ foo, bar ]
+    consumer_group: foogroup
+
+pipeline:
+  processors:
+  - jmespath:
+      query: '{ message: @, meta: { link_count: length(links) } }'
+
+output:
+  s3:
+    bucket: TODO
+    path: &quot;${!metadata:kafka_topic}/${!json_field:message.id}.json&quot;
+</code></pre>
+
 <h2 id="customising-your-configuration">Customising Your Configuration</h2>
 <p>Sometimes it's useful to write a configuration where certain fields can be
 defined during deployment. For this purpose Benthos supports
@@ -261,6 +284,18 @@ in your config with environment variables like so:</p>
 
 <p>This is very useful for sharing configuration files across different deployment
 environments.</p>
+<p>It's also possible to use <code>type</code> fields for environment variable based feature
+toggles. For example, the following config:</p>
+<pre><code class="yaml">type: ${FEATURE:noop}
+jmespath:
+  query: '{ enveloped: @ }'
+text:
+  operator: set
+  text: &quot;Wrapped: ${!content}&quot;
+</code></pre>
+
+<p>Allows us to use the env var <code>FEATURE</code> to choose between two different processor
+steps (or neither.)</p>
 <h2 id="reusing-configuration-snippets">Reusing Configuration Snippets</h2>
 <p>It's possible to break a large configuration file into smaller parts with
 <a href="https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03">JSON references</a>. Benthos doesn't yet support the full

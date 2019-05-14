@@ -233,7 +233,6 @@ pipeline:
   threads: 1
   processors: []
 output:
-  type: kafka
   kafka:
     addresses:
     - localhost:9092
@@ -245,7 +244,8 @@ output:
 </code></pre>
 
 <p>With this config you can write messages in the terminal and they will be sent to
-your chosen Kafka topic, how exciting!</p>
+your chosen Kafka topic, how exciting! You can find out more about Benthos
+configuration files <a href="../configuration/">here</a>.</p>
 <p>Next, we might want to add some processing steps in order to mutate the
 messages. For example, we could add a <a href="../processors/#text"><code>text</code></a>
 processor that converts all text into upper case:</p>
@@ -256,11 +256,9 @@ buffer:
 pipeline:
   threads: 1
   processors:
-  - type: text
-    text:
+  - text:
       operator: to_upper
 output:
-  type: kafka
   kafka:
     addresses:
     - localhost:9092

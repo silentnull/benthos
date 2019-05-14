@@ -228,14 +228,12 @@ when they have reached their final destination.</p>
 <p>It is good practice to always expand or contract batches within the <code>input</code>
 section. Like this, for example:</p>
 <pre><code class="yaml">input:
-  type: broker
   broker:
     inputs:
     - type: foo
     - type: bar
   processors:
-  - type: batch
-    batch:
+  - batch:
       byte_size: 20_000_000
 </code></pre>
 
@@ -262,13 +260,10 @@ this with the <a href="../processors/#for_each"><code>for_each</code></a> proces
 <pre><code class="yaml">input:
   type: foo
   processors:
-  - type: batch
-    batch:
+  - batch:
       byte_size: 20_000_000
-  - type: for_each
-    for_each:
-    - type: dedupe
-      dedupe:
+  - for_each:
+    - dedupe:
         cache: foocache
         key: ${!json_field:foo.bar}
 </code></pre>

@@ -494,25 +494,21 @@ message payload, since it fails when a key already exists we can remove the
 duplicates using a
 <a href="../conditions/#processor_failed"><code>processor_failed</code></a>
 condition:</p>
-<pre><code class="yaml">- type: cache
-  cache:
+<pre><code class="yaml">- cache:
     cache: TODO
     operator: add
     key: &quot;${!json_field:message.id}&quot;
     value: &quot;storeme&quot;
-- type: filter_parts
-  filter_parts:
+- filter_parts:
     type: processor_failed
 </code></pre>
 
 <h4 id="hydration">Hydration</h4>
 <p>It's possible to enrich payloads with content previously stored in a cache by
 using the <a href="#process_dag"><code>process_dag</code></a> processor:</p>
-<pre><code class="yaml">- type: process_map
-  process_map:
+<pre><code class="yaml">- process_map:
     processors:
-    - type: cache
-      cache:
+    - cache:
         cache: TODO
         operator: get
         key: &quot;${!json_field:message.document_id}&quot;
@@ -531,8 +527,7 @@ processors are only applied to messages that failed a processing step prior to
 the catch.</p>
 <p>For example, with the following config:</p>
 <pre><code class="yaml">- type: foo
-- type: catch
-  catch:
+- catch:
   - type: bar
   - type: baz
 </code></pre>
@@ -721,13 +716,11 @@ original batch. Once the groups are established a list of processors are applied
 to their respective grouped batch, which can be used to label the batch as per
 their grouping.</p>
 <p>Each group is configured in a list with a condition and a list of processors:</p>
-<pre><code class="yaml">type: group_by
-group_by:
-  - condition:
-      type: static
-      static: true
-    processors:
-      - type: noop
+<pre><code class="yaml">group_by:
+- condition:
+    static: true
+  processors:
+  - type: noop
 </code></pre>
 
 <p>Messages are added to the first group that passes and can only belong to a
@@ -740,33 +733,26 @@ gzip archive. For this purpose we can use the <code>group_by</code> processor
 with a <a href="../outputs/#switch"><code>switch</code></a> output:</p>
 <pre><code class="yaml">pipeline:
   processors:
-  - type: group_by
-    group_by:
+  - group_by:
     - condition:
-        type: text
         text:
           operator: contains
           arg: &quot;this is a foo&quot;
       processors:
-      - type: archive
-        archive:
+      - archive:
           format: tar
-      - type: compress
-        compress:
+      - compress:
           algorithm: gzip
-      - type: metadata
-        metadata:
+      - metadata:
           operator: set
           key: grouping
           value: foo
 output:
-  type: switch
   switch:
     outputs:
     - output:
         type: foo_output
       condition:
-        type: metadata
         metadata:
           operator: equals
           key: grouping
@@ -794,17 +780,13 @@ their key, archive the groups, and send them to S3 with the key as part of the
 path we could achieve that with the following:</p>
 <pre><code class="yaml">pipeline:
   processors:
-  - type: group_by_value
-    group_by_value:
+  - group_by_value:
       value: ${!metadata:kafka_key}
-  - type: archive
-    archive:
+  - archive:
       format: tar
-  - type: compress
-    compress:
+  - compress:
       algorithm: gzip
 output:
-  type: s3
   s3:
     bucket: TODO
     path: docs/${!metadata:kafka_key}/${!count:files}-${!timestamp_unix_nano}.tar.gz
@@ -826,8 +808,7 @@ specific field of a document like this:</p>
 process_field:
   path: foo.bar
   processors:
-  - type: hash
-    hash:
+  - hash:
       algorithm: sha256
 </code></pre>
 
@@ -1076,10 +1057,8 @@ allows you to log the contents and metadata of a messages within a batch.</p>
 pipeline in order to expose the JSON field <code>foo.bar</code> as well as the
 metadata field <code>kafka_partition</code> we can achieve that with the
 following config:</p>
-<pre><code class="yaml">type: for_each
-for_each:
-- type: log
-  log:
+<pre><code class="yaml">for_each:
+- log:
     level: DEBUG
     message: &quot;field: ${!json_field:foo.bar}, part: ${!metadata:kafka_partition}&quot;
 </code></pre>
@@ -1091,8 +1070,7 @@ can be any of the following values: TRACE, DEBUG, INFO, WARN, ERROR.</p>
 the service log is set to output as JSON. The field values are function
 interpolated, meaning it's possible to output structured fields containing
 message contents and metadata, e.g.:</p>
-<pre><code class="yaml">type: log
-log:
+<pre><code class="yaml">log:
   level: DEBUG
   message: &quot;foo&quot;
   fields:
@@ -1133,10 +1111,8 @@ the message payload.</p>
 <p>Value interpolations are resolved once per batch. In order to resolve them per
 message of a batch place it within a <a href="#for_each"><code>for_each</code></a>
 processor:</p>
-<pre><code class="yaml">type: for_each
-for_each:
-- type: metadata
-  metadata:
+<pre><code class="yaml">for_each:
+- metadata:
     operator: set
     key: foo
     value: ${!json_field:document.foo}
@@ -1162,10 +1138,8 @@ metric:
 <p>Expose custom metrics by extracting values from message batches. This processor
 executes once per batch, in order to execute once per message place it within a
 <a href="#for_each"><code>for_each</code></a> processor:</p>
-<pre><code class="yaml">type: for_each
-for_each:
-- type: metric
-  metric:
+<pre><code class="yaml">for_each:
+- metric:
     type: counter_by
     path: count.custom.field
     value: ${!json_field:field.some.value}
@@ -1189,8 +1163,7 @@ contents of <code>value</code> are ignored by this type.</p>
 then the counter is incremented by this value.</p>
 <p>For example, the following configuration will increment the value of the
 <code>count.custom.field</code> metric by the contents of <code>field.some.value</code>:</p>
-<pre><code class="yaml">type: metric
-metric:
+<pre><code class="yaml">metric:
   type: counter_by
   path: count.custom.field
   value: ${!json_field:field.some.value}
@@ -1201,8 +1174,7 @@ metric:
 then the gauge is set to this value.</p>
 <p>For example, the following configuration will set the value of the
 <code>gauge.custom.field</code> metric to the contents of <code>field.some.value</code>:</p>
-<pre><code class="yaml">type: metric
-metric:
+<pre><code class="yaml">metric:
   type: gauge
   path: gauge.custom.field
   value: ${!json_field:field.some.value}
@@ -1261,14 +1233,12 @@ enrichments.</p>
 <p>For example, if we had three target HTTP services that we wished to enrich each
 document with - foo, bar and baz - where baz relies on the result of both foo
 and bar, we might express that relationship here like so:</p>
-<pre><code class="yaml">type: process_dag
-process_dag:
+<pre><code class="yaml">process_dag:
   foo:
     premap:
       .: .
     processors:
-    - type: http
-      http:
+    - http:
         request:
           url: http://foo/enrich
     postmap:
@@ -1277,8 +1247,7 @@ process_dag:
     premap:
       .: msg.sub.path
     processors:
-    - type: http
-      http:
+    - http:
         request:
           url: http://bar/enrich
     postmap:
@@ -1288,8 +1257,7 @@ process_dag:
       foo_obj: foo_result
       bar_obj: bar_result
     processors:
-    - type: http
-      http:
+    - http:
         request:
           url: http://baz/enrich
     postmap:
@@ -1418,10 +1386,8 @@ of functions <a href="../config_interpolation/#functions">here</a>.</p>
 <p>This processor executes once per message batch. In order to execute once for
 each message of a batch place it within a
 <a href="#for_each"><code>for_each</code></a> processor:</p>
-<pre><code class="yaml">type: for_each
-for_each:
-- type: sleep
-  sleep:
+<pre><code class="yaml">for_each:
+- sleep:
     duration: ${!metadata:sleep_for}
 </code></pre>
 
@@ -1452,20 +1418,20 @@ sql:
 
 <p>SQL is a processor that runs a query against a target database for each message
 batch and, for queries that return rows, replaces the batch with the result.</p>
-<p>In order to execute an SQL query for each message of the batch use this
-processor within a <a href="#for_each"><code>for_each</code></a> processor.</p>
 <p>If a query contains arguments they can be set as an array of strings supporting
 <a href="../config_interpolation/#functions">interpolation functions</a> in the
-<code>args</code> field:</p>
-<pre><code class="yaml">type: sql
-sql:
-  driver: mysql
-  dsn: foouser:foopassword@tcp(localhost:3306)/foodb
-  query: &quot;INSERT INTO footable (foo, bar, baz) VALUES (?, ?, ?);&quot;
-  args:
-  - ${!json_field:document.foo}
-  - ${!json_field:document.bar}
-  - ${!metadata:kafka_topic}
+<code>args</code> field.</p>
+<p>In order to execute an SQL query for each message of the batch use this
+processor within a <a href="#for_each"><code>for_each</code></a> processor:</p>
+<pre><code class="yaml">for_each:
+- sql:
+    driver: mysql
+    dsn: foouser:foopassword@tcp(localhost:3306)/foodb
+    query: &quot;INSERT INTO footable (foo, bar, baz) VALUES (?, ?, ?);&quot;
+    args:
+    - ${!json_field:document.foo}
+    - ${!json_field:document.bar}
+    - ${!metadata:kafka_topic}
 </code></pre>
 
 <h3 id="result-codecs">Result Codecs</h3>
@@ -1545,10 +1511,8 @@ you can find a list of functions <a href="../config_interpolation/#functions">he
 <p>Value interpolations are resolved once per message batch, in order to resolve it
 for each message of the batch place it within a
 <a href="#for_each"><code>for_each</code></a> processor:</p>
-<pre><code class="yaml">type: for_each
-for_each:
-- type: text
-  text:
+<pre><code class="yaml">for_each:
+- text:
     operator: set
     value: ${!json_field:document.content}
 </code></pre>
@@ -1608,8 +1572,7 @@ list of child processors are applied to individual messages of a batch. However,
 if a processor fails for a message then that message will skip all following
 processors.</p>
 <p>For example, with the following config:</p>
-<pre><code class="yaml">- type: try
-  try:
+<pre><code class="yaml">- try:
   - type: foo
   - type: bar
   - type: baz

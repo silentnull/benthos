@@ -242,7 +242,6 @@ parallel across our document batches.</p>
 document we will use the <a href="../../processors/#process_map"><code>process_map</code></a> processor, with a child
 <a href="../../processors/#http"><code>http</code></a> processor.</p>
 <pre><code class="yaml">input:
-  type: kafka_balanced
   kafka_balanced:
     addresses:
     - TODO
@@ -253,13 +252,11 @@ document we will use the <a href="../../processors/#process_map"><code>process_m
 
 pipeline:
   processors:
-  - type: process_map
-    process_map:
+  - process_map:
       premap:
         text: article.content
       processors:
-      - type: http
-        http:
+      - http:
           parallel: true
           request:
             url: http://localhost:4197/claims
@@ -268,7 +265,6 @@ pipeline:
         tmp.claims: claims
 
 output:
-  type: kafka
   kafka:
     addresses:
     - TODO
@@ -307,22 +303,18 @@ in a single request, making better use of the host machines GPU.</p>
 map the result back into our batch, we will use the <a href="../../processors/#archive"><code>archive</code></a>
 and <a href="../../processors/#unarchive"><code>unarchive</code></a> processors in our
 <a href="../../processors/#process_map"><code>process_map</code></a> flow, like this:</p>
-<pre><code class="yaml">  - type: process_map
-    process_map:
+<pre><code class="yaml">  - process_map:
       premap:
         text: article.content
       processors:
-      - type: archive
-        archive:
+      - archive:
           format: json_array
-      - type: http
-        http:
+      - http:
           parallel: false
           request:
             url: http://localhost:4198/hyperbole
             verb: POST
-      - type: unarchive
-        unarchive:
+      - unarchive:
           format: json_array
       postmap:
         tmp.hyperbole_rank: hyperbole_rank
@@ -363,15 +355,13 @@ document of the form:</p>
 <p>We then wish to map the field <code>fake_news_rank</code> from that result into the
 original document at the path <code>article.fake_news_score</code>. Our
 <a href="../../processors/#process_map"><code>process_map</code></a> block for this enrichment would look like this:</p>
-<pre><code class="yaml">  - type: process_map
-    process_map:
+<pre><code class="yaml">  - process_map:
       premap:
         text: article.content
         claims: tmp.claims
         hyperbole_rank: tmp.hyperbole_rank
       processors:
-      - type: http
-        http:
+      - http:
           parallel: true
           request:
             url: http://localhost:4199/fakenews
@@ -400,7 +390,6 @@ giving us two key benefits:</p>
 <p>Using the <a href="../../processors/#process_dag"><code>process_dag</code></a> processor for our enrichments makes our
 final pipeline configuration look like this:</p>
 <pre><code class="yaml">input:
-  type: kafka_balanced
   kafka_balanced:
     addresses:
     - TODO
@@ -411,14 +400,12 @@ final pipeline configuration look like this:</p>
 
 pipeline:
   processors:
-  - type: process_dag
-    process_dag:
+  - process_dag:
       claims:
         premap:
           text: article.content
         processors:
-        - type: http
-          http:
+        - http:
             parallel: true
             request:
               url: http://localhost:4197/claims
@@ -430,17 +417,14 @@ pipeline:
         premap:
           text: article.content
         processors:
-        - type: archive
-          archive:
+        - archive:
             format: json_array
-        - type: http
-          http:
+        - http:
             parallel: false
             request:
               url: http://localhost:4198/hyperbole
               verb: POST
-        - type: unarchive
-          unarchive:
+        - unarchive:
             format: json_array
         postmap:
           tmp.hyperbole_rank: hyperbole_rank
@@ -451,8 +435,7 @@ pipeline:
           claims: tmp.claims
           hyperbole_rank: tmp.hyperbole_rank
         processors:
-        - type: http
-          http:
+        - http:
             parallel: true
             request:
               url: http://localhost:4199/fakenews
@@ -460,21 +443,17 @@ pipeline:
         postmap:
           article.fake_news_score: fake_news_rank
 
-  - type: catch
-    catch:
-    - type: log
-      log:
+  - catch:
+    - log:
         fields:
           content: &quot;${!content}&quot;
         message: &quot;Enrichments failed due to: ${!metadata:benthos_processing_failed}&quot;
 
-  - type: json
-    json:
+  - json:
       operator: delete
       path: tmp
 
 output:
-  type: kafka
   kafka:
     addresses:
     - TODO

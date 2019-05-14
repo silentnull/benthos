@@ -345,23 +345,21 @@ broker:
 <p>The broker output type allows you to configure multiple output targets by
 listing them:</p>
 <pre><code class="yaml">output:
-  type: broker
   broker:
     pattern: fan_out
     outputs:
-    - type: foo
-      foo:
+    - foo:
         foo_field_1: value1
-    - type: bar
-      bar:
+    - bar:
         bar_field_1: value2
         bar_field_2: value3
-    - type: baz
-      baz:
+    - baz:
         baz_field_1: value4
       processors:
+      # Processor only applied to messages sent to baz.
       - type: baz_processor
   processors:
+  # Processor applied to messages sent to any brokered output.
   - type: some_processor
 </code></pre>
 
@@ -428,14 +426,12 @@ types:</p>
 </ul>
 <p>Like follows:</p>
 <pre><code class="yaml">output:
-  type: cache
   cache:
     target: foo
     key: ${!json_field:document.id}
 resources:
   caches:
     foo:
-      type: memcached
       memcached:
         addresses:
         - localhost:11211
@@ -464,9 +460,7 @@ number of retry attempts before dropping a message.</p>
 output type <code>foo</code> three times, but if all three attempts fail the
 message is dropped entirely:</p>
 <pre><code class="yaml">output:
-  type: drop_on_error
   drop_on_error:
-    type: retry
     retry:
       max_retries: 2
       output:
@@ -989,33 +983,27 @@ containing both "foo" and "bar" will be sent to all three outputs. And finally,
 messages that do not contain "foo" or "bar" will be sent to the <code>baz</code>
 output only.</p>
 <pre><code class="yaml">output:
-  type: switch
   switch:
     retry_until_success: true
     outputs:
     - output:
-        type: foo
         foo:
           foo_field_1: value1
       condition:
-        type: text
         text:
           operator: contains
           arg: foo
       fallthrough: true
     - output:
-        type: bar
         bar:
           bar_field_1: value2
           bar_field_2: value3
       condition:
-        type: text
         text:
           operator: contains
           arg: bar
       fallthrough: true
     - output:
-        type: baz
         baz:
           baz_field_1: value4
         processors:

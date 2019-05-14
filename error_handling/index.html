@@ -218,8 +218,7 @@ messages that failed a previous stage using the <a href="../processors/#try"><co
 <h3 id="recover-failed-messages">Recover Failed Messages</h3>
 <p>Failed messages can be fed into their own processor steps with a
 <a href="../processors/#catch"><code>catch</code></a> processor:</p>
-<pre><code class="yaml">  - type: catch
-    catch:
+<pre><code class="yaml">  - catch:
     - type: foo # Recover here
 </code></pre>
 
@@ -227,10 +226,8 @@ messages that failed a previous stage using the <a href="../processors/#try"><co
 and are treated like regular messages. If this behaviour is not desired then it
 is possible to simulate a catch block with a <a href="../processors/#conditional"><code>conditional</code></a>
 processor placed within a <a href="../processors/#for_each"><code>for_each</code></a> processor:</p>
-<pre><code class="yaml">  - type: for_each
-    for_each:
-    - type: conditional
-      conditional:
+<pre><code class="yaml">  - for_each:
+    - conditional:
         condition:
           type: processor_failed
         processors:
@@ -240,10 +237,8 @@ processor placed within a <a href="../processors/#for_each"><code>for_each</code
 <h3 id="attempt-until-success">Attempt Until Success</h3>
 <p>It's possible to reattempt a processor for a particular message until it is
 successful with a <a href="../processors/#while"><code>while</code></a> processor:</p>
-<pre><code class="yaml">  - type: for_each
-    for_each:
-    - type: while
-      while:
+<pre><code class="yaml">  - for_each:
+    - while:
         at_least_once: true
         max_loops: 0 # Set this greater than zero to cap the number of attempts
         condition:
@@ -259,8 +254,7 @@ unblock itself without intervention.</p>
 <h3 id="drop-failed-messages">Drop Failed Messages</h3>
 <p>In order to filter out any failed messages from your pipeline you can simply use
 a <a href="../processors/#filter_parts"><code>filter_parts</code></a> processor:</p>
-<pre><code class="yaml">  - type: filter_parts
-    filter_parts:
+<pre><code class="yaml">  - filter_parts:
       type: processor_failed
 </code></pre>
 
@@ -271,12 +265,10 @@ a <a href="../processors/#filter_parts"><code>filter_parts</code></a> processor:
 <a href="../outputs/#broker"><code>broker</code></a> output with <a href="../processors/#filter_parts"><code>filter_parts</code></a> processors.</p>
 <pre><code class="yaml">pipeline:
   processors:
-  - type: group_by
-    group_by:
+  - group_by:
     - condition:
         type: processor_failed
 output:
-  type: switch
   switch:
     outputs:
     - output:
@@ -291,19 +283,16 @@ output:
 are batched.</p>
 <p>Alternatively, using a <code>broker</code> output looks like this:</p>
 <pre><code class="yaml">output:
-  type: broker
   broker:
     pattern: fan_out
     outputs:
     - type: foo # Dead letter queue
       processors:
-      - type: filter_parts
-        filter_parts:
+      - filter_parts:
           type: processor_failed
     - type: bar # Everything else
       processors:
-      - type: filter_parts
-        filter_parts:
+      - filter_parts:
           type: not
           not:
             type: processor_failed

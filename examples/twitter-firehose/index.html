@@ -206,7 +206,6 @@ of the stream types.</p>
 is automatically recovered if a disconnection occurs. The only processor
 attached to the input is a <code>bounds_check</code> filter that removes any empty lines.</p>
 <pre><code class="yaml">input:
-  type: http_client
   http_client:
     url: https://gnip-stream.twitter.com/stream/firehose/accounts/foo/publishers/twitter/prod.json?partition=1
     verb: GET
@@ -219,8 +218,8 @@ attached to the input is a <code>bounds_check</code> filter that removes any emp
       enabled: true
       max_buffer: 10_000_000 # 10MB - The max supported length of a single line
   processors:
-  - type: bounds_check # Filter out keep alives (empty message)
-    bounds_check:
+  # Filter out keep alives (empty message)
+  - bounds_check:
       min_part_size: 2
 </code></pre>
 
@@ -229,7 +228,6 @@ have the feature enabled. This means any connection recovery will always gain a
 small window of automatic backfill.</p>
 <h2 id="buffer">Buffer</h2>
 <pre><code class="yaml">buffer:
-  type: memory
   memory:
     limit: 500_000_000
 </code></pre>
@@ -241,13 +239,11 @@ layer of deduplication processors.</p>
 <pre><code class="yaml">pipeline:
   threads: 16 # Determines the max number of concurrent calls to dedupe cache
   processors:
-  - type: filter # Filter out non-json objects and error messages
-    filter:
-      type: jmespath
+  # Filter out non-json objects and error messages
+  - filter:
       jmespath:
         query: &quot;keys(@) | length(@) &gt; `0` &amp;&amp; !contains(@, 'error')&quot;
-  - type: dedupe
-    dedupe:
+  - dedupe:
       cache: dedupe
       drop_on_err: false # Prefer occasional duplicates over lost messages
       key: &quot;${!json_field:id_str}&quot; # Dedupe based on 'id_str' field of tweets
@@ -268,7 +264,6 @@ tweaked in order to tune the optimum number of concurrent Memcached requests.</p
 <h2 id="output">Output</h2>
 <p>The output section is a standard Kafka connection.</p>
 <pre><code class="yaml">output:
-  type: kafka
   kafka:
     addresses:
     - localhost:9092 # TODO
@@ -283,7 +278,6 @@ pipeline.</p>
 <pre><code class="yaml">resources:
   caches:
     dedupe:
-      type: memcached
       memcached:
         addresses:
         - localhost:11211 # TODO

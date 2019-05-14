@@ -305,8 +305,7 @@ the specified value. Inside the value $ signs are interpreted as submatch
 expansions, e.g. $1 represents the first submatch.</p>
 <p>To replace the paths 'foo.bar.zap' and 'foo.baz.zap' with 'zip.bar' and
 'zip.baz' respectively we could use this config:</p>
-<pre><code class="yaml">type: rename
-rename:
+<pre><code class="yaml">rename:
   by_regexp:
   - pattern: &quot;foo\\.([a-z]*)\\.zap&quot;
     value: &quot;zip.$1&quot;

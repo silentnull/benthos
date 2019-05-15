@@ -194,11 +194,11 @@ cause significant problems for any users.</p>
 <h2 id="configuration">Configuration</h2>
 <h3 id="type-inference">Type Inference</h3>
 <p>Version 2 comes with the ability to infer the <code>type</code> of components in
-configuration files whenever the field is ommited. You can read more about this
-behaviour <a href="./configuration.md#concise-configuration">here</a>.</p>
+configuration files whenever the field is omitted. You can read more about this
+behaviour <a href="../../configuration/#concise-configuration">here</a>.</p>
 <p>This feature is not expected to impact the vast majority of users. However,
 there is one exception where a malformed section containing unused type
-parameters but a missing <code>type</code> field will be interpretted differently. For
+parameters but a missing <code>type</code> field will be interpreted differently. For
 example, the following config:</p>
 <pre><code class="yaml">pipeline:
   processors:
@@ -208,15 +208,15 @@ example, the following config:</p>
       value: &quot;delete all your content&quot;
 </code></pre>
 
-<p>In V1 would be interpretted as a <code>bounds_check</code> processor as it is the default
+<p>In V1 would be interpreted as a <code>bounds_check</code> processor as it is the default
 processor type, whereas V2 would infer this to be a <code>text</code> processor based on
 its fields.</p>
 <h4 id="migration-guide">Migration Guide</h4>
 <p>Most users should not be impacted by this change, and a config file that is
 vulnerable to the regression would report linting errors in V1.</p>
-<p>You can quickly verify that your configs are interpretted without regression by
+<p>You can quickly verify that your configs are interpreted without regression by
 comparing the output of <code>benthos -c ./yourconfig.yaml --print-yaml</code> with V1 and
-V2, if they are the same then you are not affected.</p>
+V2. If they are the same then you are not affected.</p>
 <h3 id="field-default-value-changes">Field Default Value Changes</h3>
 <p>In version 2 the field <code>unsubscribe_on_close</code> of the <code>nats_stream</code> input is now
 <code>false</code> by default.</p>
@@ -239,7 +239,7 @@ simple case of applying a find/replace on your codebase:</p>
 </code></pre>
 
 <h3 id="interface-changes">Interface Changes</h3>
-<p>The following interface changes have occured to core Benthos components:</p>
+<p>The following interface changes have occurred to core Benthos components:</p>
 <ul>
 <li><code>types.Cache</code> now has <code>types.Closable</code> embedded.</li>
 <li><code>types.RateLimit</code> now has <code>types.Closable</code> embedded.</li>

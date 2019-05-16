@@ -210,6 +210,10 @@ config section supports functions you should read its respective documentation.<
 this is the <a href="https://github.com/Jeffail/benthos/blob/master/config/env/default.yaml">environment variable config</a>, which creates
 environment variables for each default field value in a standard
 single-in-single-out bridge config.</p>
+<h3 id="escaping">Escaping</h3>
+<p>If a literal string is required that matches this pattern (<code>${foo}</code>) you can
+escape it with double brackets. For example, the string <code>${{foo}}</code> is read as
+the literal <code>${foo}</code>.</p>
 <h2 id="example">Example</h2>
 <p>Let's say you plan to bridge a Kafka deployment to a RabbitMQ exchange but we
 want to resolve the addresses of these respective services after deployment
@@ -242,9 +246,17 @@ environment variables:</p>
 </code></pre>
 
 <h2 id="functions">Functions</h2>
+<p>Some string fields within a Benthos config support function interpolations,
+these are context specific functions that are executed every time the string is
+used. To find out if a field supports function interpolation refer to its
+documentation.</p>
 <p>The syntax for functions is <code>${!function-name}</code>, or <code>${!function-name:arg}</code> if
-the function takes an argument, where <code>function-name</code> should be replaced with
-one of the following function names:</p>
+the function takes an argument, where <code>function-name</code> should be replaced with a
+valid function.</p>
+<p>If a literal string is required that matches this pattern (<code>${!foo}</code>) then,
+similarly to environment variables, you can escape it with double brackets. For
+example, the string <code>${{!foo}}</code> would be read as the literal <code>${!foo}</code>.</p>
+<p>Benthos supports the following functions:</p>
 <h3 id="content"><code>content</code></h3>
 <p>Resolves to the content of a message part. The message referred to will depend
 on the context of where the function is called.</p>

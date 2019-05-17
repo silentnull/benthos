@@ -1,4 +1,4 @@
-.PHONY: all serverless wasm deps docker docker-cgo clean docs test test-race test-integration fmt lint install deploy-docs
+.PHONY: all serverless deps docker docker-cgo clean docs test test-race test-integration fmt lint install deploy-docs
 
 TAGS =
 
@@ -6,7 +6,6 @@ INSTALL_DIR        = $(GOPATH)/bin
 DEST_DIR           = ./target
 PATHINSTBIN        = $(DEST_DIR)/bin
 PATHINSTSERVERLESS = $(DEST_DIR)/serverless
-PATHINSTWASM       = $(DEST_DIR)/wasm
 PATHINSTDOCKER     = $(DEST_DIR)/docker
 
 VERSION   := $(shell git describe --tags || echo "v0.0.0")
@@ -47,15 +46,6 @@ $(PATHINSTSERVERLESS)/%: $(wildcard lib/*/*.go lib/*/*/*.go lib/*/*/*/*.go cmd/s
 	@zip -m -j $@.zip $@
 
 $(SERVERLESS): %: $(PATHINSTSERVERLESS)/%
-
-WASM = benthos-config-utils
-wasm: $(WASM)
-
-$(PATHINSTWASM)/%: $(wildcard lib/*/*.go lib/*/*/*.go lib/*/*/*/*.go cmd/wasm/*/*.go)
-	@mkdir -p $(dir $@)
-	@GOOS=js GOARCH=wasm go build $(GO_FLAGS) -tags "$(TAGS)" -ldflags "$(LD_FLAGS) $(VER_FLAGS)" -o $@.wasm ./cmd/wasm/$*
-
-$(WASM): %: $(PATHINSTWASM)/%
 
 docker-tags:
 	@echo "latest,$(VER_CUT),$(VER_MAJOR).$(VER_MINOR),$(VER_MAJOR)" > .tags

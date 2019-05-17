@@ -21,10 +21,8 @@
 package main
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
-	"os"
 	"strings"
 	"syscall/js"
 	"time"
@@ -36,6 +34,7 @@ import (
 	"github.com/Jeffail/benthos/lib/pipeline"
 	"github.com/Jeffail/benthos/lib/response"
 	"github.com/Jeffail/benthos/lib/types"
+	uconf "github.com/Jeffail/benthos/lib/util/config"
 	"gopkg.in/yaml.v3"
 )
 
@@ -54,12 +53,12 @@ var pipelineLayer types.Pipeline
 var transactionChan chan types.Transaction
 
 func reportErr(msg string, err error) {
-	fmt.Fprintf(os.Stderr, msg, err)
+	js.Global().Call("writeOutput", fmt.Sprintf(msg, err))
 }
 
 func reportLints(msg []string) {
 	for _, m := range msg {
-		fmt.Fprintln(os.Stderr, m)
+		js.Global().Call("writeOutput", m)
 	}
 }
 
@@ -79,17 +78,17 @@ func closePipeline() {
 	timesOut := time.Now().Add(exitTimeout)
 	pipelineLayer.CloseAsync()
 	if err := pipelineLayer.WaitForClose(time.Until(timesOut)); err != nil {
-		reportErr("Failed to shut down pipeline: %v\n", err)
+		reportErr("Error: Failed to shut down pipeline: %v\n", err)
 	}
 }
 
 func compile(this js.Value, args []js.Value) interface{} {
 	closePipeline()
 
-	contents := js.Global().Get("editor").Get("session").Get("doc").Call("getValue").String()
+	contents := js.Global().Get("configSession").Call("getValue").String()
 	conf, err := compileConfig(contents)
 	if err != nil {
-		reportErr("Failed to create pipeline: %v\n", err)
+		reportErr("Error: Failed to create pipeline: %v", err)
 		return nil
 	}
 
@@ -97,32 +96,59 @@ func compile(this js.Value, args []js.Value) interface{} {
 		err = pipelineLayer.Consume(transactionChan)
 	}
 	if err != nil {
-		reportErr("Failed to create pipeline: %v\n", err)
+		reportErr("Error: Failed to create pipeline: %v\n", err)
 		return nil
 	}
-	if lints, err := config.Lint([]byte(contents), conf); err != nil {
-		reportErr("Failed to parse config: %v\n", err)
+	lints, err := config.Lint([]byte(contents), conf)
+	if err != nil {
+		reportErr("Error: Failed to parse config: %v\n", err)
 		return nil
-	} else if len(lints) > 0 {
+	}
+
+	if len(lints) > 0 {
 		reportLints(lints)
 	}
+
+	js.Global().Call("writeOutput", "Compiled successfully.\n")
 	return nil
 }
 
 func normalise(this js.Value, args []js.Value) interface{} {
-	contents := js.Global().Get("editor").Get("session").Get("doc").Call("getValue").String()
-	_ = contents
+	session := js.Global().Get("configSession")
+	contents := session.Call("getValue").String()
+	conf, err := compileConfig(contents)
+	if err != nil {
+		reportErr("Error: Failed to create pipeline: %v", err)
+		return nil
+	}
+
+	sanit, err := conf.Sanitised()
+	if err != nil {
+		reportErr("Error: Failed to normalise config: %v", err)
+		return nil
+	}
+
+	sanitBytes, err := uconf.MarshalYAML(map[string]interface{}{
+		"pipeline": sanit.Pipeline,
+	})
+	if err != nil {
+		reportErr("Error: Failed to marshal normalised config: %v", err)
+		return nil
+	}
+
+	session.Call("setValue", string(sanitBytes))
+	js.Global().Call("openConfig")
 	return nil
 }
 
 func execute(this js.Value, args []js.Value) interface{} {
 	if pipelineLayer == nil {
-		reportErr("Failed to execute: %v\n", errors.New("pipeline is closed"))
+		reportErr("Failed to execute: %v\n", errors.New("pipeline must be compiled first"))
 		return nil
 	}
 
-	inputContent := js.Global().Get("document").Call("getElementById", "inputArea").Get("textContent")
-	lines := strings.Split(inputContent.String(), "\n")
+	inputContent := js.Global().Get("inputSession").Call("getValue").String()
+	lines := strings.Split(inputContent, "\n")
 	inputMsg := message.New(nil)
 	for _, line := range lines {
 		inputMsg.Append(message.NewPart([]byte(line)))
@@ -132,7 +158,7 @@ func execute(this js.Value, args []js.Value) interface{} {
 	select {
 	case transactionChan <- types.NewTransaction(inputMsg, resChan):
 	case <-time.After(time.Second * 30):
-		reportErr("Failed to execute: %v\n", errors.New("request timed out"))
+		reportErr("Error: Failed to execute: %v\n", errors.New("request timed out"))
 		return nil
 	}
 
@@ -140,7 +166,7 @@ func execute(this js.Value, args []js.Value) interface{} {
 	select {
 	case outTran = <-pipelineLayer.TransactionChan():
 	case <-time.After(time.Second * 30):
-		reportErr("Failed to execute: %v\n", errors.New("response timed out"))
+		reportErr("Error: Failed to execute: %v\n", errors.New("response timed out"))
 		closePipeline()
 		return nil
 	}
@@ -148,13 +174,14 @@ func execute(this js.Value, args []js.Value) interface{} {
 	select {
 	case outTran.ResponseChan <- response.NewAck():
 	case <-time.After(time.Second * 30):
-		reportErr("Failed to execute: %v\n", errors.New("response 2 timed out"))
+		reportErr("Error: Failed to execute: %v\n", errors.New("response 2 timed out"))
 		closePipeline()
 		return nil
 	}
 
-	resultStr := string(bytes.Join(message.GetAllBytes(outTran.Payload), []byte("\n")))
-	js.Global().Get("document").Call("getElementById", "outputArea").Set("textContent", resultStr)
+	for _, out := range message.GetAllBytes(outTran.Payload) {
+		js.Global().Call("writeOutput", string(out)+"\n")
+	}
 	return nil
 }
 
